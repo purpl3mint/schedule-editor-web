@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect} from "react"
+import React, { useCallback } from "react"
 import { Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { testUpdateForm, testUpdateData } from "../../store/actionCreators/testActionCreator"
@@ -16,6 +16,7 @@ export const StartPage = () => {
   const updateHandler = useCallback ( (e) => {
     dispatch(testUpdateData())
   }, [dispatch])
+  
 
   return (
     <div>
