@@ -1,9 +1,13 @@
+import React from 'react'
+/*
 import React, { useCallback } from "react"
 import { Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { testUpdateForm, testUpdateData } from "../../store/actionCreators/testActionCreator"
+*/
 
 export const StartPage = () => {
+/*
   const dispatch = useDispatch()
 
   const data = useSelector(state => state.testReducer.data)
@@ -30,4 +34,10 @@ export const StartPage = () => {
       </div>
     </div>
   )
+*/
+    return (
+      <div>
+        <h1>Приложение запущено!</h1>
+      </div>
+    )
 }
