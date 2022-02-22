@@ -59,6 +59,30 @@ class UserController {
 
     return res.json(token)
   }
+
+  async auth(req, res, next) {
+    res.json({message: 'Проверка работает'})
+  }
+
+  async setPassword(req, res, next) {
+    const {id, password, newPassword} = req.body
+
+    const user = await User.findByPk(id)
+
+    let comparePassword = bcrypt.compareSync(password, user.password)
+
+    if (!comparePassword)
+      return next(ApiError.badRequest('Указан неверный пароль'))
+
+    user.password = newPassword;
+    
+    const isSaved = user.save()
+
+    if (isSaved)
+      return res.json("Пароль успешно изменен")
+    else
+      return res.json("Пароль не удалось изменить")
+  }
 }
 
 module.exports = new UserController();

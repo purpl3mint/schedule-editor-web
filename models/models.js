@@ -10,6 +10,7 @@ const User = sequelize.define('user', {
 
 const CommonContent = sequelize.define('common_content', {
   id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
+  name: {type: DataTypes.STRING, defaultValue: 'Без названия'},
   author_id: {type: DataTypes.INTEGER, require: true, defaultValue: 0},
   url: {type: DataTypes.STRING, require: true},
   online: {type: DataTypes.BOOLEAN, defaultValue: false},
@@ -19,6 +20,7 @@ const CommonContent = sequelize.define('common_content', {
 
 const Banner = sequelize.define('banner', {
   id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
+  name: {type: DataTypes.STRING, defaultValue: 'Без названия'},
   author_id: {type: DataTypes.INTEGER, require: true, defaultValue: 0},
   url: {type: DataTypes.STRING, require: true},
   url_reserve: {type: DataTypes.STRING},
