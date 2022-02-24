@@ -2,17 +2,17 @@ const {Ticker} = require('../models/models')
 const ApiError = require('../error/apiError')
 
 class TickerController {
-  async create(req, res) {
-    const {name, author_id, url, size, speed, font_color, background_color} = req.body
+  async create(req, res, next) {
+    const {name, userId, url, size, speed, font_color, background_color} = req.body
 
     if (!url)
       return next(ApiError.badRequest('Некорректный URL бегущей строки'))
 
-    if (!author_id)
+    if (!userId)
       return next(ApiError.badRequest('Отсутствует автор бегущей строки'))
 
     const ticker = await Ticker.create({
-      name, author_id, url, size, speed, font_color, background_color
+      name, userId, url, size, speed, font_color, background_color
     })
 
     if (ticker) {

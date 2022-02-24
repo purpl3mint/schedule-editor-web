@@ -2,17 +2,17 @@ const {CommonContent} = require('../models/models')
 const ApiError = require('../error/apiError')
 
 class CommonContentController {
-  async create(req, res) {
-    const {name, author_id, url, online, aspect_ratio, duration} = req.body
+  async create(req, res, next) {
+    const {name, userId, url, online, aspect_ratio, duration} = req.body
 
     if (!url)
       return next(ApiError.badRequest('Некорректный URL контента'))
 
-    if (!author_id)
+    if (!userId)
       return next(ApiError.badRequest('Отсутствует автор контента'))
 
     const content = await CommonContent.create({
-      name, author_id, url, online, aspect_ratio, duration
+      name, userId, url, online, aspect_ratio, duration
     })
 
     if (content) {

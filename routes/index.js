@@ -9,7 +9,7 @@ const userRouter = require('./userRouter')
 
 
 router.use('/banner', bannerRouter)
-router.use('/commonContent', commonContentRouter)
+router.use('/content', commonContentRouter)
 router.use('/mediaplan', mediaplanRouter)
 router.use('/ticker', tickerRouter)
 router.use('/user', userRouter)

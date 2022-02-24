@@ -2,6 +2,7 @@ const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const {User} = require('../models/models')
 const ApiError = require('../error/apiError')
+const config = require('config')
 
 class UserController {
   async registration(req, res, next) {
@@ -27,7 +28,7 @@ class UserController {
 
     const token = jwt.sign(
       {id: user.id, username: user.username, type: user.type}, 
-      process.env.SECRET_KEY, 
+      config.get("SECRET_KEY"), 
       {expiresIn: '24h'})
 
     return res.json({token})
@@ -54,10 +55,10 @@ class UserController {
 
     const token = jwt.sign(
       {id: user.id, username: user.username, type: user.type}, 
-      process.env.SECRET_KEY, 
+      config.get('SECRET_KEY'), 
       {expiresIn: '24h'})
 
-    return res.json(token)
+    return res.json({token})
   }
 
   async auth(req, res, next) {
@@ -74,7 +75,9 @@ class UserController {
     if (!comparePassword)
       return next(ApiError.badRequest('Указан неверный пароль'))
 
-    user.password = newPassword;
+    const hashNewPassword = await bcrypt.hash(newPassword, 5)
+
+    user.password = hashNewPassword;
     
     const isSaved = user.save()
 

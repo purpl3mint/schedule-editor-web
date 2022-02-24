@@ -4,29 +4,29 @@ class MediaplanController {
   async create(req, res) {
     const {
       name,
-      author_id,
+      userId,
       ads_start_delay, 
       banners_start_delay, 
       banners_repeat, 
       banners_animation_duration_msec, 
-      content_id
+      contentId
     } = req.body
 
-    if (!content_id) {
+    if (!contentId) {
       return res.json({message: 'Нет основного контента'})
     }
-    if (!author_id) {
+    if (!userId) {
       return res.json({message: 'Нет автора'})
     }
 
     const mediaplan = await Mediaplan.create({
       name,
-      author_id,
+      userId,
       ads_start_delay, 
       banners_start_delay, 
       banners_repeat, 
       banners_animation_duration_msec, 
-      content_id
+      contentId
     })
 
     if (mediaplan) {
@@ -57,7 +57,7 @@ class MediaplanController {
       banners_start_delay, 
       banners_repeat, 
       banners_animation_duration_msec, 
-      content_id
+      contentId
     } = req.body
 
     const mediaplan = await Mediaplan.findByPk(id)
@@ -69,7 +69,7 @@ class MediaplanController {
     mediaplan.banners_start_delay = banners_start_delay
     mediaplan.banners_repeat = banners_repeat
     mediaplan.banners_animation_duration_msec = banners_animation_duration_msec
-    mediaplan.content_id = content_id
+    mediaplan.contentId = contentId
 
     const isSaved = await mediaplan.save()
 
@@ -81,12 +81,12 @@ class MediaplanController {
   }
 
   async addBanner(req, res) {
-    const {mediaplan_id, banner_id, position} = req.body
+    const {mediaplanId, bannerId, position} = req.body
 
     const addedBanner = await BannerInMediaplan.create({
       position,
-      banner_id,
-      mediaplan_id
+      bannerId,
+      mediaplanId
     })
 
     return res.json(addedBanner)
@@ -139,7 +139,7 @@ class MediaplanController {
 
     const result = await BannerInMediaplan.destroy({
       where: {
-        mediaplan_id: id
+        mediaplanId: id
       }
     })
 
@@ -151,11 +151,11 @@ class MediaplanController {
   }
 
   async setTicker(req, res) {
-    const {mediaplan_id, ticker_id} = req.body
+    const {mediaplanId, tickerId} = req.body
 
-    const mediaplan = await Mediaplan.findByPk(mediaplan_id)
+    const mediaplan = await Mediaplan.findByPk(mediaplanId)
 
-    mediaplan.tickerId = ticker_id
+    mediaplan.tickerId = tickerId
 
     const isSaved = await mediaplan.save()
 
@@ -182,12 +182,12 @@ class MediaplanController {
   }
 
   async setAds(req, res) {
-    const {mediaplan_id, content_id, position} = req.body
+    const {mediaplanId, contentId, position} = req.body
 
     const addedAds = await Ads.create({
       position,
-      content_id,
-      mediaplan_id
+      contentId,
+      mediaplanId
     })
 
     return res.json(addedAds)
@@ -240,7 +240,7 @@ class MediaplanController {
 
     const result = await Ads.destroy({
       where: {
-        mediaplan_id: id
+        mediaplanId: id
       }
     })
 

@@ -8,20 +8,21 @@ const User = sequelize.define('user', {
   type: {type: DataTypes.STRING, require: true, defaultValue: 'user'}
 }) 
 
+
+//author_id: {type: DataTypes.INTEGER, require: true, defaultValue: 0},
 const CommonContent = sequelize.define('common_content', {
   id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
   name: {type: DataTypes.STRING, defaultValue: 'Без названия'},
-  author_id: {type: DataTypes.INTEGER, require: true, defaultValue: 0},
   url: {type: DataTypes.STRING, require: true},
   online: {type: DataTypes.BOOLEAN, defaultValue: false},
   aspect_ratio: {type: DataTypes.STRING, defaultValue: 'normal'},
   duration: {type: DataTypes.INTEGER, defaultValue: 0}
 }) 
 
+//author_id: {type: DataTypes.INTEGER, require: true, defaultValue: 0},
 const Banner = sequelize.define('banner', {
   id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
   name: {type: DataTypes.STRING, defaultValue: 'Без названия'},
-  author_id: {type: DataTypes.INTEGER, require: true, defaultValue: 0},
   url: {type: DataTypes.STRING, require: true},
   url_reserve: {type: DataTypes.STRING},
   online: {type: DataTypes.BOOLEAN, defaultValue: false},
@@ -32,9 +33,9 @@ const Banner = sequelize.define('banner', {
   layout_gravity: {type: DataTypes.STRING},
 })
 
+//author_id: {type: DataTypes.INTEGER, require: true, defaultValue: 0},
 const Ticker = sequelize.define('ticker', {
   id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-  author_id: {type: DataTypes.INTEGER, require: true, defaultValue: 0},
   url: {type: DataTypes.STRING, require: true},
   size: {type: DataTypes.STRING, require: true, defaultValue: 24},
   speed: {type: DataTypes.INTEGER, require: true, defaultValue: 80},
@@ -42,11 +43,11 @@ const Ticker = sequelize.define('ticker', {
   background_color: {type: DataTypes.STRING, require: true, defaultValue: '#000000'}
 })
 
+//content_id: {type: DataTypes.INTEGER, require: true},
+//author_id: {type: DataTypes.INTEGER, require: true, defaultValue: 0},
 const Mediaplan = sequelize.define('mediaplan', {
   id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
   name: {type: DataTypes.STRING, defaultValue: "Плейлист без названия"},
-  content_id: {type: DataTypes.INTEGER, require: true},
-  author_id: {type: DataTypes.INTEGER, require: true, defaultValue: 0},
   ads_start_delay: {type: DataTypes.INTEGER},
   banners_start_delay: {type: DataTypes.INTEGER, defaultValue: 0},
   banners_repeat: {type: DataTypes.BOOLEAN, defaultValue: false},
@@ -56,15 +57,15 @@ const Mediaplan = sequelize.define('mediaplan', {
 const Ads = sequelize.define('ads', {
   id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
   position: {type: DataTypes.INTEGER, require: true},
-  content_id: {type: DataTypes.INTEGER, require: true},
-  mediaplan_id: {type: DataTypes.INTEGER, require: true},
+  contentId: {type: DataTypes.INTEGER, require: true},
+  mediaplanId: {type: DataTypes.INTEGER, require: true},
 })
 
 const BannerInMediaplan = sequelize.define('banner_in_mediaplan', {
   id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
   position: {type: DataTypes.INTEGER, require: true},
-  banner_id: {type: DataTypes.INTEGER, require: true},
-  mediaplan_id: {type: DataTypes.INTEGER, require: true},
+  bannerId: {type: DataTypes.INTEGER, require: true},
+  mediaplanId: {type: DataTypes.INTEGER, require: true},
 })
 
 User.hasMany(Banner)
@@ -85,18 +86,17 @@ Mediaplan.belongsTo(CommonContent)
 Ticker.hasMany(Mediaplan)
 Mediaplan.belongsTo(Ticker)
 
-Mediaplan.belongsToMany(CommonContent, { through: Ads, as: 'MediaplanContent', foreignKey: 'mediaplan_id' } )
-CommonContent.belongsToMany(Mediaplan, { through: Ads, as: 'Content', foreignKey: 'content_id' })
+Mediaplan.belongsToMany(CommonContent, { through: Ads, as: 'MediaplanContent', foreignKey: 'mediaplanId' } )
+CommonContent.belongsToMany(Mediaplan, { through: Ads, as: 'Content', foreignKey: 'contentId' })
 
 
-Mediaplan.belongsToMany(Banner, { through: BannerInMediaplan, as: 'MediaplanBanner', foreignKey: 'mediaplan_id' })
-Banner.belongsToMany(Mediaplan, { through: BannerInMediaplan, as: 'Banner', foreignKey: 'banner_id' })
+Mediaplan.belongsToMany(Banner, { through: BannerInMediaplan, as: 'MediaplanBanner', foreignKey: 'mediaplanId' })
+Banner.belongsToMany(Mediaplan, { through: BannerInMediaplan, as: 'Banner', foreignKey: 'bannerId' })
 
 module.exports = {
   User,
   CommonContent,
   Banner,
   Ticker,
-  Mediaplan,
-  BannerInMediaplan
+  Mediaplan
 }

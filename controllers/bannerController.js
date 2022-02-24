@@ -2,10 +2,10 @@ const {Banner} = require('../models/models')
 const ApiError = require('../error/apiError')
 
 class BannerController {
-  async create(req, res) {
+  async create(req, res, next) {
     const {
       name, 
-      author_id, 
+      userId, 
       url, 
       url_reserve, 
       online, 
@@ -19,12 +19,12 @@ class BannerController {
     if (!url)
       return next(ApiError.badRequest('Некорректный URL баннера'))
 
-    if (!author_id)
+    if (!userId)
       return next(ApiError.badRequest('Отсутствует автор баннера'))
 
     const banner = await Banner.create({
       name, 
-      author_id, 
+      userId, 
       url, 
       url_reserve, 
       online, 
