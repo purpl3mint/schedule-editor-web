@@ -38,8 +38,8 @@ const PORT = process.env.PORT || config.get('port') || 80
 const start = async () => {
   try {
     //UNCOMMENT ONLY AFTER INITIALIZING CREDENTIALS IN CONFIG FOR DB
-    //await sequelize.authenticate()
-    //await sequelize.sync()
+    await sequelize.authenticate()
+    await sequelize.sync()
     app.listen(PORT, () => console.log(`Server started on port ${PORT}`))
   } catch (e) {
     console.log(e);

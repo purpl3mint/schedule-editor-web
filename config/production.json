@@ -5,5 +5,10 @@
   "DB_PASSWORD": "###",
   "DB_HOST": "localhost",
   "DB_PORT": 5432,
-  "SECRET_KEY": "###"
+  "SECRET_KEY": "###",
+  "DB_DIALECT_OPTIONS": {
+    "ssl": {
+      "rejectUnauthorized": false
+    }
+  }
 }
