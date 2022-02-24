@@ -55,12 +55,14 @@ const Mediaplan = sequelize.define('mediaplan', {
 
 const Ads = sequelize.define('ads', {
   id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
+  position: {type: DataTypes.INTEGER, require: true},
   content_id: {type: DataTypes.INTEGER, require: true},
   mediaplan_id: {type: DataTypes.INTEGER, require: true},
 })
 
 const Banners = sequelize.define('banners', {
   id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
+  position: {type: DataTypes.INTEGER, require: true},
   banner_id: {type: DataTypes.INTEGER, require: true},
   mediaplan_id: {type: DataTypes.INTEGER, require: true},
 })
