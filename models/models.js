@@ -60,7 +60,7 @@ const Ads = sequelize.define('ads', {
   mediaplan_id: {type: DataTypes.INTEGER, require: true},
 })
 
-const Banners = sequelize.define('banners', {
+const BannerInMediaplan = sequelize.define('banner_in_mediaplan', {
   id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
   position: {type: DataTypes.INTEGER, require: true},
   banner_id: {type: DataTypes.INTEGER, require: true},
@@ -89,13 +89,14 @@ Mediaplan.belongsToMany(CommonContent, { through: Ads, as: 'MediaplanContent', f
 CommonContent.belongsToMany(Mediaplan, { through: Ads, as: 'Content', foreignKey: 'content_id' })
 
 
-Mediaplan.belongsToMany(Banner, { through: Banners, as: 'MediaplanBanner', foreignKey: 'mediaplan_id' })
-Banner.belongsToMany(Mediaplan, { through: Banners, as: 'Banner', foreignKey: 'banner_id' })
+Mediaplan.belongsToMany(Banner, { through: BannerInMediaplan, as: 'MediaplanBanner', foreignKey: 'mediaplan_id' })
+Banner.belongsToMany(Mediaplan, { through: BannerInMediaplan, as: 'Banner', foreignKey: 'banner_id' })
 
 module.exports = {
   User,
   CommonContent,
   Banner,
   Ticker,
-  Mediaplan
+  Mediaplan,
+  BannerInMediaplan
 }

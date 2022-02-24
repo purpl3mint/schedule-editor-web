@@ -1,4 +1,4 @@
-const {Mediaplan, Banners, Ads } = require('../models/models')
+const {Mediaplan, BannerInMediaplan, Ads } = require('../models/models')
 
 class MediaplanController {
   async create(req, res) {
@@ -83,7 +83,7 @@ class MediaplanController {
   async addBanner(req, res) {
     const {mediaplan_id, banner_id, position} = req.body
 
-    const addedBanner = await Banners.create({
+    const addedBanner = await BannerInMediaplan.create({
       position,
       banner_id,
       mediaplan_id
@@ -94,8 +94,8 @@ class MediaplanController {
 
   async editOrderBanners(req, res) {
     const {id, position} = req.body
-    const ad = await Banners.findByPk(id)
-    const candidate = await Banners.find({where: {position}})
+    const ad = await BannerInMediaplan.findByPk(id)
+    const candidate = await BannerInMediaplan.find({where: {position}})
     let result
 
 
@@ -125,7 +125,7 @@ class MediaplanController {
   async deleteBanner(req, res) {
     const {id} = req.params
 
-    const result = await Banners.destroy({where: {id}})
+    const result = await BannerInMediaplan.destroy({where: {id}})
 
     if (result) {
       return res.json({message: 'Баннер был удален'})
@@ -137,7 +137,7 @@ class MediaplanController {
   async deleteAllBanners(req, res) {
     const {id} = req.params
 
-    const result = await Banners.destroy({
+    const result = await BannerInMediaplan.destroy({
       where: {
         mediaplan_id: id
       }
