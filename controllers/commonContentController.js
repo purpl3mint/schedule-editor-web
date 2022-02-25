@@ -57,6 +57,12 @@ class CommonContentController {
 
     return res.json({message})
   }
+
+  async getAll(req, res) {
+    const contents = await CommonContent.findAll()
+
+    return res.json(contents)
+  }
 }
 
 module.exports = new CommonContentController()

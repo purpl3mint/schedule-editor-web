@@ -87,6 +87,12 @@ class BannerController {
 
     return res.json({message})
   }
+
+  async getAll(req, res) {
+    const banners = await Banner.findAll()
+
+    return res.json(banners)
+  }
 }
 
 module.exports = new BannerController()

@@ -86,6 +86,12 @@ class UserController {
     else
       return res.json("Пароль не удалось изменить")
   }
+
+  async getAll(req, res) {
+    const users = await User.findAll()
+
+    return res.json(users)
+  }
 }
 
 module.exports = new UserController();

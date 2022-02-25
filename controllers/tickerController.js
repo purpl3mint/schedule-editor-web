@@ -58,6 +58,12 @@ class TickerController {
 
     return res.json({message})
   }
+
+  async getAll(req, res) {
+    const tickers = await Ticker.findAll()
+
+    return res.json(tickers)
+  }
 }
 
 module.exports = new TickerController()

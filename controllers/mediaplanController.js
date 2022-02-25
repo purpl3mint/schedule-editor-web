@@ -1,4 +1,4 @@
-const {Mediaplan, BannerInMediaplan, Ads } = require('../models/models')
+const {Mediaplan, BannerInMediaplan, Ads, Banner, CommonContent, Ticker } = require('../models/models')
 
 class MediaplanController {
   async create(req, res) {
@@ -37,6 +37,7 @@ class MediaplanController {
   }
 
   async delete(req, res) {
+    let message = ''
     const {id} = req.params
 
     const deletedMediaplan = await Mediaplan.destroy({where: {id}})
@@ -83,19 +84,31 @@ class MediaplanController {
   async addBanner(req, res) {
     const {mediaplanId, bannerId, position} = req.body
 
-    const addedBanner = await BannerInMediaplan.create({
-      position,
-      bannerId,
-      mediaplanId
-    })
+    const candidate = await BannerInMediaplan.findOne({where: {
+      mediaplanId: mediaplanId,
+      bannerId: bannerId
+    }})
 
-    return res.json(addedBanner)
+    if (candidate)
+      return res.json({message: "Такая запись уже существует"})
+
+    const addedBanner = await BannerInMediaplan.create({
+      position: position,
+      bannerId: bannerId,
+      mediaplanId: mediaplanId
+    }).catch(err => console.error(err))
+
+    if (addedBanner) {
+      return res.json({message: 'Баннер успешно добавлен в медиаплан'})
+    } else {
+      return res.json({message: 'Баннер не удалось добавить в медиаплан'})
+    }
   }
 
   async editOrderBanners(req, res) {
     const {id, position} = req.body
     const ad = await BannerInMediaplan.findByPk(id)
-    const candidate = await BannerInMediaplan.find({where: {position}})
+    const candidate = await BannerInMediaplan.findOne({where: {position}})
     let result
 
 
@@ -153,11 +166,11 @@ class MediaplanController {
   async setTicker(req, res) {
     const {mediaplanId, tickerId} = req.body
 
-    const mediaplan = await Mediaplan.findByPk(mediaplanId)
+    let changingMediaplan = await Mediaplan.findByPk(mediaplanId)
 
-    mediaplan.tickerId = tickerId
+    changingMediaplan.tickerId = tickerId
 
-    const isSaved = await mediaplan.save()
+    const isSaved = await changingMediaplan.save().catch(err => console.error(err))
 
     if (isSaved) {
       return res.json({message: 'Бегущая строка успешно добавлена'})
@@ -167,7 +180,7 @@ class MediaplanController {
   }
 
   async unsetTicker(req, res) {
-    const {id} = req.body
+    const {id} = req.params
 
     const mediaplan = await Mediaplan.findByPk(id)
     mediaplan.tickerId = 0;
@@ -184,19 +197,30 @@ class MediaplanController {
   async setAds(req, res) {
     const {mediaplanId, contentId, position} = req.body
 
+    const candidate = await Ads.findOne({where: {
+      contentId,
+      mediaplanId
+    }})
+
+    if (candidate) 
+      return res.json({message: "Контент уже добавлен"})
+
     const addedAds = await Ads.create({
       position,
       contentId,
       mediaplanId
-    })
+    }).catch(err => console.error(err))
 
-    return res.json(addedAds)
+    if (addedAds)
+      return res.json({message: "Контент успешно добавлен в медиаплан"})
+
+    return res.json({message: "Контент не удалось добавить в медиаплан"})
   }
 
   async editOrderAds(req, res) {
     const {id, position} = req.body
     const ad = await Ads.findByPk(id)
-    const candidate = await Ads.find({where: {position}})
+    const candidate = await Ads.findOne({where: {position}})
     let result
 
 
@@ -226,7 +250,7 @@ class MediaplanController {
   async deleteAds(req, res) {
     const {id} = req.params
 
-    const result = await Ads.destroy({where: {id}})
+    const result = await Ads.destroy({where: {mediaplanId: id}})
 
     if (result) {
       return res.json({message: 'Дополнительный контент был удален'})
@@ -249,6 +273,21 @@ class MediaplanController {
     } else {
       return res.json({message: 'Весь дополнительный контент не удалось удалить'})
     }
+  }
+
+  async getAll(req, res) {
+    const mediaplans = await Mediaplan.findAll({
+      include: [{
+        model: CommonContent,
+      }, {
+        model: Banner,
+        as: 'MediaplanBanner'
+      }, {
+        model: Ticker
+      }]
+    })
+
+    return res.json(mediaplans)
   }
 }
 

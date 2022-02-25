@@ -98,5 +98,7 @@ module.exports = {
   CommonContent,
   Banner,
   Ticker,
-  Mediaplan
+  Mediaplan,
+  BannerInMediaplan,
+  Ads
 }
