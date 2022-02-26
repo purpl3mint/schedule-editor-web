@@ -1,7 +1,8 @@
 const {Mediaplan, BannerInMediaplan, Ads, Banner, CommonContent, Ticker } = require('../models/models')
+const ApiError = require('../error/apiError')
 
 class MediaplanController {
-  async create(req, res) {
+  async create(req, res, next) {
     const {
       name,
       userId,
@@ -13,10 +14,10 @@ class MediaplanController {
     } = req.body
 
     if (!contentId) {
-      return res.json({message: 'Нет основного контента'})
+      return next(ApiError.badRequest('Нет основного контента'))
     }
     if (!userId) {
-      return res.json({message: 'Нет автора'})
+      return next(ApiError.badRequest('Нет автора'))
     }
 
     const mediaplan = await Mediaplan.create({
@@ -32,11 +33,11 @@ class MediaplanController {
     if (mediaplan) {
       return res.json({message: 'Медиаплан успешно создан'})
     } else {
-      return res.json({message: 'Медиаплан не удалось создать'})
+      return next(ApiError.badRequest('Медиаплан не удалось создать'))
     }
   }
 
-  async delete(req, res) {
+  async delete(req, res, next) {
     let message = ''
     const {id} = req.params
 
@@ -45,13 +46,13 @@ class MediaplanController {
     if (deletedMediaplan) {
       message = 'Медиаплан успешно удален'
     } else {
-      message = 'Медиаплан не найден, удалить не удалось'
+      return next(ApiError.badRequest('Медиаплан не найден, удалить не удалось'))
     }
 
     return res.json({message})
   }
 
-  async setParameters(req, res) {
+  async setParameters(req, res, next) {
     const {
       id,
       ads_start_delay, 
@@ -64,7 +65,7 @@ class MediaplanController {
     const mediaplan = await Mediaplan.findByPk(id)
 
     if (!mediaplan)
-      return res.json({message: 'Не удалось найти медиаплан'})
+      return next(ApiError.badRequest('Не удалось найти медиаплан'))
 
     mediaplan.ads_start_delay = ads_start_delay
     mediaplan.banners_start_delay = banners_start_delay
@@ -77,12 +78,21 @@ class MediaplanController {
     if (isSaved) {
       return res.json({message: 'Медиаплан успешно изменен'})
     } else {
-      return res.json({message: 'Медиаплан не удалось изменить'})
+      return next(ApiError.badRequest('Медиаплан не удалось изменить'))
     }
   }
 
-  async addBanner(req, res) {
+  async addBanner(req, res, next) {
     const {mediaplanId, bannerId, position} = req.body
+
+    const mediaplan = await Mediaplan.findByPk(mediaplanId)
+    const banner = await Banner.findByPk(bannerId)
+
+    if (!mediaplan)
+      return next(ApiError.badRequest('Такого медиаплана не существует'))
+
+    if (!banner)
+      return next(ApiError.badRequest('Такого баннера не существует'))
 
     const candidate = await BannerInMediaplan.findOne({where: {
       mediaplanId: mediaplanId,
@@ -90,7 +100,7 @@ class MediaplanController {
     }})
 
     if (candidate)
-      return res.json({message: "Такая запись уже существует"})
+      return next(ApiError.badRequest('Такая запись уже существует'))
 
     const addedBanner = await BannerInMediaplan.create({
       position: position,
@@ -101,11 +111,11 @@ class MediaplanController {
     if (addedBanner) {
       return res.json({message: 'Баннер успешно добавлен в медиаплан'})
     } else {
-      return res.json({message: 'Баннер не удалось добавить в медиаплан'})
+      return next(ApiError.badRequest('Баннер не удалось добавить в медиаплан'))
     }
   }
 
-  async editOrderBanners(req, res) {
+  async editOrderBanners(req, res, next) {
     const {id, position} = req.body
     const ad = await BannerInMediaplan.findByPk(id)
     const candidate = await BannerInMediaplan.findOne({where: {position}})
@@ -116,7 +126,7 @@ class MediaplanController {
       ad.position = position
       result = await ad.save()
       if (!result)
-        return res.json({message: 'Не удалось сменить порядок воспроизведения. Баннер не сохранен'})
+        return next(ApiError.badRequest('Не удалось сменить порядок воспроизведения. Баннер не сохранен'))
       return res.json({message: 'Порядок воспроизведения баннеров успешно изменен'})
     }
 
@@ -126,16 +136,15 @@ class MediaplanController {
 
     result = await candidate.save()
     if (!result)
-      return res.json({message: 'Не удалось сменить порядок воспроизведения. Кандидат не сохранен'})
+      return next(ApiError.badRequest('Не удалось сменить порядок воспроизведения. Кандидат не сохранен'))
     
     result = await ad.save()
     if (!result)
-      return res.json({message: 'Не удалось сменить порядок воспроизведения. Баннер не сохранен'})
-
-      return res.json({message: 'Порядок воспроизведения баннеров успешно изменен'})
+      return next(ApiError.badRequest('Не удалось сменить порядок воспроизведения. Баннер не сохранен'))
+    return res.json({message: 'Порядок воспроизведения баннеров успешно изменен'})
   }
 
-  async deleteBanner(req, res) {
+  async deleteBanner(req, res, next) {
     const {id} = req.params
 
     const result = await BannerInMediaplan.destroy({where: {id}})
@@ -143,11 +152,11 @@ class MediaplanController {
     if (result) {
       return res.json({message: 'Баннер был удален'})
     } else {
-      return res.json({message: 'Баннер не удалось удалить'})
+      return next(ApiError.badRequest('Баннер не удалось удалить'))
     }
   }
 
-  async deleteAllBanners(req, res) {
+  async deleteAllBanners(req, res, next) {
     const {id} = req.params
 
     const result = await BannerInMediaplan.destroy({
@@ -159,11 +168,11 @@ class MediaplanController {
     if (result) {
       return res.json({message: 'Баннеры были удалены'})
     } else {
-      return res.json({message: 'Баннеры не удалось удалить'})
+      return next(ApiError.badRequest('Баннеры не удалось удалить'))
     }
   }
 
-  async setTicker(req, res) {
+  async setTicker(req, res, next) {
     const {mediaplanId, tickerId} = req.body
 
     let changingMediaplan = await Mediaplan.findByPk(mediaplanId)
@@ -175,11 +184,11 @@ class MediaplanController {
     if (isSaved) {
       return res.json({message: 'Бегущая строка успешно добавлена'})
     } else {
-      return res.json({message: 'Бегущую строку не удалось добавить'})
+      return next(ApiError.badRequest('Бегущую строку не удалось добавить'))
     }
   }
 
-  async unsetTicker(req, res) {
+  async unsetTicker(req, res, next) {
     const {id} = req.params
 
     const mediaplan = await Mediaplan.findByPk(id)
@@ -190,12 +199,21 @@ class MediaplanController {
     if (isSaved) {
       return res.json({message: 'Бегущая строка удалена из медиаплана'})
     } else {
-      return res.json({message: 'Бегущую строку не удалось удалить из медиаплана'})
+      return next(ApiError.badRequest('Бегущую строку не удалось удалить из медиаплана'))
     }
   }
 
-  async setAds(req, res) {
+  async setAds(req, res, next) {
     const {mediaplanId, contentId, position} = req.body
+
+    const mediaplan = await Mediaplan.findByPk(mediaplanId)
+    const content = await CommonContent.findByPk(contentId)
+
+    if (!mediaplan)
+      return next(ApiError.badRequest('Такого медиаплана не существует'))
+
+    if (!content)
+      return next(ApiError.badRequest('Такого контента не существует'))
 
     const candidate = await Ads.findOne({where: {
       contentId,
@@ -213,11 +231,10 @@ class MediaplanController {
 
     if (addedAds)
       return res.json({message: "Контент успешно добавлен в медиаплан"})
-
-    return res.json({message: "Контент не удалось добавить в медиаплан"})
+    return next(ApiError.badRequest('Контент не удалось добавить в медиаплан'))
   }
 
-  async editOrderAds(req, res) {
+  async editOrderAds(req, res, next) {
     const {id, position} = req.body
     const ad = await Ads.findByPk(id)
     const candidate = await Ads.findOne({where: {position}})
@@ -228,7 +245,7 @@ class MediaplanController {
       ad.position = position
       result = await ad.save()
       if (!result)
-        return res.json({message: 'Не удалось сменить порядок воспроизведения. Контент не сохранен'})
+        return next(ApiError.badRequest('Не удалось сменить порядок воспроизведения. Контент не сохранен'))
       return res.json({message: 'Порядок воспроизведения контента успешно изменен'})
     }
 
@@ -238,16 +255,15 @@ class MediaplanController {
 
     result = await candidate.save()
     if (!result)
-      return res.json({message: 'Не удалось сменить порядок воспроизведения. Кандидат не сохранен'})
+      return next(ApiError.badRequest('Не удалось сменить порядок воспроизведения. Кандидат не сохранен'))
     
     result = await ad.save()
     if (!result)
-      return res.json({message: 'Не удалось сменить порядок воспроизведения. Контент не сохранен'})
-
-      return res.json({message: 'Порядок воспроизведения контента успешно изменен'})
+      return next(ApiError.badRequest('Не удалось сменить порядок воспроизведения. Контент не сохранен'))
+    return res.json({message: 'Порядок воспроизведения контента успешно изменен'})
   }
 
-  async deleteAds(req, res) {
+  async deleteAds(req, res, next) {
     const {id} = req.params
 
     const result = await Ads.destroy({where: {mediaplanId: id}})
@@ -255,11 +271,11 @@ class MediaplanController {
     if (result) {
       return res.json({message: 'Дополнительный контент был удален'})
     } else {
-      return res.json({message: 'Дополнительный контент не удалось удалить'})
+      return next(ApiError.badRequest('Дополнительный контент не удалось удалить'))
     }
   }
 
-  async deleteAllAds(req, res) {
+  async deleteAllAds(req, res, next) {
     const {id} = req.params
 
     const result = await Ads.destroy({
@@ -271,11 +287,11 @@ class MediaplanController {
     if (result) {
       return res.json({message: 'Весь дополнительный контент был удален'})
     } else {
-      return res.json({message: 'Весь дополнительный контент не удалось удалить'})
+      return next(ApiError.badRequest('Весь дополнительный контент не удалось удалить'))
     }
   }
 
-  async getAll(req, res) {
+  async getAll(req, res, next) {
     const mediaplans = await Mediaplan.findAll({
       include: [{
         model: CommonContent,

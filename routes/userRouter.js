@@ -8,5 +8,6 @@ router.post('/login', userController.login)
 router.get('/auth', authMiddleware, userController.auth)
 router.put('/setpassword', userController.setPassword)
 router.get('/', userController.getAll)
+router.delete('/:id', userController.deleteUser)
 
 module.exports = router

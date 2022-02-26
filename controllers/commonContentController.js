@@ -18,11 +18,11 @@ class CommonContentController {
     if (content) {
       return res.json({message: 'Контент добавлен'})
     } else {
-      return res.json({message: 'Контент не удалось добавить'})
+      return next(ApiError.badRequest('Контент не удалось добавить'))
     }
   }
 
-  async delete(req, res) {
+  async delete(req, res, next) {
     let message = ''
     const {id} = req.params
 
@@ -31,13 +31,13 @@ class CommonContentController {
     if (deletedContent) {
       message = 'Контент успешно удален'
     } else {
-      message = 'Контент не найден, удалить не удалось'
+      return next(ApiError.badRequest('Контент не найден, удалить не удалось'))
     }
 
     return res.json({message})
   }
 
-  async edit(req, res) {
+  async edit(req, res, next) {
     let message = ''
     const {id, online, aspect_ratio, duration} = req.body
 
@@ -52,7 +52,7 @@ class CommonContentController {
     if (isSaved){
       message = 'Контент успешно обновлен'
     } else {
-      message = 'Контент не удалось обновить'
+      return next(ApiError.badRequest('Контент не удалось обновить'))
     }
 
     return res.json({message})

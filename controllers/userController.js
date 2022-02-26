@@ -84,13 +84,37 @@ class UserController {
     if (isSaved)
       return res.json("Пароль успешно изменен")
     else
-      return res.json("Пароль не удалось изменить")
+      return next(ApiError.badRequest("Пароль не удалось изменить"))
   }
 
   async getAll(req, res) {
     const users = await User.findAll()
 
     return res.json(users)
+  }
+
+  async deleteUser(req, res, next) {
+    const {id} = req.params
+
+    const user = await User.findByPk(id)
+
+    if (!user)
+      return next(ApiError.badRequest('Такого пользователя не существует'))
+
+    if (user.type === 'admin') {
+      const admins = await User.findAll({where: {type: 'admin'}})
+
+      if (admins.length === 1)
+        return next(ApiError.badRequest('Больше администраторов удалять нельзя'))
+    }
+
+    const deleteUser = await User.destroy({where: {id}})
+
+    if (deleteUser) {
+      return res.json({message: 'Пользователь успешно удален'})
+    } else {
+      return next(ApiError.badRequest('Не удалось удалить пользователя'))
+    }
   }
 }
 

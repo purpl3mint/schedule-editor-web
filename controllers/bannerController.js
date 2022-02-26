@@ -38,11 +38,11 @@ class BannerController {
     if (banner) {
       return res.json({message: 'Баннер добавлен'})
     } else {
-      return res.json({message: 'Баннер не удалось добавить'})
+      return next(ApiError.badRequest('Баннер не удалось добавить'))
     }
   }
 
-  async delete(req, res) {
+  async delete(req, res, next) {
     let message = ''
     const {id} = req.params
 
@@ -51,13 +51,13 @@ class BannerController {
     if (deletedBanner) {
       message = 'Баннер успешно удален'
     } else {
-      message = 'Баннер не найден, удалить не удалось'
+      return next(ApiError.badRequest('Баннер не найден, удалить не удалось'))
     }
 
     return res.json({message})
   }
 
-  async edit(req, res) {
+  async edit(req, res, next) {
     let message = ''
     const {id, 
       online, 
@@ -82,7 +82,7 @@ class BannerController {
     if (isSaved){
       message = 'Баннер успешно обновлен'
     } else {
-      message = 'Баннер не удалось обновить'
+      return next(ApiError.badRequest('Баннер не удалось обновить'))
     }
 
     return res.json({message})

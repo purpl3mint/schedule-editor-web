@@ -18,11 +18,11 @@ class TickerController {
     if (ticker) {
       return res.json({message: 'Бегущая строка добавлена'})
     } else {
-      return res.json({message: 'Бегущую строку не удалось добавить'})
+      return next(ApiError.badRequest('Бегущую строку не удалось добавить'))
     }
   }
 
-  async delete(req, res) {
+  async delete(req, res, next) {
     let message = ''
     const {id} = req.params
 
@@ -31,13 +31,13 @@ class TickerController {
     if (deletedTicker) {
       message = 'Бегущая строка успешно удалена'
     } else {
-      message = 'Бегущая строка не найдена, удалить не удалось'
+      return next(ApiError.badRequest('Бегущая строка не найдена, удалить не удалось'))
     }
 
     return res.json({message})
   }
 
-  async edit(req, res) {
+  async edit(req, res, next) {
     let message = ''
     const {id, size, speed, font_color, background_color} = req.body
 
@@ -53,7 +53,7 @@ class TickerController {
     if (isSaved){
       message = 'Бегущая строка успешно обновлена'
     } else {
-      message = 'Бегущую строку не удалось обновить'
+      return next(ApiError.badRequest('Бегущую строку не удалось обновить'))
     }
 
     return res.json({message})
