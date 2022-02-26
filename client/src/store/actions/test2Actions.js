@@ -1,1 +1,0 @@
-export const TEST2_SET_DATA = 'TEST2_SET_DATA'
