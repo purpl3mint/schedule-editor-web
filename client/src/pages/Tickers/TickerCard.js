@@ -1,10 +1,10 @@
 import React, { useCallback } from "react"
 
-export const UserCard = (props) => {
-  const {username, id, type} = props
+export const TickerCard = (props) => {
+  const {id, name, url, size, speed, font_color, background_color} = props
 
   const deleteHandler = useCallback(() => {
-    console.log("Deleting user will added later");
+    console.log("Deleting ticker will added later");
   }, [])
 
   return (
@@ -14,8 +14,12 @@ export const UserCard = (props) => {
                     className="collection-item card" 
                     style={{marginBottom: "25px", border: "1px solid grey"}}
                 >
-                    {username}<br/>
-                    Тип: {type}
+                    {name}<br/>
+                    URL: {url}<br/>
+                    Размер шрифта: {size}<br/>
+                    Скорость: {speed}<br/>
+                    Цвет шрифта: {font_color}<br/>
+                    Цвет фона: {background_color}<br/>
                 </div>
             </div>
 

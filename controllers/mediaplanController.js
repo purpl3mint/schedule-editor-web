@@ -27,7 +27,7 @@ class MediaplanController {
       banners_start_delay, 
       banners_repeat, 
       banners_animation_duration_msec, 
-      contentId
+      commonContentId: contentId
     })
 
     if (mediaplan) {
@@ -300,6 +300,9 @@ class MediaplanController {
         as: 'MediaplanBanner'
       }, {
         model: Ticker
+      }, {
+        model: CommonContent, 
+        as: 'MediaplanContent'
       }]
     })
 

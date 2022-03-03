@@ -1,8 +1,8 @@
 import React, { useCallback, useEffect } from "react";
 import { Preloader } from "../../components/Preloader";
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux';
 import { UserCard } from "./UserCard";
-import { userLoadUsers, userSetSucceed } from "../../store/actionCreators/userActionCreator"
+import { userLoadUsers, userSetSucceed } from "../../store/actionCreators/userActionCreator";
 
 export const UsersPage = () => {
   const dispatch = useDispatch()
