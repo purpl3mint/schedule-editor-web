@@ -1,6 +1,9 @@
 import React, { useCallback } from "react"
+import { useDispatch } from "react-redux"
+import { bannerDelete } from "../../store/actionCreators/bannerActionCreator"
 
 export const BannerCard = (props) => {
+  const dispatch = useDispatch()
   const {
     id, 
     name, 
@@ -15,8 +18,8 @@ export const BannerCard = (props) => {
   } = props
 
   const deleteHandler = useCallback(() => {
-    console.log("Deleting banner will added later");
-  }, [])
+    dispatch(bannerDelete(id))
+  }, [dispatch, id])
 
   return (
     <div className="row">

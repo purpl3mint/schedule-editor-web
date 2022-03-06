@@ -40,7 +40,7 @@ export const AddContent = (props) => {
   
   return (
     <div className='modal'>
-      <div className="row modal-content">
+      <div className="row modal-content_content">
 
         <h1>Создание нового контента</h1>
         
