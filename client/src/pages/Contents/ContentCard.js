@@ -1,11 +1,14 @@
 import React, { useCallback } from "react"
+import { useDispatch } from "react-redux"
+import { contentDelete } from "../../store/actionCreators/contentActionCreator"
 
 export const ContentCard = (props) => {
+  const dispatch = useDispatch()
   const {id, name, url, online, aspect_ratio, duration} = props
 
   const deleteHandler = useCallback(() => {
-    console.log("Deleting content will added later");
-  }, [])
+    dispatch(contentDelete(id))
+  }, [dispatch, id])
 
   return (
     <div className="row">

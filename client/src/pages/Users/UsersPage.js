@@ -30,8 +30,6 @@ export const UsersPage = () => {
     <div className="row">
       <h1>Пользователи</h1>
 
-      
-
       {loading && <Preloader />}
 
       {!loading && 
@@ -45,6 +43,7 @@ export const UsersPage = () => {
             <i className="material-icons">add</i>
             <span>Добавить</span>
           </button>
+          
           <AddUser 
             show={showModal} 
             onCreate={() => {
