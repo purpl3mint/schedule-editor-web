@@ -4,18 +4,18 @@
   top: 0;
   right: 0;
   bottom: 0;
-  display: flex;  
+  display: flex;
   min-width: 800px;
   align-items: center;
   justify-content: center;
   z-index: 1;
 }
 
-.modal-content_banner {
-  padding-top: 650px;
+.modal-content_ticker {
+  padding-top: 430px;
   padding-left: 10px;
   padding-right: 10px;
-  width: 770px;
+  width: 780px;
   background-color: #fff;
 }
 

@@ -41,25 +41,26 @@ export const AddUser = (props) => {
       <div className="row modal-content">
 
         <h1>Создание нового пользователя</h1>
+        <span>* - обязательное поле</span><br />
         <div className="col s12">
 
           <div className="row">
             <div className="input-field col s6">
               <input id="username" name="username" type="text" className="validate" onChange={changeHandler} />
-              <label htmlFor="username">Имя пользователя</label>
+              <label htmlFor="username">Имя пользователя*</label>
             </div>
           </div>
 
           <div className="row">
             <div className="input-field col s6">
               <input id="password" name="password" type="text" onChange={changeHandler} />
-              <label htmlFor="password">Пароль</label>
+              <label htmlFor="password">Пароль*</label>
             </div>
           </div>
 
           <div className="row">
             <select defaultValue="-1" className="col s6 browser-default" name="type" onChange={changeHandler}>
-              <option value="-1" disabled>Выберите тип пользователя</option>
+              <option value="-1" disabled>Выберите тип пользователя*</option>
               <option value="user">Обычный пользователь</option>
               <option value="admin">Администратор</option>
             </select>

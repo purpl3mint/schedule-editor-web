@@ -1,11 +1,14 @@
 import React, { useCallback } from "react"
+import { useDispatch } from "react-redux"
+import { tickerDelete } from "../../store/actionCreators/tickerActionCreator"
 
 export const TickerCard = (props) => {
   const {id, name, url, size, speed, font_color, background_color} = props
+  const dispatch = useDispatch()
 
   const deleteHandler = useCallback(() => {
-    console.log("Deleting ticker will added later");
-  }, [])
+    dispatch(tickerDelete(id))
+  }, [dispatch, id])
 
   return (
     <div className="row">

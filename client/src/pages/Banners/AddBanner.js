@@ -41,19 +41,20 @@ export const AddBanner = (props) => {
       <div className="row modal-content_banner">
 
         <h1>Создание нового баннера</h1>
+        <span>* - обязательное поле</span><br />
         <div className="col s12">
 
           <div className="row">
             <div className="input-field col s6">
               <input id="name" name="name" type="text" className="validate" onChange={changeHandler} />
-              <label htmlFor="name">Название баннера</label>
+              <label htmlFor="name">Название баннера*</label>
             </div>
           </div>
 
           <div className="row">
             <div className="input-field col s6">
               <input id="url" name="url" type="text" onChange={changeHandler} />
-              <label htmlFor="url">URL</label>
+              <label htmlFor="url">URL*</label>
             </div>
           </div>
 

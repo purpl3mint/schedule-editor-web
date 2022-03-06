@@ -43,6 +43,7 @@ export const AddContent = (props) => {
       <div className="row modal-content_content">
 
         <h1>Создание нового контента</h1>
+        <span>* - обязательное поле</span><br />
         
         <div className="col s12">
 

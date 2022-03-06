@@ -12,7 +12,9 @@
 }
 
 .modal-content_content {
-  padding-top: 200px;
+  padding-top: 240px;
+  padding-right: 10px;
+  padding-left: 10px;
   width: 780px;
   background-color: #fff;
 }

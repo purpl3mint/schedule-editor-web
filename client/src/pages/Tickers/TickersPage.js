@@ -1,11 +1,13 @@
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Preloader } from "../../components/Preloader";
 import { useDispatch, useSelector } from 'react-redux';
 import { TickerCard } from "./TickerCard";
+import { AddTicker } from "./AddTicker";
 import { tickerLoadTickers, tickerSetSucceed } from "../../store/actionCreators/tickerActionCreator";
 
 export const TickersPage = () => {
   const dispatch = useDispatch()
+  const [showModal, setShowModal] = useState(false)
 
   const loading = useSelector(state => state.userReducer.preloader)
   const tickers = useSelector(state => {
@@ -40,8 +42,33 @@ export const TickersPage = () => {
       {loading && <Preloader />}
 
       {!loading && 
-        <div className="collection" style={{border: "0px"}}>
-          { tickers }
+        <div>
+          
+          <button 
+            key="new" 
+            className="waves-effect waves-light btn" 
+            style={{display: "flex", width: '130px'}}
+            onClick={ () => setShowModal(true)}
+          >
+            <i className="material-icons">add</i>
+            <span>Добавить</span>
+          </button>
+
+          <AddTicker 
+            show={showModal} 
+            onCreate={() => {
+              setShowModal(false)
+              window.location.reload()
+            }}
+            onClose={() => {
+              setShowModal(false)
+            }}
+          />
+
+          <div className="collection" style={{border: "0px"}}>
+            { tickers }
+          </div>
+
         </div>
       }
 

@@ -1,7 +1,9 @@
 import {
   TICKER_SET_SUCCEED,
   TICKER_SET_TICKERS,
-  TICKER_SET_PRELOADER
+  TICKER_SET_PRELOADER,
+  TICKER_SET_ADD_FORM,
+  TICKER_CLEAR_ADD_FORM
 } from "../actions/tickerActions"
 
 export function tickerSetSucceed(data){
@@ -36,6 +38,53 @@ export function tickerLoadTickers() {
     const data = await responce.json()
     if (responce.ok) {
       dispatch(tickerSetTickers(data))
+    }
+
+    dispatch(tickerSetPreloader(false))
+  }
+}
+
+export function tickerSetAddForm(name, value) {
+  return {
+    type: TICKER_SET_ADD_FORM,
+    data: {name, value}
+  }
+}
+
+export function tickerClearAddForm () {
+  return {
+    type: TICKER_CLEAR_ADD_FORM
+  }
+}
+
+export function tickerAdd(form){
+  return async(dispatch) => {
+    dispatch(tickerSetPreloader(true))
+    
+    const method = 'POST'
+    const headers = {'Content-Type': 'application/json'}
+    const body = JSON.stringify({...form})
+    const responce = await fetch("/api/ticker", {method, body, headers})
+
+    if (responce.ok) {
+      dispatch(tickerSetSucceed(true))
+      dispatch(tickerClearAddForm())
+    }
+
+    dispatch(tickerSetPreloader(false))
+  }
+}
+
+export function tickerDelete(userId) {
+  return async(dispatch) => {
+    dispatch(tickerSetPreloader(true))
+
+    const method = 'DELETE'
+    const headers = {'Content-Type': 'application/json'}
+    const responce = await fetch("/api/ticker/" + userId, {method, headers})
+
+    if (responce.ok) {
+      dispatch(tickerLoadTickers())
     }
 
     dispatch(tickerSetPreloader(false))
