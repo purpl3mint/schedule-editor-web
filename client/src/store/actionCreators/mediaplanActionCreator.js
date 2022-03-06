@@ -1,7 +1,9 @@
 import {
   MEDIAPLAN_SET_SUCCEED,
   MEDIAPLAN_SET_MEDIAPLANS,
-  MEDIAPLAN_SET_PRELOADER
+  MEDIAPLAN_SET_PRELOADER,
+  MEDIAPLAN_SET_ADD_FORM,
+  MEDIAPLAN_CLEAR_ADD_FORM
 } from "../actions/mediaplanActions"
 
 export function mediaplanSetSucceed(data){
@@ -36,6 +38,53 @@ export function mediaplanLoadMediaplans() {
     const data = await responce.json()
     if (responce.ok) {
       dispatch(mediaplanSetMediaplans(data))
+    }
+
+    dispatch(mediaplanSetPreloader(false))
+  }
+}
+
+export function mediaplanSetAddForm(name, value) {
+  return {
+    type: MEDIAPLAN_SET_ADD_FORM,
+    data: {name, value}
+  }
+}
+
+export function mediaplanClearAddForm () {
+  return {
+    type: MEDIAPLAN_CLEAR_ADD_FORM
+  }
+}
+
+export function mediaplanAdd(form){
+  return async(dispatch) => {
+    dispatch(mediaplanSetPreloader(true))
+    
+    const method = 'POST'
+    const headers = {'Content-Type': 'application/json'}
+    const body = JSON.stringify({...form})
+    const responce = await fetch("/api/mediaplan", {method, body, headers})
+
+    if (responce.ok) {
+      dispatch(mediaplanSetSucceed(true))
+      dispatch(mediaplanClearAddForm())
+    }
+
+    dispatch(mediaplanSetPreloader(false))
+  }
+}
+
+export function mediaplanDelete(mediaplanId) {
+  return async(dispatch) => {
+    dispatch(mediaplanSetPreloader(true))
+
+    const method = 'DELETE'
+    const headers = {'Content-Type': 'application/json'}
+    const responce = await fetch("/api/mediaplan/" + mediaplanId, {method, headers})
+
+    if (responce.ok) {
+      dispatch(mediaplanLoadMediaplans())
     }
 
     dispatch(mediaplanSetPreloader(false))

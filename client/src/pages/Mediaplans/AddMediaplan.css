@@ -1,0 +1,24 @@
+.modal {
+  position: fixed;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  min-width: 800px;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+}
+
+.modal-content_mediaplan {
+  padding-top: 400px;
+  padding-left: 10px;
+  padding-right: 10px;
+  width: 780px;
+  background-color: #fff;
+}
+
+.btn-close {
+  margin-left: 15px;
+}

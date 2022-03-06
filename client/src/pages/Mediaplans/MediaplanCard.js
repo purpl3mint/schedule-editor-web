@@ -1,4 +1,6 @@
 import React, { useCallback } from "react"
+import { useDispatch } from "react-redux"
+import { mediaplanDelete } from "../../store/actionCreators/mediaplanActionCreator"
 
 export const MediaplanCard = (props) => {
   const {
@@ -13,10 +15,11 @@ export const MediaplanCard = (props) => {
     MediaplanBanner,
     MediaplanContent
   } = props
+  const dispatch = useDispatch()
 
   const deleteHandler = useCallback(() => {
-    console.log("Deleting mediaplan will added later");
-  }, [])
+    dispatch(mediaplanDelete(id))
+  }, [dispatch, id])
 
   return (
     <div className="row">

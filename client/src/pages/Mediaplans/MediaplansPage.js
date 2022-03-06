@@ -1,11 +1,13 @@
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Preloader } from "../../components/Preloader";
 import { useDispatch, useSelector } from 'react-redux';
 import { MediaplanCard } from "./MediaplanCard";
+import { AddMediaplan } from "./AddMediaplan";
 import { mediaplanLoadMediaplans, mediaplanSetSucceed } from "../../store/actionCreators/mediaplanActionCreator";
 
 export const MediaplansPage = () => {
   const dispatch = useDispatch()
+  const [showModal, setShowModal] = useState(false)
 
   const loading = useSelector(state => state.mediaplanReducer.preloader)
   const mediaplans = useSelector(state => {
@@ -43,8 +45,33 @@ export const MediaplansPage = () => {
       {loading && <Preloader />}
 
       {!loading && 
-        <div className="collection" style={{border: "0px"}}>
-          { mediaplans }
+        <div>
+
+          <button 
+            key="new" 
+            className="waves-effect waves-light btn" 
+            style={{display: "flex", width: '130px'}}
+            onClick={ () => setShowModal(true)}
+          >
+            <i className="material-icons">add</i>
+            <span>Добавить</span>
+          </button>
+    
+          <AddMediaplan 
+            show={showModal} 
+            onCreate={() => {
+              setShowModal(false)
+              window.location.reload()
+            }}
+            onClose={() => {
+              setShowModal(false)
+            }}
+          />
+
+          <div className="collection" style={{border: "0px"}}>
+            { mediaplans }
+          </div>
+
         </div>
       }
 
