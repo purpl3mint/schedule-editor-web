@@ -1,7 +1,9 @@
 import {
   USER_SET_SUCCEED,
   USER_SET_USERS,
-  USER_SET_PRELOADER
+  USER_SET_PRELOADER,
+  USER_SET_ADD_FORM,
+  USER_CLEAR_ADD_FORM
 } from "../actions/userActions"
 
 export function userSetSucceed(data){
@@ -36,6 +38,53 @@ export function userLoadUsers() {
     const data = await responce.json()
     if (responce.ok) {
       dispatch(userSetUsers(data))
+    }
+
+    dispatch(userSetPreloader(false))
+  }
+}
+
+export function userSetAddForm(name, value) {
+  return {
+    type: USER_SET_ADD_FORM,
+    data: {name, value}
+  }
+}
+
+export function userClearAddForm () {
+  return {
+    type: USER_CLEAR_ADD_FORM
+  }
+}
+
+export function userAdd(form){
+  return async(dispatch) => {
+    dispatch(userSetPreloader(true))
+    
+    const method = 'POST'
+    const headers = {'Content-Type': 'application/json'}
+    const body = JSON.stringify({...form})
+    const responce = await fetch("/api/user/registration", {method, body, headers})
+
+    if (responce.ok) {
+      dispatch(userSetSucceed(true))
+      dispatch(userClearAddForm())
+    }
+
+    dispatch(userSetPreloader(false))
+  }
+}
+
+export function userDelete(userId) {
+  return async(dispatch) => {
+    dispatch(userSetPreloader(true))
+
+    const method = 'DELETE'
+    const headers = {'Content-Type': 'application/json'}
+    const responce = await fetch("/api/user/" + userId, {method, headers})
+
+    if (responce.ok) {
+      dispatch(userLoadUsers())
     }
 
     dispatch(userSetPreloader(false))

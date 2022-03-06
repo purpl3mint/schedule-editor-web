@@ -1,0 +1,22 @@
+.modal {
+  position: fixed;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  min-width: 800px;
+  min-height: 600px;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+}
+
+.modal-content {
+  width: 800px;
+  background-color: #fff;
+}
+
+.btn-close {
+  margin-left: 15px;
+}

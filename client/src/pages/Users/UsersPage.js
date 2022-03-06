@@ -1,11 +1,13 @@
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Preloader } from "../../components/Preloader";
 import { useDispatch, useSelector } from 'react-redux';
 import { UserCard } from "./UserCard";
+import { AddUser } from "./AddUser";
 import { userLoadUsers, userSetSucceed } from "../../store/actionCreators/userActionCreator";
 
 export const UsersPage = () => {
   const dispatch = useDispatch()
+  const [showModal, setShowModal] = useState(false)
 
   const loading = useSelector(state => state.userReducer.preloader)
   const users = useSelector(state => {
@@ -28,11 +30,36 @@ export const UsersPage = () => {
     <div className="row">
       <h1>Пользователи</h1>
 
+      
+
       {loading && <Preloader />}
 
       {!loading && 
-        <div className="collection" style={{border: "0px"}}>
-          { users }
+        <div>
+          <button 
+            key="new" 
+            className="waves-effect waves-light btn" 
+            style={{display: "flex", width: '130px'}}
+            onClick={ () => setShowModal(true)}
+          >
+            <i className="material-icons">add</i>
+            <span>Добавить</span>
+          </button>
+          <AddUser 
+            show={showModal} 
+            onCreate={() => {
+              setShowModal(false)
+              window.location.reload()
+            }}
+            onClose={() => {
+              setShowModal(false)
+            }}
+          />
+
+          <div className="collection" style={{border: "0px"}}>
+            { users }
+          </div>
+
         </div>
       }
 

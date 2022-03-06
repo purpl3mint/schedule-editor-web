@@ -1,11 +1,14 @@
 import React, { useCallback } from "react"
+import { useDispatch } from "react-redux"
+import { userDelete } from "../../store/actionCreators/userActionCreator"
 
 export const UserCard = (props) => {
   const {username, id, type} = props
+  const dispatch = useDispatch()
 
   const deleteHandler = useCallback(() => {
-    console.log("Deleting user will added later");
-  }, [])
+    dispatch(userDelete(id))
+  }, [dispatch, id])
 
   return (
     <div className="row">
