@@ -30,16 +30,31 @@ export const useRoutes = (isAuthenticated) => {
       return <Route key={r.comp + r.path}/>
   })
   
-
+  //{routesDisplay}
   return (
     <div className="row">
         
         <div className="col s9 m9 l9 xl9">
             {isAuthenticated && <Sidebar /> }
 
+            {!isAuthenticated && 
             <Routes>
-                {routesDisplay}
+              <Route path="/*" element={<AuthPage />} />
             </Routes>
+            }
+
+            {isAuthenticated &&
+            <Routes>
+              <Route path="/">
+                <Route path="*" element={<StartPage />} />
+                <Route path="banners" element={<BannersPage />} />
+                <Route path="contents" element={<ContentsPage />} />
+                <Route path="mediaplans" element={<MediaplansPage />} />
+                <Route path="tickers" element={<TickersPage />} />
+                <Route path="users" element={<UsersPage />} />
+              </Route>
+            </Routes>
+            }
         </div>
     </div>
   )
