@@ -3,7 +3,9 @@ import {
   CONTENT_SET_CONTENTS,
   CONTENT_SET_PRELOADER,
   CONTENT_SET_ADD_FORM,
-  CONTENT_CLEAR_ADD_FORM
+  CONTENT_CLEAR_ADD_FORM,
+  CONTENT_SET_EDIT_FORM,
+  CONTENT_CLEAR_EDIT_FORM
 } from "../actions/contentActions"
 
 
@@ -83,6 +85,36 @@ export function contentDelete(contentId) {
     const method = 'DELETE'
     const headers = {'Content-Type': 'application/json'}
     const responce = await fetch("/api/content/" + contentId, {method, headers})
+
+    if (responce.ok) {
+      dispatch(contentLoadContents())
+    }
+
+    dispatch(contentSetPreloader(false))
+  }
+}
+
+export function contentSetEditForm(name, value) {
+  return {
+    type: CONTENT_SET_EDIT_FORM,
+    data: {name, value}
+  }
+}
+
+export function contentClearEditForm () {
+  return {
+    type: CONTENT_CLEAR_EDIT_FORM
+  }
+}
+
+export function contentEdit(form) {
+  return async(dispatch) => {
+    dispatch(contentSetPreloader(true))
+
+    const method = 'PUT'
+    const body = JSON.stringify({...form})
+    const headers = {'Content-Type': 'application/json'}
+    const responce = await fetch("/api/content/", {method, body, headers})
 
     if (responce.ok) {
       dispatch(contentLoadContents())

@@ -1,13 +1,16 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { Preloader } from "../../components/Preloader";
 import { useDispatch, useSelector } from 'react-redux';
-import { contentLoadContents, contentSetSucceed } from "../../store/actionCreators/contentActionCreator"
+import { contentLoadContents, contentSetEditForm, contentSetSucceed } from "../../store/actionCreators/contentActionCreator"
 import { ContentCard } from "./ContentCard";
 import { AddContent } from "./AddContent";
+import { EditContent } from "./EditContent";
 
 export const ContentsPage = () => {
   const dispatch = useDispatch()
-  const [showModal, setShowModal] = useState(false)
+  const [showModalAdd, setShowModalAdd] = useState(false)
+  const [showModalEdit, setShowModalEdit] = useState(false)
+  const [nameEditing, setNameEditing] = useState("")
 
   const loading = useSelector(state => state.contentReducer.preloader)
   const contents = useSelector(state => {
@@ -22,6 +25,8 @@ export const ContentsPage = () => {
         duration={c.duration} 
         id={c.id} 
         key={c.id} 
+        setShowModalEdit={setShowModalEdit}
+        setNameEditing={setNameEditing}
       />
     )
 
@@ -47,20 +52,32 @@ export const ContentsPage = () => {
             key="new" 
             className="waves-effect waves-light btn" 
             style={{display: "flex", width: '130px'}}
-            onClick={ () => setShowModal(true)}
+            onClick={ () => setShowModalAdd(true)}
           >
             <i className="material-icons">add</i>
             <span>Добавить</span>
           </button>
 
           <AddContent 
-            show={showModal} 
+            show={showModalAdd} 
             onCreate={() => {
-              setShowModal(false)
+              setShowModalAdd(false)
               window.location.reload()
             }}
             onClose={() => {
-              setShowModal(false)
+              setShowModalAdd(false)
+            }}
+          />
+
+          <EditContent
+            nameEditing={nameEditing}
+            show={showModalEdit}
+            onCreate={() => {
+              setShowModalEdit(false)
+              window.location.reload()
+            }}
+            onClose={() => {
+              setShowModalEdit(false)
             }}
           />
 

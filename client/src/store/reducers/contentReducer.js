@@ -3,7 +3,9 @@ import {
   CONTENT_SET_CONTENTS,
   CONTENT_SET_PRELOADER,
   CONTENT_SET_ADD_FORM,
-  CONTENT_CLEAR_ADD_FORM
+  CONTENT_CLEAR_ADD_FORM,
+  CONTENT_SET_EDIT_FORM,
+  CONTENT_CLEAR_EDIT_FORM
 } from "../actions/contentActions"
 
 const initialState = {
@@ -18,6 +20,12 @@ const initialState = {
     aspect_ratio: "normal",
     duration: 0
   },
+  editForm: {
+    id: 0,
+    online: false,
+    aspect_ratio: "normal",
+    duration: 0
+  }
 }
 
 function contentReducer (state = initialState, action) {
@@ -33,7 +41,13 @@ function contentReducer (state = initialState, action) {
         return { ...state, addForm: newAddForm }
     }
     case CONTENT_CLEAR_ADD_FORM:
-      return { ...state, addForm: initialState.addForm }
+      return { ...state, editForm: initialState.editForm }
+    case CONTENT_SET_EDIT_FORM: {
+        let newEditForm = {...state.editForm, [action.data.name]: action.data.value}
+        return { ...state, editForm: newEditForm }
+    }
+    case CONTENT_CLEAR_EDIT_FORM:
+      return { ...state, editForm: initialState.editForm }
 
     default: 
       return state

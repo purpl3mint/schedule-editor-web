@@ -1,28 +1,18 @@
 import './Contents.css'
 import React, { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux"
-import { contentSetAddForm, contentAdd } from "../../store/actionCreators/contentActionCreator"
+import { contentSetEditForm, contentEdit } from "../../store/actionCreators/contentActionCreator"
 
-export const AddContent = (props) => {
+export const EditContent = (props) => {
   const dispatch = useDispatch()
-  const form = useSelector(state => state.contentReducer.addForm)
+  const form = useSelector(state => state.contentReducer.editForm)
 
   const changeHandler = useCallback( (e) => {
-      dispatch(contentSetAddForm(e.target.name, e.target.value))
+      dispatch(contentSetEditForm(e.target.name, e.target.value))
   }, [dispatch])
 
   const createHandler = useCallback( () => {
-      if (!form.name){
-          //message("Ошибка: не задано имя пользователя")
-          return
-      }
-      if (!form.url){
-          //message("Ошибка: не задан пароль")
-          return
-      }
-
-      dispatch(contentAdd(form))
-
+      dispatch(contentEdit(form))
       props.onCreate()
   }, [dispatch, form, props])
 
@@ -33,32 +23,17 @@ export const AddContent = (props) => {
   if (!props.show) {
     return null
   }
-  
+
   return (
     <div className='modal'>
-      <div className="row modal-content_content">
+      <div className="row modal-content_content modal-edit_content">
 
-        <h1>Создание нового контента</h1>
-        <span>* - обязательное поле</span><br />
+        <h1>Редактирование контента: {props.nameEditing}</h1>
         
         <div className="col s12">
 
           <div className="row">
-            <div className="input-field col s6">
-              <input id="name" name="name" type="text" className="validate" onChange={changeHandler} />
-              <label htmlFor="name">Название контента*</label>
-            </div>
-          </div>
-
-          <div className="row">
-            <div className="input-field col s6">
-              <input id="url" name="url" type="text" onChange={changeHandler} />
-              <label htmlFor="url">URL*</label>
-            </div>
-          </div>
-
-          <div className="row">
-            <select defaultValue="-1" className="col s6 browser-default" name="online" onChange={changeHandler}>
+            <select defaultValue={form.online} className="col s6 browser-default" name="online" onChange={changeHandler}>
               <option value="-1" disabled>Выберите тип воспроизведения (по умолчанию offline)</option>
               <option value="true">Online</option>
               <option value="false">Offline</option>
@@ -66,7 +41,7 @@ export const AddContent = (props) => {
           </div>
 
           <div className="row">
-            <select defaultValue="-1" className="col s6 browser-default" name="aspect_ratio" onChange={changeHandler}>
+            <select defaultValue={form.aspect_ratio} className="col s6 browser-default" name="aspect_ratio" onChange={changeHandler}>
               <option value="-1" disabled>Выберите соотношение сторон (по умолчанию без масштабирования)</option>
               <option value="normal">Без масштабирования</option>
               <option value="crop">Срезать уходящее за пределы экрана</option>
@@ -76,7 +51,7 @@ export const AddContent = (props) => {
 
           <div className="row">
             <div className="input-field col s6">
-              <input id="duration" name="duration" type="number" onChange={changeHandler} />
+              <input id="duration" name="duration" type="number" onChange={changeHandler} defaultValue={form.duration} />
               <label htmlFor="duration">Длительность (по умолчанию 0)</label>
             </div>
           </div>
