@@ -308,6 +308,25 @@ class MediaplanController {
 
     return res.json(mediaplans)
   }
+
+  async getById(req, res, next) {
+    const {id} = req.params
+    const mediaplan = await Mediaplan.findByPk(id, {
+      include: [{
+        model: CommonContent,
+      }, {
+        model: Banner,
+        as: 'MediaplanBanner'
+      }, {
+        model: Ticker
+      }, {
+        model: CommonContent, 
+        as: 'MediaplanContent'
+      }]
+    })
+
+    return res.json(mediaplan)
+  }
 }
 
 module.exports = new MediaplanController()

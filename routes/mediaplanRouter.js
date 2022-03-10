@@ -20,5 +20,6 @@ router.delete('/content/:id', mediaplanController.deleteAds)
 router.delete('/contentall/:id', mediaplanController.deleteAds)
 
 router.get('/', mediaplanController.getAll)
+router.get('/:id', mediaplanController.getById)
 
 module.exports = router

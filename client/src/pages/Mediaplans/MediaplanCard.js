@@ -1,6 +1,7 @@
 import React, { useCallback } from "react"
 import { useDispatch } from "react-redux"
-import { mediaplanDelete } from "../../store/actionCreators/mediaplanActionCreator"
+import { NavLink } from 'react-router-dom'
+import { mediaplanDelete, mediaplanLoadMediaplan, mediaplanSetCurrent } from "../../store/actionCreators/mediaplanActionCreator"
 
 export const MediaplanCard = (props) => {
   const {
@@ -21,12 +22,18 @@ export const MediaplanCard = (props) => {
     dispatch(mediaplanDelete(id))
   }, [dispatch, id])
 
+  const clickHandler = useCallback(() => {
+    dispatch(mediaplanSetCurrent(id))
+    dispatch(mediaplanLoadMediaplan(id))
+  }, [dispatch, id])
+
   return (
     <div className="row">
             <div className="col s10">
-                <div
+                <NavLink to={"" + id}
                     className="collection-item card" 
                     style={{marginBottom: "25px", border: "1px solid grey"}}
+                    onClick={clickHandler}
                 >
                     {name}<br/>
                     Задержка дополнительного контента: {ads_start_delay}<br/>
@@ -37,7 +44,7 @@ export const MediaplanCard = (props) => {
                     ID бегущей строки: {tickerId ? tickerId : "Не определено"}<br/>
                     Количество баннеров: {MediaplanBanner.length}<br/>
                     Количество дополнительного контента: {MediaplanContent.length}<br/>
-                </div>
+                </NavLink>
             </div>
 
             <button name={id} className="btn" onClick={deleteHandler}>
