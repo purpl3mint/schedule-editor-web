@@ -3,7 +3,9 @@ import {
   TICKER_SET_TICKERS,
   TICKER_SET_PRELOADER,
   TICKER_SET_ADD_FORM,
-  TICKER_CLEAR_ADD_FORM
+  TICKER_CLEAR_ADD_FORM,
+  TICKER_SET_EDIT_FORM,
+  TICKER_CLEAR_EDIT_FORM
 } from "../actions/tickerActions"
 
 const initialState = {
@@ -19,6 +21,13 @@ const initialState = {
     font_color: "#ffffff",
     background_color: "#000000",
   },
+  editForm: {
+    id: 0,
+    size: 24,
+    speed: 80,
+    font_color: "#ffffff",
+    background_color: "#000000"
+  }
 }
 
 function tickerReducer (state = initialState, action) {
@@ -35,6 +44,12 @@ function tickerReducer (state = initialState, action) {
     }
     case TICKER_CLEAR_ADD_FORM:
       return { ...state, addForm: initialState.addForm }
+    case TICKER_SET_EDIT_FORM: {
+        let newEditForm = {...state.editForm, [action.data.name]: action.data.value}
+        return { ...state, editForm: newEditForm }
+    }
+    case TICKER_CLEAR_EDIT_FORM:
+      return { ...state, editForm: initialState.editForm }
 
     default: 
       return state

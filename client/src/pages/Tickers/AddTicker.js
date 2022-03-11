@@ -1,4 +1,4 @@
-import './AddTicker.css'
+import './Tickers.css'
 import React, { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux"
 import { tickerSetAddForm, tickerAdd } from "../../store/actionCreators/tickerActionCreator"

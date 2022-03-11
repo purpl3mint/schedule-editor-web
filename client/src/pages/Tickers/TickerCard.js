@@ -1,14 +1,24 @@
 import React, { useCallback } from "react"
 import { useDispatch } from "react-redux"
-import { tickerDelete } from "../../store/actionCreators/tickerActionCreator"
+import { tickerDelete, tickerSetEditForm } from "../../store/actionCreators/tickerActionCreator"
 
 export const TickerCard = (props) => {
-  const {id, name, url, size, speed, font_color, background_color} = props
+  const {id, name, url, size, speed, font_color, background_color, setShowModalEdit, setNameEditing} = props
   const dispatch = useDispatch()
 
   const deleteHandler = useCallback(() => {
     dispatch(tickerDelete(id))
   }, [dispatch, id])
+
+  const editHandler = useCallback(() => {
+    dispatch(tickerSetEditForm("id", id))
+    dispatch(tickerSetEditForm("size", size))
+    dispatch(tickerSetEditForm("speed", speed))
+    dispatch(tickerSetEditForm("font_color", font_color))
+    dispatch(tickerSetEditForm("background_color", background_color))
+    setNameEditing(url)
+    setShowModalEdit(true)
+  }, [dispatch, id, size, speed, font_color, background_color, setShowModalEdit, setNameEditing, url])
 
   return (
     <div className="row">
@@ -28,6 +38,10 @@ export const TickerCard = (props) => {
 
             <button name={id} className="btn" onClick={deleteHandler}>
                 <i className="material-icons">delete</i>
+            </button>
+
+            <button name={id} className="btn" onClick={editHandler}>
+                <i className="material-icons">edit</i>
             </button>
         </div>
   )
