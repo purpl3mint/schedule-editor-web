@@ -3,7 +3,9 @@ import {
   BANNER_SET_BANNERS,
   BANNER_SET_PRELOADER,
   BANNER_SET_ADD_FORM,
-  BANNER_CLEAR_ADD_FORM
+  BANNER_CLEAR_ADD_FORM,
+  BANNER_SET_EDIT_FORM,
+  BANNER_CLEAR_EDIT_FORM
 } from "../actions/bannerActions"
 
 export function bannerSetSucceed(data){
@@ -83,6 +85,36 @@ export function bannerDelete(bannerId) {
     const method = 'DELETE'
     const headers = {'Content-Type': 'application/json'}
     const responce = await fetch("/api/banner/" + bannerId, {method, headers})
+
+    if (responce.ok) {
+      dispatch(bannerLoadBanners())
+    }
+
+    dispatch(bannerSetPreloader(false))
+  }
+}
+
+export function bannerSetEditForm(name, value) {
+  return {
+    type: BANNER_SET_EDIT_FORM,
+    data: {name, value}
+  }
+}
+
+export function bannerClearEditForm () {
+  return {
+    type: BANNER_CLEAR_EDIT_FORM
+  }
+}
+
+export function bannerEdit(form) {
+  return async(dispatch) => {
+    dispatch(bannerSetPreloader(true))
+
+    const method = 'PUT'
+    const body = JSON.stringify({...form})
+    const headers = {'Content-Type': 'application/json'}
+    const responce = await fetch("/api/banner/", {method, body, headers})
 
     if (responce.ok) {
       dispatch(bannerLoadBanners())

@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { Preloader } from "../../components/Preloader";
 import { useDispatch, useSelector } from 'react-redux';
-import { contentLoadContents, contentSetEditForm, contentSetSucceed } from "../../store/actionCreators/contentActionCreator"
+import { contentLoadContents, contentSetSucceed } from "../../store/actionCreators/contentActionCreator"
 import { ContentCard } from "./ContentCard";
 import { AddContent } from "./AddContent";
 import { EditContent } from "./EditContent";

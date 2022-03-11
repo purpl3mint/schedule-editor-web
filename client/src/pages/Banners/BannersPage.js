@@ -1,13 +1,16 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { Preloader } from "../../components/Preloader";
 import { useDispatch, useSelector } from 'react-redux';
-import { BannerCard } from "./BannerCard";
 import { bannerLoadBanners, bannerSetSucceed } from "../../store/actionCreators/bannerActionCreator";
+import { BannerCard } from "./BannerCard";
 import { AddBanner } from "./AddBanner";
+import { EditBanner } from "./EditBanner"
 
 export const BannersPage = () => {
   const dispatch = useDispatch()
-  const [showModal, setShowModal] = useState(false)
+  const [showModalAdd, setShowModalAdd] = useState(false)
+  const [showModalEdit, setShowModalEdit] = useState(false)
+  const [nameEditing, setNameEditing] = useState("")
 
   const loading = useSelector(state => state.bannerReducer.preloader)
   const banners = useSelector(state => {
@@ -25,6 +28,8 @@ export const BannersPage = () => {
         layout_width={b.layout_width} 
         layout_height={b.layout_height} 
         layout_gravity={b.layout_gravity} 
+        setShowModalEdit={setShowModalEdit}
+        setNameEditing={setNameEditing}
       />
     )
 
@@ -51,20 +56,32 @@ export const BannersPage = () => {
             key="new" 
             className="waves-effect waves-light btn" 
             style={{display: "flex", width: '130px'}}
-            onClick={ () => setShowModal(true)}
+            onClick={ () => setShowModalAdd(true)}
           >
             <i className="material-icons">add</i>
             <span>Добавить</span>
           </button>
 
           <AddBanner
-            show={showModal} 
+            show={showModalAdd} 
             onCreate={() => {
-              setShowModal(false)
+              setShowModalAdd(false)
               window.location.reload()
             }}
             onClose={() => {
-              setShowModal(false)
+              setShowModalAdd(false)
+            }}
+          />
+
+          <EditBanner
+            nameEditing={nameEditing}
+            show={showModalEdit}
+            onCreate={() => {
+              setShowModalEdit(false)
+              window.location.reload()
+            }}
+            onClose={() => {
+              setShowModalEdit(false)
             }}
           />
 

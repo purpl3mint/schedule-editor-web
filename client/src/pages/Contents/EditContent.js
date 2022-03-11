@@ -56,7 +56,7 @@ export const EditContent = (props) => {
             </div>
           </div>
 
-          <button className="btn blue-grey darken-1" onClick={createHandler}>Создать</button>
+          <button className="btn blue-grey darken-1" onClick={createHandler}>Изменить</button>
           <button className="btn blue-grey darken-1 btn-close" onClick={closeHandler}>Закрыть</button>
           
         </div>

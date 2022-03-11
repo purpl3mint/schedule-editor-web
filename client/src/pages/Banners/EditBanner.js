@@ -1,30 +1,18 @@
 import './Banners.css'
 import React, { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux"
-import { bannerSetAddForm, bannerAdd } from "../../store/actionCreators/bannerActionCreator"
+import { bannerSetEditForm, bannerEdit } from "../../store/actionCreators/bannerActionCreator"
 
-export const AddBanner = (props) => {
+export const EditBanner = (props) => {
   const dispatch = useDispatch()
-
-  //const isSucceed = useSelector(state => state.userReducer.isSucceed)
-  const form = useSelector(state => state.bannerReducer.addForm)
+  const form = useSelector(state => state.bannerReducer.editForm)
 
   const changeHandler = useCallback( (e) => {
-      dispatch(bannerSetAddForm(e.target.name, e.target.value))
+      dispatch(bannerSetEditForm(e.target.name, e.target.value))
   }, [dispatch])
 
   const createHandler = useCallback( () => {
-      if (!form.name){
-          //message("Ошибка: не задано имя пользователя")
-          return
-      }
-      if (!form.url){
-          //message("Ошибка: не задан пароль")
-          return
-      }
-
-      dispatch(bannerAdd(form))
-
+      dispatch(bannerEdit(form))
       props.onCreate()
   }, [dispatch, form, props])
 
@@ -35,38 +23,17 @@ export const AddBanner = (props) => {
   if (!props.show) {
     return null
   }
-  
+
   return (
     <div className='modal'>
-      <div className="row modal-content_banner">
+      <div className="row modal-content_content modal-edit_content">
 
-        <h1>Создание нового баннера</h1>
-        <span>* - обязательное поле</span><br />
+        <h1>Редактирование баннера: {props.nameEditing}</h1>
+        
         <div className="col s12">
 
           <div className="row">
-            <div className="input-field col s6">
-              <input id="name" name="name" type="text" className="validate" onChange={changeHandler} />
-              <label htmlFor="name">Название баннера*</label>
-            </div>
-          </div>
-
-          <div className="row">
-            <div className="input-field col s6">
-              <input id="url" name="url" type="text" onChange={changeHandler} />
-              <label htmlFor="url">URL*</label>
-            </div>
-          </div>
-
-          <div className="row">
-            <div className="input-field col s6">
-              <input id="url_reserve" name="url_reserve" type="text" onChange={changeHandler} />
-              <label htmlFor="url_reserve">URL резервный</label>
-            </div>
-          </div>
-
-          <div className="row">
-            <select defaultValue="-1" className="col s6 browser-default" name="online" onChange={changeHandler}>
+            <select defaultValue={form.online} className="col s6 browser-default" name="online" onChange={changeHandler}>
               <option value="-1" disabled>Выберите тип воспроизведения (по умолчанию offline)</option>
               <option value="true">Online</option>
               <option value="false">Offline</option>
@@ -75,34 +42,34 @@ export const AddBanner = (props) => {
 
           <div className="row">
             <div className="input-field col s6">
-              <input id="background" name="background" type="text" onChange={changeHandler} />
+              <input defaultValue={form.background} id="background" name="background" type="text" onChange={changeHandler} />
               <label htmlFor="background">Цвет фона(по умолчанию #000000)</label>
             </div>
           </div>
 
           <div className="row">
             <div className="input-field col s6">
-              <input id="duration" name="duration" type="number" onChange={changeHandler} />
+              <input id="duration" name="duration" type="number" onChange={changeHandler} defaultValue={form.duration} />
               <label htmlFor="duration">Длительность (по умолчанию 0)</label>
             </div>
           </div>
 
           <div className="row">
             <div className="input-field col s6">
-              <input id="layout_width" name="layout_width" type="text" onChange={changeHandler} />
+              <input defaultValue={form.layout_width} id="layout_width" name="layout_width" type="text" onChange={changeHandler} />
               <label htmlFor="layout_width">Ширина баннера (проценты/wrap_content/match_parent)</label>
             </div>
           </div>
 
           <div className="row">
             <div className="input-field col s6">
-              <input id="layout_height" name="layout_height" type="text" onChange={changeHandler} />
+              <input defaultValue={form.layout_height} id="layout_height" name="layout_height" type="text" onChange={changeHandler} />
               <label htmlFor="layout_height">Высота баннера (проценты/wrap_content/match_parent)</label>
             </div>
           </div>
 
           <div className="row">
-            <select defaultValue="-1" className="col s6 browser-default" name="layout_gravity" onChange={changeHandler}>
+            <select defaultValue={form.layout_gravity} className="col s6 browser-default" name="layout_gravity" onChange={changeHandler}>
               <option value="-1" disabled>Выравнивание по стороне экрана (по умолчанию верхний край)</option>
               <option value="top">Верхний край</option>
               <option value="bottom">Нижний край</option>
@@ -116,9 +83,9 @@ export const AddBanner = (props) => {
             </select>
           </div>
 
-          <button className="btn blue-grey darken-1" onClick={createHandler}>Создать</button>
+          <button className="btn blue-grey darken-1" onClick={createHandler}>Изменить</button>
           <button className="btn blue-grey darken-1 btn-close" onClick={closeHandler}>Закрыть</button>
-
+          
         </div>
 
       </div>
