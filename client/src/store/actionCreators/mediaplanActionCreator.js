@@ -6,8 +6,12 @@ import {
   MEDIAPLAN_CLEAR_ADD_FORM,
   MEDIAPLAN_SET_CURRENT,
   MEDIAPLAN_SET_MEDIAPLAN,
-  MEDIAPLAN_SET_EDIT_FORM,
-  MEDIAPLAN_CLEAR_EDIT_FORM
+  MEDIAPLAN_SET_EDIT_OPTIONS_FORM,
+  MEDIAPLAN_CLEAR_EDIT_OPTIONS_FORM,
+  MEDIAPLAN_SET_EDIT_CONTENT_FORM,
+  MEDIAPLAN_CLEAR_EDIT_CONTENT_FORM,
+  MEDIAPLAN_SET_CONTENT_LIST,
+  MEDIAPLAN_CLEAR_CONTENT_LIST
 } from "../actions/mediaplanActions"
 
 export function mediaplanSetSucceed(data){
@@ -126,15 +130,92 @@ export function mediaplanLoadMediaplan(id) {
   }
 }
 
-export function mediaplanSetEditForm(name, value) {
+export function mediaplanSetEditOptionsForm(name, value) {
   return {
-    type: MEDIAPLAN_SET_EDIT_FORM,
+    type: MEDIAPLAN_SET_EDIT_OPTIONS_FORM,
     data: {name, value}
   }
 }
 
-export function mediaplanClearEditForm () {
+export function mediaplanClearEditOptionsForm () {
   return {
-    type: MEDIAPLAN_CLEAR_EDIT_FORM
+    type: MEDIAPLAN_CLEAR_EDIT_OPTIONS_FORM
+  }
+}
+
+export function mediaplanEditOptions (form) {
+  return async(dispatch) => {
+    dispatch(mediaplanSetPreloader(true))
+
+    const method = 'PUT'
+    const body = JSON.stringify({...form})
+    const headers = {'Content-Type': 'application/json'}
+    const responce = await fetch("/api/mediaplan/", {method, body, headers})
+
+    if (responce.ok) {
+      dispatch(mediaplanLoadMediaplans())
+    }
+
+    dispatch(mediaplanSetPreloader(false))
+  }
+}
+
+export function mediaplanSetEditContentForm(name, value) {
+  return {
+    type: MEDIAPLAN_SET_EDIT_CONTENT_FORM,
+    data: {name, value}
+  }
+}
+
+export function mediaplanClearEditContentForm () {
+  return {
+    type: MEDIAPLAN_CLEAR_EDIT_CONTENT_FORM
+  }
+}
+
+export function mediaplanEditContent (form) {
+  return async(dispatch) => {
+    dispatch(mediaplanSetPreloader(true))
+
+    const method = 'PUT'
+    const body = JSON.stringify({...form})
+    const headers = {'Content-Type': 'application/json'}
+    const responce = await fetch("/api/mediaplan/", {method, body, headers})
+
+    if (responce.ok) {
+      dispatch(mediaplanLoadMediaplans())
+    }
+
+    dispatch(mediaplanSetPreloader(false))
+  }
+}
+
+export function mediaplanSetContentList(data) {
+  return {
+    type: MEDIAPLAN_SET_CONTENT_LIST,
+    data
+  }
+}
+
+export function mediaplanClearContentList () {
+  return {
+    type: MEDIAPLAN_CLEAR_CONTENT_LIST
+  }
+}
+
+export function mediaplanGetContentList () {
+  return async(dispatch) => {
+    dispatch(mediaplanSetPreloader(true))
+
+    const method = 'GET'
+    const headers = {'Content-Type': 'application/json'}
+    const responce = await fetch("/api/content", {method, headers})
+
+    const data = await responce.json()
+    if (responce.ok) {
+      dispatch(mediaplanSetContentList(data))
+    }
+
+    dispatch(mediaplanSetPreloader(false))
   }
 }

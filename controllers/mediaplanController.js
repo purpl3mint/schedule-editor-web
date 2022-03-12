@@ -59,7 +59,7 @@ class MediaplanController {
       banners_start_delay, 
       banners_repeat, 
       banners_animation_duration_msec, 
-      contentId
+      commonContentId
     } = req.body
 
     const mediaplan = await Mediaplan.findByPk(id)
@@ -71,7 +71,7 @@ class MediaplanController {
     mediaplan.banners_start_delay = banners_start_delay
     mediaplan.banners_repeat = banners_repeat
     mediaplan.banners_animation_duration_msec = banners_animation_duration_msec
-    mediaplan.contentId = contentId
+    mediaplan.commonContentId = commonContentId
 
     const isSaved = await mediaplan.save()
 
