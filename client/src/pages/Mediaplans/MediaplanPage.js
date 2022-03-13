@@ -6,12 +6,14 @@ import {
   mediaplanGetContentList, 
   mediaplanSetEditOptionsForm, 
   mediaplanGetTickerList,
-  mediaplanGetBannerList
+  mediaplanGetBannerList,
+  mediaplanGetAdsList
 } from "../../store/actionCreators/mediaplanActionCreator";
 import { EditOptionsMediaplan } from "./EditOptionsMediaplan";
 import { EditContentMediaplan } from "./EditContentMediaplan";
 import { EditTickerMediaplan } from "./EditTickerMediaplan";
 import { EditBannersMediaplan } from "./EditBannersMediaplan";
+import { EditAdsMediaplan } from "./EditAdsMediaplan";
 
 export const MediaplanPage = () => {
   const dispatch = useDispatch()
@@ -21,6 +23,7 @@ export const MediaplanPage = () => {
   const [showModalContent, setShowModalContent] = useState(false)
   const [showModalTicker, setShowModalTicker] = useState(false)
   const [showModalBanner, setShowModalBanner] = useState(false)
+  const [showModalAds, setShowModalAds] = useState(false)
   const [tab1, setTab1] = useState(true)
   const [tab2, setTab2] = useState(false)
   const [tab3, setTab3] = useState(false)
@@ -94,6 +97,11 @@ export const MediaplanPage = () => {
     dispatch(mediaplanGetBannerList())
     setShowModalBanner(true)
   }, [dispatch, setShowModalBanner])
+  
+  const editAdsHandler = useCallback( () => {
+    dispatch(mediaplanGetAdsList())
+    setShowModalAds(true)
+  }, [dispatch, setShowModalAds])
   
   /*
   const initializeHandler = useCallback( () => {
@@ -275,12 +283,28 @@ export const MediaplanPage = () => {
       
       {tab5 &&
       <div className="col s9 offset-s3">
-        <button className="btn" style={{marginTop: "0"}}>Добавить дополнительный контент</button>
+        <button 
+          className="btn" 
+          style={{marginTop: "0"}}
+          onClick={editAdsHandler}
+        >Добавить дополнительный контент</button>
         <div style={{overflowY: "scroll"}}>
           <ul className="collection">
             {ads}
           </ul>
         </div>
+
+        <EditAdsMediaplan
+          show={showModalAds}
+          onCreate={() => {
+            setShowModalAds(false)
+            navigate(successPath)
+          }}
+          onClose={() => {
+            setShowModalAds(false)
+          }}
+        />
+
       </div>
       }
 

@@ -24,6 +24,11 @@ import {
   MEDIAPLAN_CLEAR_EDIT_BANNER_FORM,
   MEDIAPLAN_SET_BANNER_LIST,
   MEDIAPLAN_CLEAR_BANNER_LIST,
+
+  MEDIAPLAN_SET_EDIT_ADS_FORM,
+  MEDIAPLAN_CLEAR_EDIT_ADS_FORM,
+  MEDIAPLAN_SET_ADS_LIST,
+  MEDIAPLAN_CLEAR_ADS_LIST,
 } from "../actions/mediaplanActions"
 
 const initialState = {
@@ -62,6 +67,12 @@ const initialState = {
     position: 0
   },
   bannerList: [],
+  editAdsForm: {
+    mediaplanId: 0,
+    contentId: 0,
+    position: 0
+  },
+  adsList: [],
   currentMediaplanId: 0,
   currentMediaplan: {
     id: 0,
@@ -142,6 +153,18 @@ function mediaplanReducer (state = initialState, action) {
       return { ...state, bannerList: action.data}
     case MEDIAPLAN_CLEAR_BANNER_LIST:
       return { ...state, bannerList: initialState.bannerList}
+
+
+    case MEDIAPLAN_SET_EDIT_ADS_FORM: {
+      let newEditAdsForm = {...state.editAdsForm, [action.data.name]: action.data.value}
+      return { ...state, editAdsForm: newEditAdsForm }
+    }
+    case MEDIAPLAN_CLEAR_EDIT_ADS_FORM:
+      return { ...state, editAdsForm: initialState.editAdsForm }
+    case MEDIAPLAN_SET_ADS_LIST:
+      return { ...state, adsList: action.data}
+    case MEDIAPLAN_CLEAR_ADS_LIST:
+      return { ...state, adsList: initialState.adsList}
 
     default: 
       return state

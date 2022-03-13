@@ -1,25 +1,25 @@
 import './Mediaplan.css'
 import React, { useCallback, useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux"
-import { mediaplanSetEditBannerForm, mediaplanEditBanner } from "../../store/actionCreators/mediaplanActionCreator"
+import { mediaplanSetEditAdsForm, mediaplanEditAds } from "../../store/actionCreators/mediaplanActionCreator"
 
-export const EditBannersMediaplan = (props) => {
+export const EditAdsMediaplan = (props) => {
   const dispatch = useDispatch()
   const [name, setName] = useState(props.name ? props.name : "Не выбран")
   const id = useSelector(state => state.mediaplanReducer.currentMediaplan.id)
-  const form = useSelector(state => state.mediaplanReducer.editBannerForm)
+  const form = useSelector(state => state.mediaplanReducer.editAdsForm)
 
   const changeHandler = useCallback( (e) => {
-    dispatch(mediaplanSetEditBannerForm(e.target.name, e.target.value))
+    dispatch(mediaplanSetEditAdsForm(e.target.name, e.target.value))
   }, [dispatch])
 
   const chooseHandler = useCallback( (e) => {
       setName(e.target.textContent)
-      dispatch(mediaplanSetEditBannerForm("bannerId", e.target.value))
+      dispatch(mediaplanSetEditAdsForm("contentId", e.target.value))
   }, [dispatch, setName])
 
   const createHandler = useCallback( () => {
-      dispatch(mediaplanEditBanner(form))
+      dispatch(mediaplanEditAds(form))
       props.onCreate()
   }, [dispatch, form, props])
 
@@ -27,10 +27,10 @@ export const EditBannersMediaplan = (props) => {
     props.onClose()
   }, [props])
 
-  const bannerList = useSelector(state => {
-    const bannerRaw = state.mediaplanReducer.bannerList
+  const adsList = useSelector(state => {
+    const adsRaw = state.mediaplanReducer.adsList
 
-    const bannerTransformed = bannerRaw.map(item => 
+    const adsTransformed = adsRaw.map(item => 
       <li 
         value={item.id} 
         className="collection-item" 
@@ -41,11 +41,11 @@ export const EditBannersMediaplan = (props) => {
       </li>
     )
 
-    return bannerTransformed
+    return adsTransformed
   })
 
   const initializeHandler = useCallback( () => {
-    dispatch(mediaplanSetEditBannerForm("mediaplanId", id))
+    dispatch(mediaplanSetEditAdsForm("mediaplanId", id))
   }, [dispatch, id])
 
   useEffect(() => { initializeHandler() }, [initializeHandler])
@@ -58,7 +58,7 @@ export const EditBannersMediaplan = (props) => {
     <div className='modal'>
       <div className="row modal-edit-options_mediaplan">
 
-        <h1>Добавление баннера</h1>
+        <h1>Добавление дополнительного контента</h1>
 
         <span>Выбран: {name}</span><br/>
         
@@ -73,7 +73,7 @@ export const EditBannersMediaplan = (props) => {
 
           <div className="row">
             <ul className="collection">
-              {bannerList}
+              {adsList}
             </ul>
           </div>
 

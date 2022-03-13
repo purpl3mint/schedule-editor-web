@@ -24,6 +24,11 @@ import {
   MEDIAPLAN_CLEAR_EDIT_BANNER_FORM,
   MEDIAPLAN_SET_BANNER_LIST,
   MEDIAPLAN_CLEAR_BANNER_LIST,
+
+  MEDIAPLAN_SET_EDIT_ADS_FORM,
+  MEDIAPLAN_CLEAR_EDIT_ADS_FORM,
+  MEDIAPLAN_SET_ADS_LIST,
+  MEDIAPLAN_CLEAR_ADS_LIST,
 } from "../actions/mediaplanActions"
 
 export function mediaplanSetSucceed(data){
@@ -350,6 +355,67 @@ export function mediaplanGetBannerList () {
     const data = await responce.json()
     if (responce.ok) {
       dispatch(mediaplanSetBannerList(data))
+    }
+
+    dispatch(mediaplanSetPreloader(false))
+  }
+}
+
+/*Editing ads in mediaplan */
+export function mediaplanSetEditAdsForm(name, value) {
+  return {
+    type: MEDIAPLAN_SET_EDIT_ADS_FORM,
+    data: {name, value}
+  }
+}
+
+export function mediaplanClearEditAdsForm () {
+  return {
+    type: MEDIAPLAN_CLEAR_EDIT_ADS_FORM
+  }
+}
+
+export function mediaplanEditAds (form) {
+  return async(dispatch) => {
+    dispatch(mediaplanSetPreloader(true))
+
+    const method = 'POST'
+    const body = JSON.stringify({...form})
+    const headers = {'Content-Type': 'application/json'}
+    const responce = await fetch("/api/mediaplan/content", {method, body, headers})
+
+    if (responce.ok) {
+      dispatch(mediaplanLoadMediaplans())
+    }
+
+    dispatch(mediaplanSetPreloader(false))
+  }
+}
+
+export function mediaplanSetAdsList(data) {
+  return {
+    type: MEDIAPLAN_SET_ADS_LIST,
+    data
+  }
+}
+
+export function mediaplanClearAdsList () {
+  return {
+    type: MEDIAPLAN_CLEAR_ADS_LIST
+  }
+}
+
+export function mediaplanGetAdsList () {
+  return async(dispatch) => {
+    dispatch(mediaplanSetPreloader(true))
+
+    const method = 'GET'
+    const headers = {'Content-Type': 'application/json'}
+    const responce = await fetch("/api/content", {method, headers})
+
+    const data = await responce.json()
+    if (responce.ok) {
+      dispatch(mediaplanSetAdsList(data))
     }
 
     dispatch(mediaplanSetPreloader(false))
