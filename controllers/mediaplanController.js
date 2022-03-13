@@ -266,7 +266,7 @@ class MediaplanController {
   async deleteAds(req, res, next) {
     const {id} = req.params
 
-    const result = await Ads.destroy({where: {mediaplanId: id}})
+    const result = await Ads.destroy({where: {id}})
 
     if (result) {
       return res.json({message: 'Дополнительный контент был удален'})

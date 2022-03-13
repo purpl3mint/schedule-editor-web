@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
 import { Preloader } from "../../components/Preloader";
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from "react-router-dom";
@@ -7,7 +7,9 @@ import {
   mediaplanSetEditOptionsForm, 
   mediaplanGetTickerList,
   mediaplanGetBannerList,
-  mediaplanGetAdsList
+  mediaplanGetAdsList,
+  mediaplanDeleteBanner,
+  mediaplanDeleteAds
 } from "../../store/actionCreators/mediaplanActionCreator";
 import { EditOptionsMediaplan } from "./EditOptionsMediaplan";
 import { EditContentMediaplan } from "./EditContentMediaplan";
@@ -30,6 +32,16 @@ export const MediaplanPage = () => {
   const [tab4, setTab4] = useState(false)
   const [tab5, setTab5] = useState(false)
 
+  const deleteBannerHandler = useCallback( (id) => {
+    dispatch(mediaplanDeleteBanner(id))
+    navigate(successPath)
+  }, [dispatch, navigate])
+
+  const deleteAdsHandler = useCallback( (id) => {
+    dispatch(mediaplanDeleteAds(id))
+    navigate(successPath)
+  }, [dispatch, navigate])
+
   const currentMediaplan = useSelector(state => state.mediaplanReducer.currentMediaplan)
   const loading = useSelector(state => state.mediaplanReducer.preloader)
   const banners = useSelector(state => {
@@ -39,10 +51,15 @@ export const MediaplanPage = () => {
     const rawBanners = state.mediaplanReducer.currentMediaplan.MediaplanBanner
 
     const transformedBanners = rawBanners.map(banner => 
-    <li className="collection-item" key={banner.id}>
-      <span>{banner.name}</span><br/>
-      <span>{banner.online ? "Онлайн" : "Оффлайн"}</span><br/>
-      <span>Длительность: {banner.duration}</span>
+    <li className="collection-item row" key={banner.id}>
+      <div className="col s11">
+        <span>{banner.name}</span><br/>
+        <span>{banner.online ? "Онлайн" : "Оффлайн"}</span><br/>
+        <span>Длительность: {banner.duration}</span>
+      </div>
+      <button className="btn col s1" onClick={(e) => deleteBannerHandler(banner.banner_in_mediaplan.id, e)}>
+        <i className="material-icons" style={{marginRight: "10px"}}>delete</i>
+      </button> 
     </li>)
 
     return transformedBanners
@@ -55,14 +72,20 @@ export const MediaplanPage = () => {
 
     const rawAds = state.mediaplanReducer.currentMediaplan.MediaplanContent
     const transformedAds = rawAds.map(ad => 
-      <li className="collection-item" key={ad.id}>
-        <span>{ad.name}</span><br/>
-        <span>{ad.online ? "Онлайн" : "Оффлайн"}</span><br/>
-        <span>Длительность: {ad.duration}</span>
+      <li className="collection-item row" key={ad.id}>
+        <div className="col s11">
+          <span>{ad.name}</span><br/>
+          <span>{ad.online ? "Онлайн" : "Оффлайн"}</span><br/>
+          <span>Длительность: {ad.duration}</span>
+        </div>
+        <button className="btn col s1" onClick={(e) => deleteAdsHandler(ad.ads.id, e)}>
+          <i className="material-icons" style={{marginRight: "10px"}}>delete</i>
+        </button>
       </li>)
   
     return transformedAds
   })
+
 
   const editOptionsHandler = useCallback( () => {
     dispatch(mediaplanSetEditOptionsForm("id", currentMediaplan.id))
@@ -70,7 +93,6 @@ export const MediaplanPage = () => {
     dispatch(mediaplanSetEditOptionsForm("banners_start_delay", currentMediaplan.banners_start_delay))
     dispatch(mediaplanSetEditOptionsForm("banners_repeat", currentMediaplan.banners_repeat))
     dispatch(mediaplanSetEditOptionsForm("banners_animation_duration_msec", currentMediaplan.banners_animation_duration_msec))
-    //dispatch(mediaplanSetEditOptionsForm("contentId", currentMediaplan.contentId))
     setShowModalOptions(true)
   }, [
     dispatch, 
@@ -78,8 +100,7 @@ export const MediaplanPage = () => {
     currentMediaplan.ads_start_delay, 
     currentMediaplan.banners_start_delay, 
     currentMediaplan.banners_repeat,
-    currentMediaplan.banners_animation_duration_msec, 
-    currentMediaplan.contentId,
+    currentMediaplan.banners_animation_duration_msec,
     setShowModalOptions
   ])
   

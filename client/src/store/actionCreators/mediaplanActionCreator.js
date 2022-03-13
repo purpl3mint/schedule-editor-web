@@ -361,6 +361,22 @@ export function mediaplanGetBannerList () {
   }
 }
 
+export function mediaplanDeleteBanner (id) {
+  return async(dispatch) => {
+    dispatch(mediaplanSetPreloader(true))
+
+    const method = 'DELETE'
+    const headers = {'Content-Type': 'application/json'}
+    const responce = await fetch("/api/mediaplan/banner/" + id, {method, headers})
+
+    if (responce.ok) {
+      dispatch(mediaplanLoadMediaplans())
+    }
+
+    dispatch(mediaplanSetPreloader(false))
+  }
+}
+
 /*Editing ads in mediaplan */
 export function mediaplanSetEditAdsForm(name, value) {
   return {
@@ -416,6 +432,23 @@ export function mediaplanGetAdsList () {
     const data = await responce.json()
     if (responce.ok) {
       dispatch(mediaplanSetAdsList(data))
+    }
+
+    dispatch(mediaplanSetPreloader(false))
+  }
+}
+
+export function mediaplanDeleteAds (id) {
+  return async(dispatch) => {
+    dispatch(mediaplanSetPreloader(true))
+
+    const method = 'DELETE'
+    const headers = {'Content-Type': 'application/json'}
+    const responce = await fetch("/api/mediaplan/content/" + id, {method, headers})
+
+    if (responce.ok) {
+      dispatch(mediaplanLoadMediaplans())
+      //dispatch(mediaplanLoadMediaplans())
     }
 
     dispatch(mediaplanSetPreloader(false))
