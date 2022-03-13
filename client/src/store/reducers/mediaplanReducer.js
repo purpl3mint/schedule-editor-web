@@ -6,16 +6,24 @@ import {
   MEDIAPLAN_CLEAR_ADD_FORM,
   MEDIAPLAN_SET_CURRENT,
   MEDIAPLAN_SET_MEDIAPLAN,
+
   MEDIAPLAN_SET_EDIT_OPTIONS_FORM,
   MEDIAPLAN_CLEAR_EDIT_OPTIONS_FORM,
+
   MEDIAPLAN_SET_EDIT_CONTENT_FORM,
   MEDIAPLAN_CLEAR_EDIT_CONTENT_FORM,
   MEDIAPLAN_SET_CONTENT_LIST,
   MEDIAPLAN_CLEAR_CONTENT_LIST,
+
   MEDIAPLAN_SET_EDIT_TICKER_FORM,
   MEDIAPLAN_CLEAR_EDIT_TICKER_FORM,
   MEDIAPLAN_SET_TICKER_LIST,
-  MEDIAPLAN_CLEAR_TICKER_LIST
+  MEDIAPLAN_CLEAR_TICKER_LIST,
+
+  MEDIAPLAN_SET_EDIT_BANNER_FORM,
+  MEDIAPLAN_CLEAR_EDIT_BANNER_FORM,
+  MEDIAPLAN_SET_BANNER_LIST,
+  MEDIAPLAN_CLEAR_BANNER_LIST,
 } from "../actions/mediaplanActions"
 
 const initialState = {
@@ -48,6 +56,12 @@ const initialState = {
     tickerId: 0
   },
   tickerList: [],
+  editBannerForm: {
+    mediaplanId: 0,
+    bannerId: 0,
+    position: 0
+  },
+  bannerList: [],
   currentMediaplanId: 0,
   currentMediaplan: {
     id: 0,
@@ -84,12 +98,16 @@ function mediaplanReducer (state = initialState, action) {
       return { ...state, currentMediaplanId: action.data}
     case MEDIAPLAN_SET_MEDIAPLAN:
       return { ...state, currentMediaplan: action.data}
+
+
     case MEDIAPLAN_SET_EDIT_OPTIONS_FORM: {
       let newEditOptionsForm = {...state.editOptionsForm, [action.data.name]: action.data.value}
       return { ...state, editOptionsForm: newEditOptionsForm }
     }
     case MEDIAPLAN_CLEAR_EDIT_OPTIONS_FORM:
       return { ...state, editOptionsForm: initialState.editOptionsForm }
+
+
     case MEDIAPLAN_SET_EDIT_CONTENT_FORM: {
       let newEditContentForm = {...state.editContentForm, [action.data.name]: action.data.value}
       return { ...state, editContentForm: newEditContentForm }
@@ -100,6 +118,8 @@ function mediaplanReducer (state = initialState, action) {
       return { ...state, contentList: action.data}
     case MEDIAPLAN_CLEAR_CONTENT_LIST:
       return { ...state, contentList: initialState.contentList}
+
+
     case MEDIAPLAN_SET_EDIT_TICKER_FORM: {
       let newEditTickerForm = {...state.editTickerForm, [action.data.name]: action.data.value}
       return { ...state, editTickerForm: newEditTickerForm }
@@ -110,6 +130,18 @@ function mediaplanReducer (state = initialState, action) {
       return { ...state, tickerList: action.data}
     case MEDIAPLAN_CLEAR_TICKER_LIST:
       return { ...state, tickerList: initialState.tickerList}
+
+
+    case MEDIAPLAN_SET_EDIT_BANNER_FORM: {
+      let newEditBannerForm = {...state.editBannerForm, [action.data.name]: action.data.value}
+      return { ...state, editBannerForm: newEditBannerForm }
+    }
+    case MEDIAPLAN_CLEAR_EDIT_BANNER_FORM:
+      return { ...state, editBannerForm: initialState.editBannerForm }
+    case MEDIAPLAN_SET_BANNER_LIST:
+      return { ...state, bannerList: action.data}
+    case MEDIAPLAN_CLEAR_BANNER_LIST:
+      return { ...state, bannerList: initialState.bannerList}
 
     default: 
       return state

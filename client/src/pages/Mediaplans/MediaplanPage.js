@@ -2,10 +2,16 @@ import React, { useCallback, useEffect, useState } from "react";
 import { Preloader } from "../../components/Preloader";
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from "react-router-dom";
-import { mediaplanGetContentList, mediaplanSetEditOptionsForm, mediaplanGetTickerList } from "../../store/actionCreators/mediaplanActionCreator";
+import { 
+  mediaplanGetContentList, 
+  mediaplanSetEditOptionsForm, 
+  mediaplanGetTickerList,
+  mediaplanGetBannerList
+} from "../../store/actionCreators/mediaplanActionCreator";
 import { EditOptionsMediaplan } from "./EditOptionsMediaplan";
 import { EditContentMediaplan } from "./EditContentMediaplan";
 import { EditTickerMediaplan } from "./EditTickerMediaplan";
+import { EditBannersMediaplan } from "./EditBannersMediaplan";
 
 export const MediaplanPage = () => {
   const dispatch = useDispatch()
@@ -14,6 +20,7 @@ export const MediaplanPage = () => {
   const [showModalOptions, setShowModalOptions] = useState(false)
   const [showModalContent, setShowModalContent] = useState(false)
   const [showModalTicker, setShowModalTicker] = useState(false)
+  const [showModalBanner, setShowModalBanner] = useState(false)
   const [tab1, setTab1] = useState(true)
   const [tab2, setTab2] = useState(false)
   const [tab3, setTab3] = useState(false)
@@ -82,6 +89,11 @@ export const MediaplanPage = () => {
     dispatch(mediaplanGetTickerList())
     setShowModalTicker(true)
   }, [dispatch, setShowModalTicker])
+  
+  const editBannerHandler = useCallback( () => {
+    dispatch(mediaplanGetBannerList())
+    setShowModalBanner(true)
+  }, [dispatch, setShowModalBanner])
   
   /*
   const initializeHandler = useCallback( () => {
@@ -208,12 +220,28 @@ export const MediaplanPage = () => {
       
       {tab3 &&
       <div className="col s9 offset-s3">
-        <button className="btn" style={{marginTop: "0"}}>Добавить баннер</button>
+        <button 
+          className="btn" 
+          style={{marginTop: "0"}}
+          onClick={editBannerHandler}
+        >Добавить баннер</button>
         <div style={{overflowY: "scroll"}}>
           <ul className="collection">
             {banners}
           </ul>
         </div>
+
+        <EditBannersMediaplan
+          show={showModalBanner}
+          onCreate={() => {
+            setShowModalBanner(false)
+            navigate(successPath)
+          }}
+          onClose={() => {
+            setShowModalBanner(false)
+          }}
+        />
+
       </div>
       }
       

@@ -6,16 +6,24 @@ import {
   MEDIAPLAN_CLEAR_ADD_FORM,
   MEDIAPLAN_SET_CURRENT,
   MEDIAPLAN_SET_MEDIAPLAN,
+
   MEDIAPLAN_SET_EDIT_OPTIONS_FORM,
   MEDIAPLAN_CLEAR_EDIT_OPTIONS_FORM,
+
   MEDIAPLAN_SET_EDIT_CONTENT_FORM,
   MEDIAPLAN_CLEAR_EDIT_CONTENT_FORM,
   MEDIAPLAN_SET_CONTENT_LIST,
   MEDIAPLAN_CLEAR_CONTENT_LIST,
+
   MEDIAPLAN_SET_EDIT_TICKER_FORM,
   MEDIAPLAN_CLEAR_EDIT_TICKER_FORM,
   MEDIAPLAN_SET_TICKER_LIST,
-  MEDIAPLAN_CLEAR_TICKER_LIST
+  MEDIAPLAN_CLEAR_TICKER_LIST,
+
+  MEDIAPLAN_SET_EDIT_BANNER_FORM,
+  MEDIAPLAN_CLEAR_EDIT_BANNER_FORM,
+  MEDIAPLAN_SET_BANNER_LIST,
+  MEDIAPLAN_CLEAR_BANNER_LIST,
 } from "../actions/mediaplanActions"
 
 export function mediaplanSetSucceed(data){
@@ -287,3 +295,63 @@ export function mediaplanGetTickerList () {
   }
 }
 
+/*Editing banner in mediplan*/
+export function mediaplanSetEditBannerForm(name, value) {
+  return {
+    type: MEDIAPLAN_SET_EDIT_BANNER_FORM,
+    data: {name, value}
+  }
+}
+
+export function mediaplanClearEditBannerForm () {
+  return {
+    type: MEDIAPLAN_CLEAR_EDIT_BANNER_FORM
+  }
+}
+
+export function mediaplanEditBanner (form) {
+  return async(dispatch) => {
+    dispatch(mediaplanSetPreloader(true))
+
+    const method = 'POST'
+    const body = JSON.stringify({...form})
+    const headers = {'Content-Type': 'application/json'}
+    const responce = await fetch("/api/mediaplan/banner", {method, body, headers})
+
+    if (responce.ok) {
+      dispatch(mediaplanLoadMediaplans())
+    }
+
+    dispatch(mediaplanSetPreloader(false))
+  }
+}
+
+export function mediaplanSetBannerList(data) {
+  return {
+    type: MEDIAPLAN_SET_BANNER_LIST,
+    data
+  }
+}
+
+export function mediaplanClearBannerList () {
+  return {
+    type: MEDIAPLAN_CLEAR_BANNER_LIST
+  }
+}
+
+export function mediaplanGetBannerList () {
+  return async(dispatch) => {
+    dispatch(mediaplanSetPreloader(true))
+
+    const method = 'GET'
+    const headers = {'Content-Type': 'application/json'}
+    const responce = await fetch("/api/banner", {method, headers})
+
+    const data = await responce.json()
+    if (responce.ok) {
+      dispatch(mediaplanSetBannerList(data))
+    }
+
+    dispatch(mediaplanSetPreloader(false))
+  }
+}
