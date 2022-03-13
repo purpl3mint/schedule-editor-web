@@ -1,4 +1,4 @@
-import './AddMediaplan.css'
+import './Mediaplan.css'
 import React, { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux"
 import { mediaplanSetAddForm, mediaplanAdd } from "../../store/actionCreators/mediaplanActionCreator"

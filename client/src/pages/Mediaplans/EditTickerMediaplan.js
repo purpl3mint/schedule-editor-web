@@ -1,21 +1,21 @@
 import './Mediaplan.css'
 import React, { useCallback, useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux"
-import { mediaplanSetEditContentForm, mediaplanEditContent } from "../../store/actionCreators/mediaplanActionCreator"
+import { mediaplanSetEditTickerForm, mediaplanEditTicker } from "../../store/actionCreators/mediaplanActionCreator"
 
-export const EditContentMediaplan = (props) => {
+export const EditTickerMediaplan = (props) => {
   const dispatch = useDispatch()
   const [name, setName] = useState(props.name ? props.name : "Не выбран")
   const id = useSelector(state => state.mediaplanReducer.currentMediaplan.id)
-  const form = useSelector(state => state.mediaplanReducer.editContentForm)
+  const form = useSelector(state => state.mediaplanReducer.editTickerForm)
 
   const changeHandler = useCallback( (e) => {
       setName(e.target.textContent)
-      dispatch(mediaplanSetEditContentForm("commonContentId", e.target.value))
+      dispatch(mediaplanSetEditTickerForm("tickerId", e.target.value))
   }, [dispatch, setName])
 
   const createHandler = useCallback( () => {
-      dispatch(mediaplanEditContent(form))
+      dispatch(mediaplanEditTicker(form))
       props.onCreate()
   }, [dispatch, form, props])
 
@@ -23,16 +23,16 @@ export const EditContentMediaplan = (props) => {
     props.onClose()
   }, [props])
 
-  const contentList = useSelector(state => {
-    const contentRaw = state.mediaplanReducer.contentList
+  const tickerList = useSelector(state => {
+    const tickerRaw = state.mediaplanReducer.tickerList
 
-    const contentTransformed = contentRaw.map(item => <li value={item.id} className="collection-item" key={item.id} onClick={changeHandler}>{item.name}</li>)
+    const tickerTransformed = tickerRaw.map(item => <li value={item.id} className="collection-item" key={item.id} onClick={changeHandler}>{item.url}</li>)
 
-    return contentTransformed
+    return tickerTransformed
   })
 
   const initializeHandler = useCallback( () => {
-    dispatch(mediaplanSetEditContentForm("id", id))
+    dispatch(mediaplanSetEditTickerForm("mediaplanId", id))
   }, [dispatch, id])
 
   useEffect(() => { initializeHandler() }, [initializeHandler])
@@ -45,15 +45,15 @@ export const EditContentMediaplan = (props) => {
     <div className='modal'>
       <div className="row modal-edit-options_mediaplan">
 
-        <h1>Редактирование основного контента</h1>
+        <h1>Редактирование бегущей строки</h1>
 
-        <span>Название контента: {name}</span><br/>
+        <span>Название: {name}</span><br/>
         
         <div className="col s12">
 
           <div className="row">
             <ul className="collection">
-              {contentList}
+              {tickerList}
             </ul>
           </div>
 

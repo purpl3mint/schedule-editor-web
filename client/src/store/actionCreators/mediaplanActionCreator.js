@@ -11,7 +11,11 @@ import {
   MEDIAPLAN_SET_EDIT_CONTENT_FORM,
   MEDIAPLAN_CLEAR_EDIT_CONTENT_FORM,
   MEDIAPLAN_SET_CONTENT_LIST,
-  MEDIAPLAN_CLEAR_CONTENT_LIST
+  MEDIAPLAN_CLEAR_CONTENT_LIST,
+  MEDIAPLAN_SET_EDIT_TICKER_FORM,
+  MEDIAPLAN_CLEAR_EDIT_TICKER_FORM,
+  MEDIAPLAN_SET_TICKER_LIST,
+  MEDIAPLAN_CLEAR_TICKER_LIST
 } from "../actions/mediaplanActions"
 
 export function mediaplanSetSucceed(data){
@@ -130,6 +134,7 @@ export function mediaplanLoadMediaplan(id) {
   }
 }
 
+/*Editing options in mediaplan*/
 export function mediaplanSetEditOptionsForm(name, value) {
   return {
     type: MEDIAPLAN_SET_EDIT_OPTIONS_FORM,
@@ -160,6 +165,7 @@ export function mediaplanEditOptions (form) {
   }
 }
 
+/*Editing content in mediaplan*/
 export function mediaplanSetEditContentForm(name, value) {
   return {
     type: MEDIAPLAN_SET_EDIT_CONTENT_FORM,
@@ -219,3 +225,65 @@ export function mediaplanGetContentList () {
     dispatch(mediaplanSetPreloader(false))
   }
 }
+
+/*Editing ticker in mediplan*/
+export function mediaplanSetEditTickerForm(name, value) {
+  return {
+    type: MEDIAPLAN_SET_EDIT_TICKER_FORM,
+    data: {name, value}
+  }
+}
+
+export function mediaplanClearEditTickerForm () {
+  return {
+    type: MEDIAPLAN_CLEAR_EDIT_TICKER_FORM
+  }
+}
+
+export function mediaplanEditTicker (form) {
+  return async(dispatch) => {
+    dispatch(mediaplanSetPreloader(true))
+
+    const method = 'PUT'
+    const body = JSON.stringify({...form})
+    const headers = {'Content-Type': 'application/json'}
+    const responce = await fetch("/api/mediaplan/ticker", {method, body, headers})
+
+    if (responce.ok) {
+      dispatch(mediaplanLoadMediaplans())
+    }
+
+    dispatch(mediaplanSetPreloader(false))
+  }
+}
+
+export function mediaplanSetTickerList(data) {
+  return {
+    type: MEDIAPLAN_SET_TICKER_LIST,
+    data
+  }
+}
+
+export function mediaplanClearTickerList () {
+  return {
+    type: MEDIAPLAN_CLEAR_TICKER_LIST
+  }
+}
+
+export function mediaplanGetTickerList () {
+  return async(dispatch) => {
+    dispatch(mediaplanSetPreloader(true))
+
+    const method = 'GET'
+    const headers = {'Content-Type': 'application/json'}
+    const responce = await fetch("/api/ticker", {method, headers})
+
+    const data = await responce.json()
+    if (responce.ok) {
+      dispatch(mediaplanSetTickerList(data))
+    }
+
+    dispatch(mediaplanSetPreloader(false))
+  }
+}
+

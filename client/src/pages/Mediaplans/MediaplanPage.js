@@ -2,9 +2,10 @@ import React, { useCallback, useEffect, useState } from "react";
 import { Preloader } from "../../components/Preloader";
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from "react-router-dom";
-import { mediaplanGetContentList, mediaplanSetEditOptionsForm } from "../../store/actionCreators/mediaplanActionCreator";
+import { mediaplanGetContentList, mediaplanSetEditOptionsForm, mediaplanGetTickerList } from "../../store/actionCreators/mediaplanActionCreator";
 import { EditOptionsMediaplan } from "./EditOptionsMediaplan";
 import { EditContentMediaplan } from "./EditContentMediaplan";
+import { EditTickerMediaplan } from "./EditTickerMediaplan";
 
 export const MediaplanPage = () => {
   const dispatch = useDispatch()
@@ -12,6 +13,7 @@ export const MediaplanPage = () => {
   const successPath = "/mediaplans"
   const [showModalOptions, setShowModalOptions] = useState(false)
   const [showModalContent, setShowModalContent] = useState(false)
+  const [showModalTicker, setShowModalTicker] = useState(false)
   const [tab1, setTab1] = useState(true)
   const [tab2, setTab2] = useState(false)
   const [tab3, setTab3] = useState(false)
@@ -70,12 +72,17 @@ export const MediaplanPage = () => {
     currentMediaplan.contentId,
     setShowModalOptions
   ])
-
+  
   const editContentHandler = useCallback( () => {
     dispatch(mediaplanGetContentList())
     setShowModalContent(true)
   }, [dispatch, setShowModalContent])
-
+  
+  const editTickerHandler = useCallback( () => {
+    dispatch(mediaplanGetTickerList())
+    setShowModalTicker(true)
+  }, [dispatch, setShowModalTicker])
+  
   /*
   const initializeHandler = useCallback( () => {
     //dispatch(mediaplanLoadMediaplans())
@@ -212,12 +219,29 @@ export const MediaplanPage = () => {
       
       {tab4 &&
       <div className="col s9 offset-s3">
-        <button className="btn" style={{marginTop: "0"}}>Выбрать бегущую строку</button>
+        <button 
+          className="btn" 
+          style={{marginTop: "0"}}
+          onClick={editTickerHandler}
+        >Выбрать бегущую строку</button>
         <div>
           <ul className="collection">
             <li className="collection-item">Бегущая строка: {currentMediaplan.ticker ? currentMediaplan.ticker.url : "Не определено"}</li>
           </ul>
         </div>
+
+        <EditTickerMediaplan
+          show={showModalTicker}
+          onCreate={() => {
+            setShowModalTicker(false)
+            navigate(successPath)
+          }}
+          onClose={() => {
+            setShowModalTicker(false)
+          }}
+          name={currentMediaplan.ticker ? currentMediaplan.ticker.url : undefined}
+        />
+
       </div>
       }
       

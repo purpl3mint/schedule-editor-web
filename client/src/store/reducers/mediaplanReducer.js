@@ -11,7 +11,11 @@ import {
   MEDIAPLAN_SET_EDIT_CONTENT_FORM,
   MEDIAPLAN_CLEAR_EDIT_CONTENT_FORM,
   MEDIAPLAN_SET_CONTENT_LIST,
-  MEDIAPLAN_CLEAR_CONTENT_LIST
+  MEDIAPLAN_CLEAR_CONTENT_LIST,
+  MEDIAPLAN_SET_EDIT_TICKER_FORM,
+  MEDIAPLAN_CLEAR_EDIT_TICKER_FORM,
+  MEDIAPLAN_SET_TICKER_LIST,
+  MEDIAPLAN_CLEAR_TICKER_LIST
 } from "../actions/mediaplanActions"
 
 const initialState = {
@@ -39,6 +43,11 @@ const initialState = {
     commonContentId: 0
   },
   contentList: [],
+  editTickerForm: {
+    mediaplanId: 0,
+    tickerId: 0
+  },
+  tickerList: [],
   currentMediaplanId: 0,
   currentMediaplan: {
     id: 0,
@@ -91,6 +100,16 @@ function mediaplanReducer (state = initialState, action) {
       return { ...state, contentList: action.data}
     case MEDIAPLAN_CLEAR_CONTENT_LIST:
       return { ...state, contentList: initialState.contentList}
+    case MEDIAPLAN_SET_EDIT_TICKER_FORM: {
+      let newEditTickerForm = {...state.editTickerForm, [action.data.name]: action.data.value}
+      return { ...state, editTickerForm: newEditTickerForm }
+    }
+    case MEDIAPLAN_CLEAR_EDIT_TICKER_FORM:
+      return { ...state, editTickerForm: initialState.editTickerForm }
+    case MEDIAPLAN_SET_TICKER_LIST:
+      return { ...state, tickerList: action.data}
+    case MEDIAPLAN_CLEAR_TICKER_LIST:
+      return { ...state, tickerList: initialState.tickerList}
 
     default: 
       return state
