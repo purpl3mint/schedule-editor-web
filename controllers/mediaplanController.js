@@ -20,6 +20,11 @@ class MediaplanController {
       return next(ApiError.badRequest('Нет автора'))
     }
 
+    const candidate = await Mediaplan.findOne({where: {name}})
+    if (candidate) {
+      return next(ApiError.badRequest('Медиаплан с таким названием уже существует'))
+    }
+
     const mediaplan = await Mediaplan.create({
       name,
       userId,
