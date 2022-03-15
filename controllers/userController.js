@@ -5,6 +5,7 @@ const ApiError = require('../error/apiError')
 const config = require('config')
 
 class UserController {
+
   async registration(req, res, next) {
     
     const {username, password, type} = req.body

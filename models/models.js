@@ -47,7 +47,7 @@ const Ticker = sequelize.define('ticker', {
 //author_id: {type: DataTypes.INTEGER, require: true, defaultValue: 0},
 const Mediaplan = sequelize.define('mediaplan', {
   id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-  name: {type: DataTypes.STRING, defaultValue: "Плейлист без названия"},
+  name: {type: DataTypes.STRING, unique: true},
   ads_start_delay: {type: DataTypes.INTEGER},
   banners_start_delay: {type: DataTypes.INTEGER, defaultValue: 0},
   banners_repeat: {type: DataTypes.BOOLEAN, defaultValue: false},
@@ -57,8 +57,8 @@ const Mediaplan = sequelize.define('mediaplan', {
 const Ads = sequelize.define('ads', {
   id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
   position: {type: DataTypes.INTEGER, require: true},
-  contentId: {type: DataTypes.INTEGER, require: true},
-  mediaplanId: {type: DataTypes.INTEGER, require: true},
+  contentId: {type: DataTypes.INTEGER, require: true, unique: false},
+  mediaplanId: {type: DataTypes.INTEGER, require: true, unique: false},
 })
 
 const BannerInMediaplan = sequelize.define('banner_in_mediaplan', {

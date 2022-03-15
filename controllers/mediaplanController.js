@@ -217,7 +217,8 @@ class MediaplanController {
 
     const candidate = await Ads.findOne({where: {
       contentId,
-      mediaplanId
+      mediaplanId,
+      position
     }})
 
     if (candidate) 
