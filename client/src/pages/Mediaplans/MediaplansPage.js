@@ -12,6 +12,7 @@ export const MediaplansPage = () => {
   const loading = useSelector(state => state.mediaplanReducer.preloader)
   const mediaplans = useSelector(state => {
     const mediaplansRaw = state.mediaplanReducer.mediaplans
+
     const mediaplans = mediaplansRaw.map(m => 
       <MediaplanCard 
         id={m.id} 
@@ -21,8 +22,8 @@ export const MediaplansPage = () => {
         banners_start_delay={m.banners_start_delay} 
         banners_repeat={m.banners_repeat} 
         banners_animation_duration_msec={m.banners_animation_duration_msec} 
-        commonContentId={m.commonContentId} 
-        tickerId={m.tickerId} 
+        content={m.common_content} 
+        ticker={m.ticker} 
         MediaplanBanner={m.MediaplanBanner} 
         MediaplanContent={m.MediaplanContent} 
       />

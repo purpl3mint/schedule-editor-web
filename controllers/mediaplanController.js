@@ -1,7 +1,10 @@
 const {Mediaplan, BannerInMediaplan, Ads, Banner, CommonContent, Ticker } = require('../models/models')
 const ApiError = require('../error/apiError')
+const fs = require('fs')
+const path = require('path')
 
 class MediaplanController {
+
   async create(req, res, next) {
     const {
       name,
@@ -36,6 +39,13 @@ class MediaplanController {
     })
 
     if (mediaplan) {
+      /*
+      fs.writeFile(path.resolve(__dirname, '..', mediaplan.name, '.json'), JSON.stringify(mediaplan), function(err) {
+        if (err) {
+          console.log("Файл не удалось создать");
+        }
+      })
+      */
       return res.json({message: 'Медиаплан успешно создан'})
     } else {
       return next(ApiError.badRequest('Медиаплан не удалось создать'))
