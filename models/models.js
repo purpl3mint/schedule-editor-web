@@ -36,8 +36,9 @@ const Banner = sequelize.define('banner', {
 //author_id: {type: DataTypes.INTEGER, require: true, defaultValue: 0},
 const Ticker = sequelize.define('ticker', {
   id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
+  name: {type: DataTypes.STRING, require: true},
   url: {type: DataTypes.STRING, require: true},
-  size: {type: DataTypes.STRING, require: true, defaultValue: 24},
+  size: {type: DataTypes.INTEGER, require: true, defaultValue: 24},
   speed: {type: DataTypes.INTEGER, require: true, defaultValue: 80},
   font_color: {type: DataTypes.STRING, require: true, defaultValue: '#ffffff'},
   background_color: {type: DataTypes.STRING, require: true, defaultValue: '#000000'}

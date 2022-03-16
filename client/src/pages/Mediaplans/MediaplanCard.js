@@ -39,7 +39,7 @@ export const MediaplanCard = (props) => {
     }
 
     if (ticker) { mediaplan['ticker'] = ticker }
-    if (MediaplanBanner.length > 0) { mediaplan['banner'] = MediaplanBanner }
+    if (MediaplanBanner.length > 0) { mediaplan['banners'] = MediaplanBanner }
     if (MediaplanContent.length > 0) { mediaplan['ads'] = MediaplanContent }
 
     exportToJson(mediaplan, mediaplan.name)
@@ -55,18 +55,12 @@ export const MediaplanCard = (props) => {
     MediaplanBanner
   ])
 
-  const clickHandler = useCallback(() => {
-    dispatch(mediaplanSetCurrent(id))
-    dispatch(mediaplanLoadMediaplan(id))
-  }, [dispatch, id])
-
   return (
     <div className="row">
             <div className="col s10">
                 <NavLink to={"" + id}
                     className="collection-item card" 
                     style={{marginBottom: "25px", border: "1px solid grey"}}
-                    onClick={clickHandler}
                 >
                     {name}<br/>
                     Задержка дополнительного контента: {ads_start_delay}<br/>
@@ -74,7 +68,7 @@ export const MediaplanCard = (props) => {
                     Повтор баннеров: {banners_repeat ? "Да" : "Нет"}<br/>
                     Длительность воспроизведения баннеров: {banners_animation_duration_msec}<br/>
                     Основногй конент: {content ? content.name : "Не определено"}<br/>
-                    ID бегущей строки: {ticker ? ticker.id : "Не определено"}<br/>
+                    Бегущая строка: {ticker ? ticker.name : "Не определено"}<br/>
                     Количество баннеров: {MediaplanBanner.length}<br/>
                     Количество дополнительного контента: {MediaplanContent.length}<br/>
                 </NavLink>

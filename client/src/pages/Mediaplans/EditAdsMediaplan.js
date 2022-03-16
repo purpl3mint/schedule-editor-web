@@ -26,9 +26,9 @@ export const EditAdsMediaplan = (props) => {
         return
       }
 
-      dispatch(mediaplanEditAds(form))
+      dispatch(mediaplanEditAds(form, id))
       props.onCreate()
-  }, [dispatch, form, props, message])
+  }, [dispatch, form, props, message, id])
 
   const closeHandler = useCallback( () => {
     props.onClose()

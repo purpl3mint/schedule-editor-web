@@ -72,6 +72,7 @@ export function contentAdd(form){
     if (responce.ok) {
       dispatch(contentSetSucceed(true))
       dispatch(contentClearAddForm())
+      dispatch(contentLoadContents())
     }
 
     dispatch(contentSetPreloader(false))

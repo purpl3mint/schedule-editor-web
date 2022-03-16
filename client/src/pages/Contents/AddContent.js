@@ -5,7 +5,7 @@ import { contentSetAddForm, contentAdd } from "../../store/actionCreators/conten
 import { useMessage } from '../../hooks/message.hook';
 
 export const AddContent = (props) => {
-  const regexpUrl = /^(http|https):\/\/[a-zA-Z-0-9\.]+((\/[a-zA-Z0-9]+)+(\.(gif|png|bmp|jpg|m3u8)))?$/
+  const regexpUrl = /^(http|https):\/\/[a-zA-Z-0-9\.]+((\/[a-zA-Z0-9]+)+(\.(mp4|gif|png|bmp|jpg|m3u8)))?$/
 
   const dispatch = useDispatch()
   const form = useSelector(state => state.contentReducer.addForm)

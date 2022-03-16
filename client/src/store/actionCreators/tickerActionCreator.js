@@ -71,6 +71,7 @@ export function tickerAdd(form){
     if (responce.ok) {
       dispatch(tickerSetSucceed(true))
       dispatch(tickerClearAddForm())
+      dispatch(tickerLoadTickers())
     }
 
     dispatch(tickerSetPreloader(false))

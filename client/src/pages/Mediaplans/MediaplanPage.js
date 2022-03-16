@@ -1,7 +1,6 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useState, useEffect } from "react";
 import { Preloader } from "../../components/Preloader";
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from "react-router-dom";
 import { 
   mediaplanGetContentList, 
   mediaplanSetEditOptionsForm, 
@@ -9,7 +8,9 @@ import {
   mediaplanGetBannerList,
   mediaplanGetAdsList,
   mediaplanDeleteBanner,
-  mediaplanDeleteAds
+  mediaplanDeleteAds,
+  mediaplanLoadMediaplan,
+  mediaplanSetCurrent
 } from "../../store/actionCreators/mediaplanActionCreator";
 import { EditOptionsMediaplan } from "./EditOptionsMediaplan";
 import { EditContentMediaplan } from "./EditContentMediaplan";
@@ -19,8 +20,6 @@ import { EditAdsMediaplan } from "./EditAdsMediaplan";
 
 export const MediaplanPage = () => {
   const dispatch = useDispatch()
-  const navigate = useNavigate()
-  const successPath = "/mediaplans"
   const [showModalOptions, setShowModalOptions] = useState(false)
   const [showModalContent, setShowModalContent] = useState(false)
   const [showModalTicker, setShowModalTicker] = useState(false)
@@ -32,15 +31,15 @@ export const MediaplanPage = () => {
   const [tab4, setTab4] = useState(false)
   const [tab5, setTab5] = useState(false)
 
-  const deleteBannerHandler = useCallback( (id) => {
-    dispatch(mediaplanDeleteBanner(id))
-    navigate(successPath)
-  }, [dispatch, navigate])
+  const idMediaplan = useSelector(state => state.mediaplanReducer.currentMediaplan.id)
 
-  const deleteAdsHandler = useCallback( (id) => {
-    dispatch(mediaplanDeleteAds(id))
-    navigate(successPath)
-  }, [dispatch, navigate])
+  const deleteBannerHandler = useCallback( (idBanner) => {
+    dispatch(mediaplanDeleteBanner(idBanner, idMediaplan))
+  }, [dispatch, idMediaplan])
+
+  const deleteAdsHandler = useCallback( (idAds) => {
+    dispatch(mediaplanDeleteAds(idAds, idMediaplan))
+  }, [dispatch, idMediaplan])
 
   const currentMediaplan = useSelector(state => state.mediaplanReducer.currentMediaplan)
   const loading = useSelector(state => state.mediaplanReducer.preloader)
@@ -124,14 +123,16 @@ export const MediaplanPage = () => {
     setShowModalAds(true)
   }, [dispatch, setShowModalAds])
   
-  /*
+  
   const initializeHandler = useCallback( () => {
-    //dispatch(mediaplanLoadMediaplans())
-    //dispatch(mediaplanSetSucceed(false))
+    const path = window.location.href.split('/')
+    const id = path[path.length - 1]
+    dispatch(mediaplanSetCurrent(id))
+    dispatch(mediaplanLoadMediaplan(id))
   }, [dispatch])
 
   useEffect(() => { initializeHandler() }, [initializeHandler])
-  */
+  
 
   return (
     <div>
@@ -210,7 +211,6 @@ export const MediaplanPage = () => {
           show={showModalOptions}
           onCreate={() => {
             setShowModalOptions(false)
-            navigate(successPath)
           }}
           onClose={() => {
             setShowModalOptions(false)
@@ -236,7 +236,6 @@ export const MediaplanPage = () => {
           show={showModalContent}
           onCreate={() => {
             setShowModalContent(false)
-            navigate(successPath)
           }}
           onClose={() => {
             setShowModalContent(false)
@@ -264,7 +263,6 @@ export const MediaplanPage = () => {
           show={showModalBanner}
           onCreate={() => {
             setShowModalBanner(false)
-            navigate(successPath)
           }}
           onClose={() => {
             setShowModalBanner(false)
@@ -283,7 +281,7 @@ export const MediaplanPage = () => {
         >Выбрать бегущую строку</button>
         <div>
           <ul className="collection">
-            <li className="collection-item">Бегущая строка: {currentMediaplan.ticker ? currentMediaplan.ticker.url : "Не определено"}</li>
+            <li className="collection-item">Бегущая строка: {currentMediaplan.ticker ? currentMediaplan.ticker.name : "Не определено"}</li>
           </ul>
         </div>
 
@@ -291,12 +289,11 @@ export const MediaplanPage = () => {
           show={showModalTicker}
           onCreate={() => {
             setShowModalTicker(false)
-            navigate(successPath)
           }}
           onClose={() => {
             setShowModalTicker(false)
           }}
-          name={currentMediaplan.ticker ? currentMediaplan.ticker.url : undefined}
+          name={currentMediaplan.ticker ? currentMediaplan.ticker.name : undefined}
         />
 
       </div>
@@ -319,7 +316,6 @@ export const MediaplanPage = () => {
           show={showModalAds}
           onCreate={() => {
             setShowModalAds(false)
-            navigate(successPath)
           }}
           onClose={() => {
             setShowModalAds(false)

@@ -62,7 +62,6 @@ export const MediaplansPage = () => {
             show={showModal} 
             onCreate={() => {
               setShowModal(false)
-              window.location.reload()
             }}
             onClose={() => {
               setShowModal(false)

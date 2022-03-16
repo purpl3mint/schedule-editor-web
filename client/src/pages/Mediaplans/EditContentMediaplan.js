@@ -15,9 +15,9 @@ export const EditContentMediaplan = (props) => {
   }, [dispatch, setName])
 
   const createHandler = useCallback( () => {
-      dispatch(mediaplanEditContent(form))
+      dispatch(mediaplanEditContent(form, id))
       props.onCreate()
-  }, [dispatch, form, props])
+  }, [dispatch, form, props, id])
 
   const closeHandler = useCallback( () => {
     props.onClose()

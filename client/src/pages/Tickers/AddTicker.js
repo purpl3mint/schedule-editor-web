@@ -12,7 +12,6 @@ export const AddTicker = (props) => {
   const regexpColor = /^#(([0-9a-fA-F]{6})|([0-9a-fA-F]{8}))$/
 
   const changeHandler = useCallback( (e) => {
-      console.log(form);
       dispatch(tickerSetAddForm(e.target.name, e.target.value))
   }, [dispatch, form])
 

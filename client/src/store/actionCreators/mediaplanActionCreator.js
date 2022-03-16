@@ -94,6 +94,7 @@ export function mediaplanAdd(form){
     if (responce.ok) {
       dispatch(mediaplanSetSucceed(true))
       dispatch(mediaplanClearAddForm())
+      dispatch(mediaplanLoadMediaplans())
     }
 
     dispatch(mediaplanSetPreloader(false))
@@ -161,7 +162,7 @@ export function mediaplanClearEditOptionsForm () {
   }
 }
 
-export function mediaplanEditOptions (form) {
+export function mediaplanEditOptions (form, id) {
   return async(dispatch) => {
     dispatch(mediaplanSetPreloader(true))
 
@@ -171,7 +172,7 @@ export function mediaplanEditOptions (form) {
     const responce = await fetch("/api/mediaplan/", {method, body, headers})
 
     if (responce.ok) {
-      dispatch(mediaplanLoadMediaplans())
+      dispatch(mediaplanLoadMediaplan(id))
     }
 
     dispatch(mediaplanSetPreloader(false))
@@ -192,7 +193,7 @@ export function mediaplanClearEditContentForm () {
   }
 }
 
-export function mediaplanEditContent (form) {
+export function mediaplanEditContent (form, id) {
   return async(dispatch) => {
     dispatch(mediaplanSetPreloader(true))
 
@@ -202,7 +203,7 @@ export function mediaplanEditContent (form) {
     const responce = await fetch("/api/mediaplan/", {method, body, headers})
 
     if (responce.ok) {
-      dispatch(mediaplanLoadMediaplans())
+      dispatch(mediaplanLoadMediaplan(id))
     }
 
     dispatch(mediaplanSetPreloader(false))
@@ -253,17 +254,17 @@ export function mediaplanClearEditTickerForm () {
   }
 }
 
-export function mediaplanEditTicker (form) {
+export function mediaplanEditTicker (form, id) {
   return async(dispatch) => {
     dispatch(mediaplanSetPreloader(true))
 
-    const method = 'PUT'
+    const method = 'POST'
     const body = JSON.stringify({...form})
     const headers = {'Content-Type': 'application/json'}
     const responce = await fetch("/api/mediaplan/ticker", {method, body, headers})
 
     if (responce.ok) {
-      dispatch(mediaplanLoadMediaplans())
+      dispatch(mediaplanLoadMediaplan(id))
     }
 
     dispatch(mediaplanSetPreloader(false))
@@ -314,7 +315,7 @@ export function mediaplanClearEditBannerForm () {
   }
 }
 
-export function mediaplanEditBanner (form) {
+export function mediaplanEditBanner (form, id) {
   return async(dispatch) => {
     dispatch(mediaplanSetPreloader(true))
 
@@ -324,7 +325,7 @@ export function mediaplanEditBanner (form) {
     const responce = await fetch("/api/mediaplan/banner", {method, body, headers})
 
     if (responce.ok) {
-      dispatch(mediaplanLoadMediaplans())
+      dispatch(mediaplanLoadMediaplan(id))
     }
 
     dispatch(mediaplanSetPreloader(false))
@@ -361,16 +362,16 @@ export function mediaplanGetBannerList () {
   }
 }
 
-export function mediaplanDeleteBanner (id) {
+export function mediaplanDeleteBanner (idBanner, idMediaplan) {
   return async(dispatch) => {
     dispatch(mediaplanSetPreloader(true))
 
     const method = 'DELETE'
     const headers = {'Content-Type': 'application/json'}
-    const responce = await fetch("/api/mediaplan/banner/" + id, {method, headers})
+    const responce = await fetch("/api/mediaplan/banner/" + idBanner, {method, headers})
 
     if (responce.ok) {
-      dispatch(mediaplanLoadMediaplans())
+      dispatch(mediaplanLoadMediaplan(idMediaplan))
     }
 
     dispatch(mediaplanSetPreloader(false))
@@ -391,7 +392,7 @@ export function mediaplanClearEditAdsForm () {
   }
 }
 
-export function mediaplanEditAds (form) {
+export function mediaplanEditAds (form, id) {
   return async(dispatch) => {
     dispatch(mediaplanSetPreloader(true))
 
@@ -401,7 +402,7 @@ export function mediaplanEditAds (form) {
     const responce = await fetch("/api/mediaplan/content", {method, body, headers})
 
     if (responce.ok) {
-      dispatch(mediaplanLoadMediaplans())
+      dispatch(mediaplanLoadMediaplan(id))
     }
 
     dispatch(mediaplanSetPreloader(false))
@@ -438,17 +439,16 @@ export function mediaplanGetAdsList () {
   }
 }
 
-export function mediaplanDeleteAds (id) {
+export function mediaplanDeleteAds (idAds, idMediaplan) {
   return async(dispatch) => {
     dispatch(mediaplanSetPreloader(true))
 
     const method = 'DELETE'
     const headers = {'Content-Type': 'application/json'}
-    const responce = await fetch("/api/mediaplan/content/" + id, {method, headers})
+    const responce = await fetch("/api/mediaplan/content/" + idAds, {method, headers})
 
     if (responce.ok) {
-      dispatch(mediaplanLoadMediaplans())
-      //dispatch(mediaplanLoadMediaplans())
+      dispatch(mediaplanLoadMediaplan(idMediaplan))
     }
 
     dispatch(mediaplanSetPreloader(false))

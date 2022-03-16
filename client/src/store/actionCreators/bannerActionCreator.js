@@ -72,6 +72,7 @@ export function bannerAdd(form){
     if (responce.ok) {
       dispatch(bannerSetSucceed(true))
       dispatch(bannerClearAddForm())
+      dispatch(bannerLoadBanners())
     }
 
     dispatch(bannerSetPreloader(false))

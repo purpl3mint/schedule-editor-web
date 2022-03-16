@@ -48,7 +48,7 @@ export const UsersPage = () => {
             show={showModal} 
             onCreate={() => {
               setShowModal(false)
-              window.location.reload()
+              initializeHandler()
             }}
             onClose={() => {
               setShowModal(false)

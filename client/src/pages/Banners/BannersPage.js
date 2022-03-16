@@ -66,7 +66,6 @@ export const BannersPage = () => {
             show={showModalAdd} 
             onCreate={() => {
               setShowModalAdd(false)
-              window.location.reload()
             }}
             onClose={() => {
               setShowModalAdd(false)
@@ -78,7 +77,6 @@ export const BannersPage = () => {
             show={showModalEdit}
             onCreate={() => {
               setShowModalEdit(false)
-              window.location.reload()
             }}
             onClose={() => {
               setShowModalEdit(false)

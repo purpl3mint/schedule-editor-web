@@ -15,9 +15,9 @@ export const EditTickerMediaplan = (props) => {
   }, [dispatch, setName])
 
   const createHandler = useCallback( () => {
-      dispatch(mediaplanEditTicker(form))
+      dispatch(mediaplanEditTicker(form, id))
       props.onCreate()
-  }, [dispatch, form, props])
+  }, [dispatch, form, props, id])
 
   const closeHandler = useCallback( () => {
     props.onClose()
@@ -26,7 +26,7 @@ export const EditTickerMediaplan = (props) => {
   const tickerList = useSelector(state => {
     const tickerRaw = state.mediaplanReducer.tickerList
 
-    const tickerTransformed = tickerRaw.map(item => <li value={item.id} className="collection-item" key={item.id} onClick={changeHandler}>{item.url}</li>)
+    const tickerTransformed = tickerRaw.map(item => <li value={item.id} className="collection-item" key={item.id} onClick={changeHandler}>{item.name}</li>)
 
     return tickerTransformed
   })

@@ -63,7 +63,6 @@ export const TickersPage = () => {
             show={showModalAdd} 
             onCreate={() => {
               setShowModalAdd(false)
-              window.location.reload()
             }}
             onClose={() => {
               setShowModalAdd(false)
@@ -75,7 +74,6 @@ export const TickersPage = () => {
             show={showModalEdit}
             onCreate={() => {
               setShowModalEdit(false)
-              window.location.reload()
             }}
             onClose={() => {
               setShowModalEdit(false)

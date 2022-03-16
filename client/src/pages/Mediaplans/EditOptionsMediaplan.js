@@ -8,6 +8,7 @@ export const EditOptionsMediaplan = (props) => {
   const dispatch = useDispatch()
   const message = useMessage()
   const form = useSelector(state => state.mediaplanReducer.editOptionsForm)
+  const id = useSelector(state => state.mediaplanReducer.currentMediaplan.id)
 
   const changeHandler = useCallback( (e) => {
       dispatch(mediaplanSetEditOptionsForm(e.target.name, e.target.value))
@@ -29,9 +30,9 @@ export const EditOptionsMediaplan = (props) => {
         return
       }
 
-      dispatch(mediaplanEditOptions(form))
+      dispatch(mediaplanEditOptions(form, id))
       props.onCreate()
-  }, [dispatch, form, props, message])
+  }, [dispatch, form, props, message, id])
 
   const closeHandler = useCallback( () => {
     props.onClose()
