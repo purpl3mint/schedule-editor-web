@@ -2,10 +2,14 @@ import './Contents.css'
 import React, { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux"
 import { contentSetAddForm, contentAdd } from "../../store/actionCreators/contentActionCreator"
+import { useMessage } from '../../hooks/message.hook';
 
 export const AddContent = (props) => {
+  const regexpUrl = /^(http|https):\/\/[a-zA-Z-0-9\.]+((\/[a-zA-Z0-9]+)+(\.(gif|png|bmp|jpg|m3u8)))?$/
+
   const dispatch = useDispatch()
   const form = useSelector(state => state.contentReducer.addForm)
+  const message = useMessage()
 
   const changeHandler = useCallback( (e) => {
       dispatch(contentSetAddForm(e.target.name, e.target.value))
@@ -13,18 +17,23 @@ export const AddContent = (props) => {
 
   const createHandler = useCallback( () => {
       if (!form.name){
-          //message("Ошибка: не задано имя пользователя")
+          message("Ошибка: не задано имя контента")
           return
       }
       if (!form.url){
-          //message("Ошибка: не задан пароль")
+          message("Ошибка: не задан url контента")
           return
       }
 
-      dispatch(contentAdd(form))
+      if (regexpUrl.test(form.url)) {
+        dispatch(contentAdd(form))
+      } else {
+        message("Ошибка: недопустимый тип контента, измените URL")
+        return
+      }
 
       props.onCreate()
-  }, [dispatch, form, props])
+  }, [dispatch, form, props, message])
 
   const closeHandler = useCallback( () => {
     props.onClose()

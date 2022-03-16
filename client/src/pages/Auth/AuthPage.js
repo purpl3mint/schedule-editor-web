@@ -1,9 +1,9 @@
-import React, {useCallback, useContext} from "react"
+import React, {useCallback, useContext, useEffect} from "react"
 import { useDispatch, useSelector } from 'react-redux'
 import { AuthContext } from "../../context/AuthContext"
 import { useHttp } from "../../hooks/http.hook"
 import { useMessage } from "../../hooks/message.hook"
-import { authSetForm, authLogin } from "../../store/actionCreators/authActionCreator"
+import { authSetForm, authLogin, authSetWrong } from "../../store/actionCreators/authActionCreator"
 
 export const AuthPage = () => {
     const auth = useContext(AuthContext)
@@ -12,6 +12,8 @@ export const AuthPage = () => {
     const dispatch = useDispatch()
 
     const form = useSelector(state => state.authReducer.form)
+
+    const isWrongData = useSelector(state => state.authReducer.isWrongData)
 
     const changeHandler = event => {
         dispatch(authSetForm(event.target.name, event.target.value))
@@ -27,8 +29,17 @@ export const AuthPage = () => {
             return
         }
         dispatch(authLogin(form, auth))
+
     }, [dispatch, message, form, auth])
 
+    const checkCorrectData = useCallback( () => {
+        if (isWrongData) {
+            message("Ошибка: неправильный логин или пароль")
+            dispatch(authSetWrong(false))
+        }
+    }, [dispatch, message, isWrongData])
+
+    useEffect( () => { checkCorrectData() }, [checkCorrectData])
 
     return (
         <div className="row">

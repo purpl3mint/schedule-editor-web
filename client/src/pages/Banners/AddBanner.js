@@ -2,12 +2,15 @@ import './Banners.css'
 import React, { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux"
 import { bannerSetAddForm, bannerAdd } from "../../store/actionCreators/bannerActionCreator"
+import { useMessage } from '../../hooks/message.hook';
 
 export const AddBanner = (props) => {
   const dispatch = useDispatch()
-
-  //const isSucceed = useSelector(state => state.userReducer.isSucceed)
   const form = useSelector(state => state.bannerReducer.addForm)
+  const message = useMessage()
+  const regexpUrl = /^(http|https):\/\/[a-zA-Z-0-9\.]+((\/[a-zA-Z0-9]+)+(\.(gif|png|bmp|jpg|m3u8)))?$/
+  const regexpColor = /^#(([0-9a-fA-F]{6})|([0-9a-fA-F]{8}))$/
+
 
   const changeHandler = useCallback( (e) => {
       dispatch(bannerSetAddForm(e.target.name, e.target.value))
@@ -15,18 +18,27 @@ export const AddBanner = (props) => {
 
   const createHandler = useCallback( () => {
       if (!form.name){
-          //message("Ошибка: не задано имя пользователя")
+          message("Ошибка: не задано название баннера")
           return
       }
       if (!form.url){
-          //message("Ошибка: не задан пароль")
+          message("Ошибка: не задан URL баннера")
           return
       }
 
-      dispatch(bannerAdd(form))
+      if (!regexpUrl.test(form.url)) {
+        message("Ошибка: недопустимый тип контента, измените URL")
+        return
+      }
 
+      if (!regexpColor.test(form.background)) {
+        message("Ошибка: некорректный цвет фона")
+        return
+      }
+
+      dispatch(bannerAdd(form))
       props.onCreate()
-  }, [dispatch, form, props])
+  }, [dispatch, form, props, message, regexpUrl, regexpColor])
 
   const closeHandler = useCallback( () => {
     props.onClose()

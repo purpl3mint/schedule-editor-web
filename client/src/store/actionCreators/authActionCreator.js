@@ -1,6 +1,7 @@
 import {
   AUTH_SET_FORM,
-  AUTH_CLEAR_FORM
+  AUTH_CLEAR_FORM,
+  AUTH_SET_WRONG
 } from '../actions/authActions'
 
 export function authSetForm (target, value) {
@@ -16,6 +17,13 @@ export function authClearForm () {
   }
 }
 
+export function authSetWrong (data) {
+  return {
+    type: AUTH_SET_WRONG,
+    data
+  }
+}
+
 export function authLogin (form, authContext) {
   return async (dispatch) => {
     const method = 'POST'
@@ -27,6 +35,8 @@ export function authLogin (form, authContext) {
     if (responce.ok){
       authContext.login(data)
       dispatch(authClearForm())
+    } else {
+      dispatch(authSetWrong(true))
     }
   }
 }
