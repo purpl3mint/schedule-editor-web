@@ -2,11 +2,11 @@ import './AddUser.css'
 import React, { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux"
 import { userSetAddForm, userAdd } from "../../store/actionCreators/userActionCreator"
+import { useMessage } from '../../hooks/message.hook';
 
 export const AddUser = (props) => {
   const dispatch = useDispatch()
-
-  //const isSucceed = useSelector(state => state.userReducer.isSucceed)
+  const message = useMessage()
   const form = useSelector(state => state.userReducer.addForm)
 
   const changeHandler = useCallback( (e) => {
@@ -15,18 +15,18 @@ export const AddUser = (props) => {
 
   const createHandler = useCallback( () => {
       if (!form.username){
-          //message("Ошибка: не задано имя пользователя")
+          message("Ошибка: не задано имя пользователя")
           return
       }
       if (!form.password){
-          //message("Ошибка: не задан пароль")
+          message("Ошибка: не задан пароль")
           return
       }
 
       dispatch(userAdd(form))
 
       props.onCreate()
-  }, [dispatch, form, props])
+  }, [dispatch, form, props, message])
 
   const closeHandler = useCallback( () => {
     props.onClose()
@@ -46,20 +46,20 @@ export const AddUser = (props) => {
 
           <div className="row">
             <div className="input-field col s6">
-              <input id="username" name="username" type="text" className="validate" onChange={changeHandler} />
-              <label htmlFor="username">Имя пользователя*</label>
+              <input id="username" name="username" type="text" value={form.username} onChange={changeHandler} />
+              <span className="helper-text">Имя пользователя*</span>
             </div>
           </div>
 
           <div className="row">
             <div className="input-field col s6">
-              <input id="password" name="password" type="text" onChange={changeHandler} />
-              <label htmlFor="password">Пароль*</label>
+              <input id="password" name="password" type="text" value={form.password} onChange={changeHandler} />
+              <span className="helper-text">Пароль*</span>
             </div>
           </div>
 
           <div className="row">
-            <select defaultValue="-1" className="col s6 browser-default" name="type" onChange={changeHandler}>
+            <select defaultValue="-1" className="col s6 browser-default" name="type" value={form.type} onChange={changeHandler}>
               <option value="-1" disabled>Выберите тип пользователя*</option>
               <option value="user">Обычный пользователь</option>
               <option value="admin">Администратор</option>
