@@ -24,21 +24,21 @@ export const AddMediaplan = (props) => {
       }
 
       if (form.contentId < 1) {
-        message("Ошибка: id основного контента указано неверно")
+        message("Ошибка: id основного контента должно быть положительным числом")
         return
       }
 
-      if (form.ads_start_delay < 1) {
+      if (form.ads_start_delay < 0) {
         message("Ошибка: задержка воспроизведения основного контента указана неверно")
         return
       }
 
-      if (form.banners_start_delay < 1) {
+      if (form.banners_start_delay < 0) {
         message("Ошибка: задержка воспроизведения баннеров указана неверно")
         return
       }
 
-      if (form.banners_animation_duration_msec < 1) {
+      if (form.banners_animation_duration_msec < 0) {
         message("Ошибка: длительность анимации баннеров указана неверно")
         return
       }

@@ -32,6 +32,11 @@ export const AddContent = (props) => {
         return
       }
 
+      if (form.duration < 0){
+        message("Ошибка: длиьтельность не может быть меньше 0")
+        return
+      }
+
       props.onCreate()
   }, [dispatch, form, props, message])
 
@@ -86,7 +91,7 @@ export const AddContent = (props) => {
           <div className="row">
             <div className="input-field col s10">
               <input id="duration" name="duration" type="number" value={form.duration} onChange={changeHandler} />
-              <span className="helper-text">Длительность (по умолчанию 0)</span>
+              <span className="helper-text">Длительность</span>
             </div>
           </div>
 

@@ -32,6 +32,16 @@ export const AddTicker = (props) => {
           return
       }
 
+      if (form.size <= 0) {
+          message("Ошибка: размер шрифта должен быть положительным числом")
+          return
+      }
+
+      if (form.speed <= 0) {
+        message("Ошибка: скорость текста должна быть положительным числом")
+        return
+      }
+
       if (!regexpUrl.test(form.url)) {
         console.log(form.url);
         message("Ошибка: некорректный URL")

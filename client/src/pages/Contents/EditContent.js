@@ -2,9 +2,11 @@ import './Contents.css'
 import React, { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux"
 import { contentSetEditForm, contentEdit } from "../../store/actionCreators/contentActionCreator"
+import { useMessage } from '../../hooks/message.hook';
 
 export const EditContent = (props) => {
   const dispatch = useDispatch()
+  const message = useMessage()
   const form = useSelector(state => state.contentReducer.editForm)
 
   const changeHandler = useCallback( (e) => {
@@ -12,9 +14,14 @@ export const EditContent = (props) => {
   }, [dispatch])
 
   const createHandler = useCallback( () => {
+      if (form.duration < 0){
+        message("Ошибка: длиьтельность не может быть меньше 0")
+        return
+      }
+
       dispatch(contentEdit(form))
       props.onCreate()
-  }, [dispatch, form, props])
+  }, [dispatch, form, props, message])
 
   const closeHandler = useCallback( () => {
     props.onClose()
@@ -34,7 +41,7 @@ export const EditContent = (props) => {
 
           <div className="row">
             <select defaultValue={form.online} className="col s6 browser-default" name="online" onChange={changeHandler}>
-              <option value="-1" disabled>Выберите тип воспроизведения (по умолчанию offline)</option>
+              <option value="-1" disabled>Выберите тип воспроизведения</option>
               <option value="true">Online</option>
               <option value="false">Offline</option>
             </select>
@@ -42,7 +49,7 @@ export const EditContent = (props) => {
 
           <div className="row">
             <select defaultValue={form.aspect_ratio} className="col s6 browser-default" name="aspect_ratio" onChange={changeHandler}>
-              <option value="-1" disabled>Выберите соотношение сторон (по умолчанию без масштабирования)</option>
+              <option value="-1" disabled>Выберите соотношение сторон</option>
               <option value="normal">Без масштабирования</option>
               <option value="crop">Срезать уходящее за пределы экрана</option>
               <option value="stretch">Подогнать под размер экрана</option>
@@ -52,7 +59,7 @@ export const EditContent = (props) => {
           <div className="row">
             <div className="input-field col s6">
               <input id="duration" name="duration" type="number" onChange={changeHandler} defaultValue={form.duration} />
-              <label htmlFor="duration">Длительность (по умолчанию 0)</label>
+              <span className="helper-text">Длительность</span>
             </div>
           </div>
 

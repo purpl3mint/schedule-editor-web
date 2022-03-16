@@ -41,6 +41,11 @@ export const AddBanner = (props) => {
         return
       }
 
+      if (form.duration < 0) {
+        message("Ошибка: длительность не может быть меньше 0")
+        return
+      }
+
       dispatch(bannerAdd(form))
       props.onCreate()
   }, [dispatch, form, props, message, regexpUrl, regexpColor])
@@ -93,14 +98,14 @@ export const AddBanner = (props) => {
           <div className="row">
             <div className="input-field col s10">
               <input id="background" name="background" type="text" value={form.background} onChange={changeHandler} />
-              <span className="helper-text">Цвет фона(по умолчанию #000000)</span>
+              <span className="helper-text">Цвет фона</span>
             </div>
           </div>
 
           <div className="row">
             <div className="input-field col s10">
               <input id="duration" name="duration" type="number" value={form.duration} onChange={changeHandler} />
-              <span className="helper-text">Длительность (по умолчанию 0)</span>
+              <span className="helper-text">Длительность</span>
             </div>
           </div>
 

@@ -2,9 +2,11 @@ import './Mediaplan.css'
 import React, { useCallback, useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux"
 import { mediaplanSetEditBannerForm, mediaplanEditBanner } from "../../store/actionCreators/mediaplanActionCreator"
+import { useMessage } from '../../hooks/message.hook';
 
 export const EditBannersMediaplan = (props) => {
   const dispatch = useDispatch()
+  const message = useMessage()
   const [name, setName] = useState(props.name ? props.name : "Не выбран")
   const id = useSelector(state => state.mediaplanReducer.currentMediaplan.id)
   const form = useSelector(state => state.mediaplanReducer.editBannerForm)
@@ -19,9 +21,14 @@ export const EditBannersMediaplan = (props) => {
   }, [dispatch, setName])
 
   const createHandler = useCallback( () => {
+      if (form.position < 0) {
+        message("Ошибка: позиция в медиаплане должна быть положительным числом")
+        return
+      }
+
       dispatch(mediaplanEditBanner(form))
       props.onCreate()
-  }, [dispatch, form, props])
+  }, [dispatch, form, props, message])
 
   const closeHandler = useCallback( () => {
     props.onClose()
@@ -66,8 +73,8 @@ export const EditBannersMediaplan = (props) => {
 
           <div className="row">
             <div className="input-field col s6">
-              <input id="position" name="position" type="text" onChange={changeHandler} />
-              <label htmlFor="position">Позиция в медиаплане</label>
+              <input id="position" name="position" type="text" value={form.position} onChange={changeHandler} />
+              <span className="helper-text">Позиция в медиаплане</span>
             </div>
           </div>
 

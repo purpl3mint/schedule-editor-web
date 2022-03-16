@@ -2,9 +2,11 @@ import './Mediaplan.css'
 import React, { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux"
 import { mediaplanSetEditOptionsForm, mediaplanEditOptions } from "../../store/actionCreators/mediaplanActionCreator"
+import { useMessage } from '../../hooks/message.hook';
 
 export const EditOptionsMediaplan = (props) => {
   const dispatch = useDispatch()
+  const message = useMessage()
   const form = useSelector(state => state.mediaplanReducer.editOptionsForm)
 
   const changeHandler = useCallback( (e) => {
@@ -12,9 +14,24 @@ export const EditOptionsMediaplan = (props) => {
   }, [dispatch])
 
   const createHandler = useCallback( () => {
+      if (form.ads_start_delay < 0) {
+        message("Ошибка: задержка воспроизведения основного контента указана неверно")
+        return
+      }
+
+      if (form.banners_start_delay < 0) {
+        message("Ошибка: задержка воспроизведения баннеров указана неверно")
+        return
+      }
+
+      if (form.banners_animation_duration_msec < 0) {
+        message("Ошибка: длительность анимации баннеров указана неверно")
+        return
+      }
+
       dispatch(mediaplanEditOptions(form))
       props.onCreate()
-  }, [dispatch, form, props])
+  }, [dispatch, form, props, message])
 
   const closeHandler = useCallback( () => {
     props.onClose()
@@ -34,22 +51,22 @@ export const EditOptionsMediaplan = (props) => {
 
           <div className="row">
             <div className="input-field col s6">
-              <input defaultValue={form.ads_start_delay} id="ads_start_delay" name="ads_start_delay" type="number" onChange={changeHandler} />
-              <label htmlFor="ads_start_delay">Задержка воспроизведения доп контента (по умолчанию 0)</label>
+              <input value={form.ads_start_delay} id="ads_start_delay" name="ads_start_delay" type="number" onChange={changeHandler} />
+              <span className="helper-text">Задержка воспроизведения доп контента</span>
             </div>
           </div>
 
           <div className="row">
             <div className="input-field col s6">
-              <input defaultValue={form.banners_start_delay} id="banners_start_delay" name="banners_start_delay" type="number" onChange={changeHandler} />
-              <label htmlFor="banners_start_delay">Задержка воспроизведения баннеров (по умолчанию 0)</label>
+              <input value={form.banners_start_delay} id="banners_start_delay" name="banners_start_delay" type="number" onChange={changeHandler} />
+              <span className="helper-text">Задержка воспроизведения баннеров</span>
             </div>
           </div>
 
           <div className="row">
             <div className="input-field col s6">
-              <input defaultValue={form.banners_animation_duration_msec} id="banners_animation_duration_msec" name="banners_animation_duration_msec" type="number" onChange={changeHandler} />
-              <label htmlFor="banners_animation_duration_msec">Длительность воспроизведения анимации баннеров</label>
+              <input value={form.banners_animation_duration_msec} id="banners_animation_duration_msec" name="banners_animation_duration_msec" type="number" onChange={changeHandler} />
+              <span className="helper-text">Длительность воспроизведения анимации баннеров</span>
             </div>
           </div>
 

@@ -2,9 +2,11 @@ import './Banners.css'
 import React, { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux"
 import { bannerSetEditForm, bannerEdit } from "../../store/actionCreators/bannerActionCreator"
+import { useMessage } from '../../hooks/message.hook';
 
 export const EditBanner = (props) => {
   const dispatch = useDispatch()
+  const message = useMessage()
   const form = useSelector(state => state.bannerReducer.editForm)
 
   const changeHandler = useCallback( (e) => {
@@ -12,9 +14,21 @@ export const EditBanner = (props) => {
   }, [dispatch])
 
   const createHandler = useCallback( () => {
+      const regexpColor = /^#(([0-9a-fA-F]{6})|([0-9a-fA-F]{8}))$/
+
+      if (!regexpColor.test(form.background)) {
+        message("Ошибка: некорректный цвет фона")
+        return
+      }
+      
+      if (form.duration < 0) {
+        message("Ошибка: длительность не может быть меньше 0")
+        return
+      }
+
       dispatch(bannerEdit(form))
       props.onCreate()
-  }, [dispatch, form, props])
+  }, [dispatch, form, props, message])
 
   const closeHandler = useCallback( () => {
     props.onClose()
@@ -34,7 +48,7 @@ export const EditBanner = (props) => {
 
           <div className="row">
             <select defaultValue={form.online} className="col s6 browser-default" name="online" onChange={changeHandler}>
-              <option value="-1" disabled>Выберите тип воспроизведения (по умолчанию offline)</option>
+              <option value="-1" disabled>Выберите тип воспроизведения</option>
               <option value="true">Online</option>
               <option value="false">Offline</option>
             </select>
@@ -43,28 +57,28 @@ export const EditBanner = (props) => {
           <div className="row">
             <div className="input-field col s6">
               <input defaultValue={form.background} id="background" name="background" type="text" onChange={changeHandler} />
-              <label htmlFor="background">Цвет фона(по умолчанию #000000)</label>
+              <span className="helper-text">Цвет фона</span>
             </div>
           </div>
 
           <div className="row">
             <div className="input-field col s6">
               <input id="duration" name="duration" type="number" onChange={changeHandler} defaultValue={form.duration} />
-              <label htmlFor="duration">Длительность (по умолчанию 0)</label>
+              <span className="helper-text">Длительность</span>
             </div>
           </div>
 
           <div className="row">
             <div className="input-field col s6">
               <input defaultValue={form.layout_width} id="layout_width" name="layout_width" type="text" onChange={changeHandler} />
-              <label htmlFor="layout_width">Ширина баннера (проценты/wrap_content/match_parent)</label>
+              <span className="helper-text">Ширина баннера (проценты/wrap_content/match_parent)</span>
             </div>
           </div>
 
           <div className="row">
             <div className="input-field col s6">
               <input defaultValue={form.layout_height} id="layout_height" name="layout_height" type="text" onChange={changeHandler} />
-              <label htmlFor="layout_height">Высота баннера (проценты/wrap_content/match_parent)</label>
+              <span className="helper-text">Высота баннера (проценты/wrap_content/match_parent)</span>
             </div>
           </div>
 
