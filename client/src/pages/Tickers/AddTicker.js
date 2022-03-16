@@ -69,44 +69,44 @@ export const AddTicker = (props) => {
         <div className="col s12">
 
           <div className="row">
-            <div className="input-field col s6">
-              <input id="name" name="name" type="text" className="validate" value={form.name} onChange={changeHandler} />
-              <label htmlFor="name">Название*</label>
+            <div className="input-field col s10">
+              <input id="name" name="name" type="text" value={form.name} onChange={changeHandler} />
+              <span className="helper-text">Название бегущей строки*</span>
             </div>
           </div>
 
           <div className="row">
-            <div className="input-field col s6">
+            <div className="input-field col s10">
               <input id="url" name="url" type="text" value={form.url} onChange={changeHandler} />
-              <label htmlFor="url">URL*</label>
+              <span className="helper-text">URL*</span>
             </div>
           </div>
 
           <div className="row">
-            <div className="input-field col s6">
+            <div className="input-field col s10">
               <input id="size" name="size" type="text" value={form.size} onChange={changeHandler} />
-              <label htmlFor="size">Размер шрифта</label>
+              <span className="helper-text">Размер шрифта</span>
             </div>
           </div>
 
           <div className="row">
-            <div className="input-field col s6">
+            <div className="input-field col s10">
               <input id="speed" name="speed" type="text" value={form.speed} onChange={changeHandler} />
-              <label htmlFor="speed">Скорость</label>
+              <span className="helper-text">Скорость</span>
             </div>
           </div>
 
           <div className="row">
-            <div className="input-field col s6">
+            <div className="input-field col s10">
               <input id="font_color" name="font_color" type="text" value={form.font_color} onChange={changeHandler} />
-              <label htmlFor="font_color">Цвет шрифта</label>
+              <span className="helper-text">Цвет шрифта</span>
             </div>
           </div>
 
           <div className="row">
-            <div className="input-field col s6">
+            <div className="input-field col s10">
               <input id="background_color" name="background_color" type="text" value={form.background_color} onChange={changeHandler} />
-              <label htmlFor="background_color">Цвет фона</label>
+              <span className="helper-text">Цвет фона</span>
             </div>
           </div>
 

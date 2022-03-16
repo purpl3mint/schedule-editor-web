@@ -31,6 +31,11 @@ export const AddBanner = (props) => {
         return
       }
 
+      if (form.url_reserve.length !== 0 && !regexpUrl.test(form.url_reserve)) {
+        message("Ошибка: недопустимый тип контента, измените резервный URL")
+        return
+      }
+
       if (!regexpColor.test(form.background)) {
         message("Ошибка: некорректный цвет фона")
         return
@@ -57,28 +62,28 @@ export const AddBanner = (props) => {
         <div className="col s12">
 
           <div className="row">
-            <div className="input-field col s6">
-              <input id="name" name="name" type="text" className="validate" onChange={changeHandler} />
-              <label htmlFor="name">Название баннера*</label>
+            <div className="input-field col s10">
+              <input id="name" name="name" type="text" value={form.name} onChange={changeHandler} />
+              <span className="helper-text">Название баннера*</span>
             </div>
           </div>
 
           <div className="row">
-            <div className="input-field col s6">
-              <input id="url" name="url" type="text" onChange={changeHandler} />
-              <label htmlFor="url">URL*</label>
+            <div className="input-field col s10">
+              <input id="url" name="url" type="text" value={form.url} onChange={changeHandler} />
+              <span className="helper-text">URL*</span>
             </div>
           </div>
 
           <div className="row">
-            <div className="input-field col s6">
-              <input id="url_reserve" name="url_reserve" type="text" onChange={changeHandler} />
-              <label htmlFor="url_reserve">URL резервный</label>
+            <div className="input-field col s10">
+              <input id="url_reserve" name="url_reserve" type="text" value={form.url_reserve} onChange={changeHandler} />
+              <span className="helper-text">URL резервный</span>
             </div>
           </div>
 
           <div className="row">
-            <select defaultValue="-1" className="col s6 browser-default" name="online" onChange={changeHandler}>
+            <select defaultValue="-1" className="col s10 browser-default" name="online" value={form.online} onChange={changeHandler}>
               <option value="-1" disabled>Выберите тип воспроизведения (по умолчанию offline)</option>
               <option value="true">Online</option>
               <option value="false">Offline</option>
@@ -86,35 +91,35 @@ export const AddBanner = (props) => {
           </div>
 
           <div className="row">
-            <div className="input-field col s6">
-              <input id="background" name="background" type="text" onChange={changeHandler} />
-              <label htmlFor="background">Цвет фона(по умолчанию #000000)</label>
+            <div className="input-field col s10">
+              <input id="background" name="background" type="text" value={form.background} onChange={changeHandler} />
+              <span className="helper-text">Цвет фона(по умолчанию #000000)</span>
             </div>
           </div>
 
           <div className="row">
-            <div className="input-field col s6">
-              <input id="duration" name="duration" type="number" onChange={changeHandler} />
-              <label htmlFor="duration">Длительность (по умолчанию 0)</label>
+            <div className="input-field col s10">
+              <input id="duration" name="duration" type="number" value={form.duration} onChange={changeHandler} />
+              <span className="helper-text">Длительность (по умолчанию 0)</span>
             </div>
           </div>
 
           <div className="row">
-            <div className="input-field col s6">
-              <input id="layout_width" name="layout_width" type="text" onChange={changeHandler} />
-              <label htmlFor="layout_width">Ширина баннера (проценты/wrap_content/match_parent)</label>
+            <div className="input-field col s10">
+              <input id="layout_width" name="layout_width" type="text" value={form.layout_width} onChange={changeHandler} />
+              <span className="helper-text">Ширина баннера (проценты/wrap_content/match_parent)</span>
             </div>
           </div>
 
           <div className="row">
-            <div className="input-field col s6">
-              <input id="layout_height" name="layout_height" type="text" onChange={changeHandler} />
-              <label htmlFor="layout_height">Высота баннера (проценты/wrap_content/match_parent)</label>
+            <div className="input-field col s10">
+              <input id="layout_height" name="layout_height" type="text" value={form.layout_height} onChange={changeHandler} />
+              <span className="helper-text">Высота баннера (проценты/wrap_content/match_parent)</span>
             </div>
           </div>
 
           <div className="row">
-            <select defaultValue="-1" className="col s6 browser-default" name="layout_gravity" onChange={changeHandler}>
+            <select defaultValue="-1" className="col s10 browser-default" name="layout_gravity" value={form.layout_gravity} onChange={changeHandler}>
               <option value="-1" disabled>Выравнивание по стороне экрана (по умолчанию верхний край)</option>
               <option value="top">Верхний край</option>
               <option value="bottom">Нижний край</option>
