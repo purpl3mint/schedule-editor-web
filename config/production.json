@@ -1,11 +1,11 @@
 {
   "port": 80,
-  "DB_NAME": "###",
-  "DB_USER": "###",
-  "DB_PASSWORD": "###",
-  "DB_HOST": "localhost",
+  "DB_NAME": "ddgeel9irine8i",
+  "DB_USER": "qmaglibepsrbjk",
+  "DB_PASSWORD": "f9d3f507029b0ea9c3cf81a62ae890eb0dcd22b93dc3ac269e10dc035c25ff87",
+  "DB_HOST": "ec2-18-210-191-5.compute-1.amazonaws.com",
   "DB_PORT": 5432,
-  "SECRET_KEY": "###",
+  "SECRET_KEY": "leeeeeeeeeeeeeeeeeeeeroyJENKINS",
   "DB_DIALECT_OPTIONS": {
     "ssl": {
       "rejectUnauthorized": false

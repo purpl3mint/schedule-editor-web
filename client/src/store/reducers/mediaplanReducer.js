@@ -73,7 +73,6 @@ const initialState = {
     position: 0
   },
   adsList: [],
-  currentMediaplanId: 0,
   currentMediaplan: {
     id: 0,
     name: "",
