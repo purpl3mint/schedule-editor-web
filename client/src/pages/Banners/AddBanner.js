@@ -8,7 +8,7 @@ export const AddBanner = (props) => {
   const dispatch = useDispatch()
   const form = useSelector(state => state.bannerReducer.addForm)
   const message = useMessage()
-  const regexpUrl = /^(http|https):\/\/[a-zA-Z-0-9\.]+((\/[a-zA-Z0-9]+)+(\.(gif|png|bmp|jpg|m3u8)))?$/
+  const regexpUrl = /^(http|https):\/\/[a-zA-Z-0-9\.]+((\/[a-zA-Z0-9\-\=\+\.\(\)\?\_\,\:\;]+)+(\.(gif|png|bmp|jpg|m3u8)))?$/
   const regexpColor = /^#(([0-9a-fA-F]{6})|([0-9a-fA-F]{8}))$/
 
 

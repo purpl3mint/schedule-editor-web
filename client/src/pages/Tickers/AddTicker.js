@@ -8,7 +8,7 @@ export const AddTicker = (props) => {
   const dispatch = useDispatch()
   const form = useSelector(state => state.tickerReducer.addForm)
   const message = useMessage()
-  const regexpUrl = /^(http|https):\/\/[a-zA-Z-0-9\.]+((\/[a-zA-Z0-9]+)+(\.(txt|txt)))$/
+  const regexpUrl = /^(http|https):\/\/[a-zA-Z-0-9\.]+((\/[a-zA-Z0-9\-\=\+\.\(\)\?\_\,\:\;]+)+(\.(txt|txt)))$/
   const regexpColor = /^#(([0-9a-fA-F]{6})|([0-9a-fA-F]{8}))$/
 
   const changeHandler = useCallback( (e) => {
