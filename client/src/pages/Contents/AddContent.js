@@ -38,7 +38,7 @@ export const AddContent = (props) => {
       }
 
       props.onCreate()
-  }, [dispatch, form, props, message])
+  }, [dispatch, form, props, message, regexpUrl])
 
   const closeHandler = useCallback( () => {
     props.onClose()
