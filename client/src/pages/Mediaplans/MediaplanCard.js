@@ -24,25 +24,73 @@ export const MediaplanCard = (props) => {
   }, [dispatch, id])
 
   const saveHandler = useCallback(() => {
-    let mediaplan = {
-      name,
-      ads_start_delay,
-      banners_start_delay,
-      banners_repeat,
-      banners_animation_duration_msec
+    let mediaplanObj = {
+      name
     }
 
+    //Add 'content' object
     if (content) {
-      mediaplan['content'] = content
+      mediaplanObj['content'] = {
+        name: content.name,
+        url: content.url,
+        online: content.online,
+        aspect_ratio: content.aspect_ratio,
+        duration: content.duration
+      }
     } else {
-      mediaplan['content'] = {}
+      mediaplanObj['content'] = {}
     }
 
-    if (ticker) { mediaplan['ticker'] = ticker }
-    if (MediaplanBanner.length > 0) { mediaplan['banners'] = MediaplanBanner }
-    if (MediaplanContent.length > 0) { mediaplan['ads'] = MediaplanContent }
+    //Add 'banners' object
+    if (MediaplanBanner.length > 0) {
+      mediaplanObj['banners'] = MediaplanBanner.map(item => {
+        let result = {
+          name: item.name,
+          url: item.url,
+          url_reserve: item.url_reserve,
+          online: item.online,
+          background: item.background,
+          layout_width: item.layout_width,
+          layout_height: item.layout_height,
+          layout_gravity: item.layout_gravity
+        }
 
-    exportToJson(mediaplan, mediaplan.name)
+        return result
+      })
+      mediaplanObj['banners']['start_delay'] = banners_start_delay
+      mediaplanObj['banners']['repeat'] = banners_repeat
+      mediaplanObj['banners']['animation_duration_msec'] = banners_animation_duration_msec
+    }
+
+    //Add 'ticker' object
+    if (ticker) {
+      mediaplanObj['ticker'] = {
+        name: ticker.name,
+        url: ticker.url,
+        size: ticker.size,
+        speed: ticker.speed,
+        font_color: ticker.font_color,
+        background_color: ticker.background_color
+      }
+    }
+
+    //Add 'ads' object
+    if (MediaplanContent.length > 0) {
+      mediaplanObj['ads'] = MediaplanContent.map(item => {
+        let result = {
+          name: item.name,
+          url: item.url,
+          online: item.online,
+          aspect_ratio: item.aspect_ratio,
+          duration: item.duration
+        }
+
+        return result
+      })
+      mediaplanObj['ads']['start_delay'] = ads_start_delay
+    }
+
+    exportToJson([mediaplanObj], mediaplanObj.name)
   }, [
     name,
     ads_start_delay,
