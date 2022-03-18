@@ -3,7 +3,7 @@ import { Preloader } from "../../components/Preloader";
 import { useDispatch, useSelector } from 'react-redux';
 import { MediaplanCard } from "./MediaplanCard";
 import { AddMediaplan } from "./AddMediaplan";
-import { mediaplanLoadMediaplans, mediaplanSetSucceed } from "../../store/actionCreators/mediaplanActionCreator";
+import { mediaplanLoadMediaplans, mediaplanSetSucceed, mediaplanGetContentList } from "../../store/actionCreators/mediaplanActionCreator";
 
 export const MediaplansPage = () => {
   const dispatch = useDispatch()
@@ -33,6 +33,7 @@ export const MediaplansPage = () => {
   })
 
   const initializeHandler = useCallback( () => {
+    dispatch(mediaplanGetContentList())
     dispatch(mediaplanLoadMediaplans())
     dispatch(mediaplanSetSucceed(false))
   }, [dispatch])

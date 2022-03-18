@@ -1,5 +1,5 @@
 import './Mediaplan.css'
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux"
 import { mediaplanSetAddForm, mediaplanAdd } from "../../store/actionCreators/mediaplanActionCreator"
 import { useMessage } from '../../hooks/message.hook';
@@ -8,6 +8,13 @@ export const AddMediaplan = (props) => {
   const dispatch = useDispatch()
   const message = useMessage()
   const form = useSelector(state => state.mediaplanReducer.addForm)
+  const contentId = useSelector(state => {
+    if (state.mediaplanReducer.contentList.length > 0) {
+      return state.mediaplanReducer.contentList[0].id
+    } else {
+      return undefined
+    }
+  })
 
   const changeHandler = useCallback( (e) => {
       dispatch(mediaplanSetAddForm(e.target.name, e.target.value))
@@ -52,6 +59,12 @@ export const AddMediaplan = (props) => {
     props.onClose()
   }, [props])
 
+  const initializeHandler = useCallback( () => {
+    dispatch(mediaplanSetAddForm("contentId", contentId))
+  }, [dispatch, contentId])
+
+  useEffect( () => {initializeHandler()}, [initializeHandler])
+
   if (!props.show) {
     return null
   }
@@ -73,7 +86,7 @@ export const AddMediaplan = (props) => {
 
           <div className="row">
             <div className="input-field col s6">
-              <input id="contentId" name="contentId" type="number" value={form.contentId} onChange={changeHandler} />
+              <input id="contentId" name="contentId" type="number" value={form.contentId} onChange={changeHandler} disabled="true"/>
               <span className="helper-text">ID основного контента*</span>
             </div>
           </div>
