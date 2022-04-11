@@ -15,8 +15,14 @@ export const MediaplanEditor = (props) =>
 
   }, [])
 
+  const setTickerHandler = useCallback( (e) => {
+
+  }, [dispatch])
+
   const id = useSelector(state => state.mediaplanReducer.currentMediaplan.id);
-  const formOptions = useSelector(state => state.mediaplanReducer.editOptionsForm)
+  const formOptions = useSelector(state => state.mediaplanReducer.editOptionsForm);
+  const currentMediaplan = useSelector(state => state.mediaplanReducer.currentMediaplan);
+  //const chosenTicker = useSelector(state => state.mediaplanReducer.editTickerForm);
 
   const contentList = useSelector(state => {
     const contentRaw = state.mediaplanReducer.contentList
@@ -64,7 +70,7 @@ export const MediaplanEditor = (props) =>
         className="col s12 element" 
         style={{border: "1px solid black", minHeight: "50px", backgroundColor: "rgba(0, 0, 255, 0.3)"}}
         key={item.id} 
-        onClick={changeHandler}
+        onClick={setTickerHandler}
         >{item.name}
       </li>)
 
@@ -183,21 +189,39 @@ export const MediaplanEditor = (props) =>
 
         <div className="col s11 timeline" style={{height: "320px", border: "1px solid black", overflowX: "scroll"}}>
 
-          <div className="row" style={{height: "100px", border: "1px solid black", marginBottom: "0px"}}>
-            <div className="col items">
-
+          <div className="row" style={{position: "relative", width: "175%", height: "100px", border: "1px solid black", marginBottom: "0px"}}>
+            <div className="col items itemContent" style={{position: "absolute", width: "20%", height: "100%", backgroundColor: "rgba(255, 0, 0, 0.3)", borderRight: "1px solid black"}}>
+              Content 1
+            </div>
+            <div className="col items itemContent" style={{position: "absolute", left: "20%", width: "20%", height: "100%", backgroundColor: "rgba(255, 0, 0, 0.3)", borderRight: "1px solid black"}}>
+              Content 2
+            </div>
+            <div className="col items itemContent" style={{position: "absolute", left: "40%", width: "20%", height: "100%", backgroundColor: "rgba(255, 0, 0, 0.3)", borderRight: "1px solid black"}}>
+              Content 3
+            </div>
+            <div className="col items itemContent" style={{position: "absolute", left: "60%", width: "20%", height: "100%", backgroundColor: "rgba(255, 0, 0, 0.3)", borderRight: "1px solid black"}}>
+              Content 4
+            </div>
+            <div className="col items itemContent" style={{position: "absolute", left: "80%", width: "20%", height: "100%", backgroundColor: "rgba(255, 0, 0, 0.3)", borderRight: "1px solid black"}}>
+              Content 5
             </div>
           </div>
 
-          <div className="row" style={{height: "100px", border: "1px solid black", marginBottom: "0px"}}>
-            <div className="col items">
-
+          <div className="row" style={{position: "relative", width: "175%", height: "100px", border: "1px solid black", marginBottom: "0px"}}>
+            <div className="col items itemBanners" style={{position: "absolute", width: "15%", height: "100%", backgroundColor: "rgba(0, 255, 0, 0.3)", borderRight: "1px solid black"}}>
+              Banner 1
+            </div>
+            <div className="col items itemBanners" style={{position: "absolute", left: "15%", width: "10%", height: "100%", backgroundColor: "rgba(0, 255, 0, 0.3)", borderRight: "1px solid black"}}>
+              Banner 2
+            </div>
+            <div className="col items itemBanners" style={{position: "absolute", left: "25%", width: "35%", height: "100%", backgroundColor: "rgba(0, 255, 0, 0.3)", borderRight: "1px solid black"}}>
+              Banner 3
             </div>
           </div>
 
-          <div className="row" style={{height: "100px", border: "1px solid black", marginBottom: "0px"}}>
-            <div className="col items">
-
+          <div className="row " style={{position: "fixed", width: "100%", height: "100px", border: "1px solid black", marginBottom: "0px"}}>
+            <div className="col items itemTicker" style={{width: "100%", height: "100%", backgroundColor: "rgba(0, 0, 255, 0.3)"}}>
+              Ticker Name
             </div>
           </div>
         </div>
