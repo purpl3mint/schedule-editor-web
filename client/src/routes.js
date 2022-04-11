@@ -9,6 +9,7 @@ import { TickersPage } from "./pages/Tickers/TickersPage"
 import { UsersPage } from "./pages/Users/UsersPage"
 import { Sidebar } from "./components/Sidebar"
 import { MediaplanPage } from "./pages/Mediaplans/MediaplanPage"
+import { MediaplanEditor } from "./pages/MediaplanEditor/MediaplanEditor"
 
 export const useRoutes = (isAuthenticated) => {
 
@@ -37,6 +38,7 @@ export const useRoutes = (isAuthenticated) => {
                 </Route>
                 <Route path="tickers" element={<TickersPage />} />
                 <Route path="users" element={<UsersPage />} />
+                <Route path="testEditor" element={<MediaplanEditor />} />
               </Route>
             </Routes>
             }
