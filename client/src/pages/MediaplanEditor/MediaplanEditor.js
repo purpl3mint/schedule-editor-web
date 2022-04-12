@@ -14,7 +14,7 @@ import {
 export const MediaplanEditor = (props) =>
 {
   const dispatch = useDispatch();
-  const message = useMessage()
+  const message = useMessage();
 
   const id = useSelector(state => state.mediaplanReducer.currentMediaplan.id);
   const formOptions = useSelector(state => state.mediaplanReducer.editOptionsForm);
@@ -187,7 +187,7 @@ export const MediaplanEditor = (props) =>
         </div>
 
 
-        <div className="col offset-s1 s4 settings" style={{height: "400px", border: "1px solid black", overflowY: "scroll"}}>
+        <div className="col offset-s1 s4 options" style={{height: "400px", border: "1px solid black", overflowY: "scroll"}}>
           <p>Название медиаплана: <span>{currentMediaplan.name || "без названия"}</span></p>
 
           <div className="row">
