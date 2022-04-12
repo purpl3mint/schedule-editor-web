@@ -10,7 +10,8 @@ import {
   mediaplanSetEditOptionsForm ,
   mediaplanEditOptions,
   mediaplanSetEditTickerForm,
-  mediaplanEditTicker
+  mediaplanEditTicker,
+  mediaplanDeleteTicker
 } from "../../store/actionCreators/mediaplanActionCreator";
 
 export const MediaplanEditor = (props) =>
@@ -30,6 +31,27 @@ export const MediaplanEditor = (props) =>
   const [showTabTickers, setShowTabTickers] = useState(false);
 
   //Container for current ticker
+
+  const chooseTickerHandler = useCallback( (e) => {
+    dispatch(mediaplanSetEditTickerForm("tickerId", e.target.value))
+  }, [dispatch])
+
+  const clearTickerHandler = useCallback( () => {
+    dispatch(mediaplanSetEditTickerForm("tickerId", 0))
+  }, [dispatch])
+
+  const saveTickerHandler = useCallback( () => {
+    console.log(formTicker);
+
+    if (formTicker.tickerId !== 0){
+      dispatch(mediaplanEditTicker(formTicker, id))
+      message("Бегущая строка успешно сохранена")
+    } else {
+      dispatch(mediaplanDeleteTicker(id))
+      message("Бегущая строка успешно удалена")
+    }
+  }, [dispatch, formTicker, id, message])
+
   const chosenTicker = useSelector( state => {
     const tickerId = state.mediaplanReducer.editTickerForm.tickerId
     const tickerList = state.mediaplanReducer.tickerList
@@ -43,7 +65,8 @@ export const MediaplanEditor = (props) =>
           id={result.id}
           style={{width: "100%", height: "100%", backgroundColor: "rgba(0, 0, 255, 0.3)"}}
         >
-          {result.name}
+          {result.name}<br />
+          <button className="btn" style={{marginTop: "10px"}} onClick={clearTickerHandler}><i className="material-icons">delete</i></button>
         </div>
       )
     } else {
@@ -52,15 +75,6 @@ export const MediaplanEditor = (props) =>
       )
     }
   })
-
-  const chooseTickerHandler = useCallback( (e) => {
-    dispatch(mediaplanSetEditTickerForm("tickerId", e.target.value))
-  }, [dispatch])
-
-  const saveTickerHandler = useCallback( () => {
-    dispatch(mediaplanEditTicker(formTicker, id))
-    message("Бегущая строка успешно сохранена")
-  }, [dispatch, formTicker, id, message])
 
   //Plugs for onClick
   const changeHandler = useCallback( (e) => {
@@ -178,7 +192,11 @@ export const MediaplanEditor = (props) =>
   //Setup ticker form
   useEffect(() => {
     dispatch(mediaplanSetEditTickerForm("mediaplanId", currentMediaplan.id))
-    dispatch(mediaplanSetEditTickerForm("tickerId", currentMediaplan.ticker.id))
+    if (currentMediaplan.ticker) {
+      dispatch(mediaplanSetEditTickerForm("tickerId", currentMediaplan.ticker.id))
+    } else {
+      dispatch(mediaplanSetEditTickerForm("tickerId", null))
+    }
   }, [dispatch, currentMediaplan])
 
 

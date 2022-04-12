@@ -207,9 +207,18 @@ class MediaplanController {
     const {id} = req.params
 
     const mediaplan = await Mediaplan.findByPk(id)
-    mediaplan.tickerId = 0;
 
-    const isSaved = mediaplan.save()
+    console.log("Mediaplan: ", mediaplan);
+
+    mediaplan.tickerId = null;
+    
+    let isSaved
+    try {
+      isSaved = await mediaplan.save()
+    } catch (e) {
+      console.log(e);
+    }
+    //const isSaved = await mediaplan.save()
 
     if (isSaved) {
       return res.json({message: 'Бегущая строка удалена из медиаплана'})

@@ -301,6 +301,21 @@ export function mediaplanGetTickerList () {
   }
 }
 
+export function mediaplanDeleteTicker (mediaplanId) {
+  return async(dispatch) => {
+    dispatch(mediaplanSetPreloader(true))
+
+    const method = 'DELETE'
+    const headers = {'Content-Type': 'application/json'}
+    const responce = await fetch("/api/mediaplan/ticker/" + mediaplanId, {method, headers})
+
+    if (responce.ok) {
+      dispatch(mediaplanLoadMediaplans())
+    }
+
+    dispatch(mediaplanSetPreloader(false))
+  }
+}
 /*Editing banner in mediplan*/
 export function mediaplanSetEditBannerForm(name, value) {
   return {
