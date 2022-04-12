@@ -8,7 +8,9 @@ import {
   mediaplanSetCurrent, 
   mediaplanLoadMediaplan,
   mediaplanSetEditOptionsForm ,
-  mediaplanEditOptions
+  mediaplanEditOptions,
+  mediaplanSetEditTickerForm,
+  mediaplanEditTicker
 } from "../../store/actionCreators/mediaplanActionCreator";
 
 export const MediaplanEditor = (props) =>
@@ -18,18 +20,47 @@ export const MediaplanEditor = (props) =>
 
   const id = useSelector(state => state.mediaplanReducer.currentMediaplan.id);
   const formOptions = useSelector(state => state.mediaplanReducer.editOptionsForm);
+  const formTicker = useSelector(state => state.mediaplanReducer.editTickerForm);
   const currentMediaplan = useSelector(state => state.mediaplanReducer.currentMediaplan);
   //const chosenTicker = useSelector(state => state.mediaplanReducer.editTickerForm);
-
-  console.log(currentMediaplan);
 
   //Tab togglers for components lists
   const [showTabContent, setShowTabContent] = useState(true);
   const [showTabBanners, setShowTabBanners] = useState(false);
   const [showTabTickers, setShowTabTickers] = useState(false);
 
-  //Containers for ...
+  //Container for current ticker
+  const chosenTicker = useSelector( state => {
+    const tickerId = state.mediaplanReducer.editTickerForm.tickerId
+    const tickerList = state.mediaplanReducer.tickerList
 
+    const result = tickerList.find(item => item.id === tickerId)
+
+    if (result) {
+      return (
+        <div 
+          className="col items itemTicker" 
+          id={result.id}
+          style={{width: "100%", height: "100%", backgroundColor: "rgba(0, 0, 255, 0.3)"}}
+        >
+          {result.name}
+        </div>
+      )
+    } else {
+      return (
+        <div className="col items itemTicker"></div>
+      )
+    }
+  })
+
+  const chooseTickerHandler = useCallback( (e) => {
+    dispatch(mediaplanSetEditTickerForm("tickerId", e.target.value))
+  }, [dispatch])
+
+  const saveTickerHandler = useCallback( () => {
+    dispatch(mediaplanEditTicker(formTicker, id))
+    message("Бегущая строка успешно сохранена")
+  }, [dispatch, formTicker, id, message])
 
   //Plugs for onClick
   const changeHandler = useCallback( (e) => {
@@ -66,6 +97,7 @@ export const MediaplanEditor = (props) =>
 
     message("Основные параметры медиаплана сохранены")
   }, [dispatch, formOptions, props, message, id])
+
 
   const contentList = useSelector(state => {
     const contentRaw = state.mediaplanReducer.contentList
@@ -111,7 +143,7 @@ export const MediaplanEditor = (props) =>
         className="col s12 element" 
         style={{border: "1px solid black", minHeight: "50px", backgroundColor: "rgba(0, 0, 255, 0.3)"}}
         key={item.id} 
-        onClick={setTickerHandler}
+        onClick={chooseTickerHandler}
         >{item.name}
       </li>)
 
@@ -142,6 +174,13 @@ export const MediaplanEditor = (props) =>
     dispatch(mediaplanSetEditOptionsForm("banners_repeat", currentMediaplan.banners_repeat))
     dispatch(mediaplanSetEditOptionsForm("banners_animation_duration_msec", currentMediaplan.banners_animation_duration_msec))
   }, [dispatch, currentMediaplan])
+  
+  //Setup ticker form
+  useEffect(() => {
+    dispatch(mediaplanSetEditTickerForm("mediaplanId", currentMediaplan.id))
+    dispatch(mediaplanSetEditTickerForm("tickerId", currentMediaplan.ticker.id))
+  }, [dispatch, currentMediaplan])
+
 
   return (
     <div>
@@ -178,11 +217,13 @@ export const MediaplanEditor = (props) =>
             </div>
           </div>
 
-          <ul className="row elementsList" style={{height: "348px", border: "1px solid black" ,marginBottom: "0px", marginTop: "0px", overflowY: "scroll"}}>
+          <ul className="row elementsList" style={{height: "300px", border: "1px solid black" ,marginBottom: "10px", marginTop: "0px", overflowY: "scroll"}}>
             {showTabContent && contentList}
             {showTabBanners && bannerList}
             {showTabTickers && tickerList}
           </ul>
+
+          <button className="btn" style={{width: "100%"}} onClick={saveTickerHandler}>Сохранить изменения таймлайна</button>
 
         </div>
 
@@ -278,9 +319,7 @@ export const MediaplanEditor = (props) =>
           </div>
 
           <div className="row " style={{position: "fixed", width: "100%", height: "100px", border: "1px solid black", marginBottom: "0px"}}>
-            <div className="col items itemTicker" style={{width: "100%", height: "100%", backgroundColor: "rgba(0, 0, 255, 0.3)"}}>
-              Ticker Name
-            </div>
+            {chosenTicker}
           </div>
         </div>
       </div>
@@ -301,4 +340,10 @@ export const MediaplanEditor = (props) =>
               <span className="elementName">Название3</span><br/>
               <span className="elementInfo">youtube</span>
             </li>
+*/
+
+/*
+            <div className="col items itemTicker" style={{width: "100%", height: "100%", backgroundColor: "rgba(0, 0, 255, 0.3)"}}>
+              Ticker Name
+            </div>
 */
