@@ -1,16 +1,37 @@
 import React, {useCallback, useEffect, useState} from "react"
 import { useDispatch, useSelector } from 'react-redux';
 import { useMessage } from '../../hooks/message.hook';
-import { mediaplanGetBannerList, mediaplanGetContentList, mediaplanGetTickerList } from "../../store/actionCreators/mediaplanActionCreator";
+import { 
+  mediaplanGetBannerList, 
+  mediaplanGetContentList, 
+  mediaplanGetTickerList, 
+  mediaplanSetCurrent, 
+  mediaplanLoadMediaplan,
+  mediaplanSetEditOptionsForm ,
+  mediaplanEditOptions
+} from "../../store/actionCreators/mediaplanActionCreator";
 
 export const MediaplanEditor = (props) =>
 {
   const dispatch = useDispatch();
   const message = useMessage()
-  const [showContent, setShowContent] = useState(true);
-  const [showBanners, setShowBanners] = useState(false);
-  const [showTickers, setShowTickers] = useState(false);
 
+  const id = useSelector(state => state.mediaplanReducer.currentMediaplan.id);
+  const formOptions = useSelector(state => state.mediaplanReducer.editOptionsForm);
+  const currentMediaplan = useSelector(state => state.mediaplanReducer.currentMediaplan);
+  //const chosenTicker = useSelector(state => state.mediaplanReducer.editTickerForm);
+
+  console.log(currentMediaplan);
+
+  //Tab togglers for components lists
+  const [showTabContent, setShowTabContent] = useState(true);
+  const [showTabBanners, setShowTabBanners] = useState(false);
+  const [showTabTickers, setShowTabTickers] = useState(false);
+
+  //Containers for ...
+
+
+  //Plugs for onClick
   const changeHandler = useCallback( (e) => {
 
   }, [])
@@ -18,11 +39,33 @@ export const MediaplanEditor = (props) =>
   const setTickerHandler = useCallback( (e) => {
 
   }, [dispatch])
+  //End of plugs
 
-  const id = useSelector(state => state.mediaplanReducer.currentMediaplan.id);
-  const formOptions = useSelector(state => state.mediaplanReducer.editOptionsForm);
-  const currentMediaplan = useSelector(state => state.mediaplanReducer.currentMediaplan);
-  //const chosenTicker = useSelector(state => state.mediaplanReducer.editTickerForm);
+  const changeOptionsHandler = useCallback( (e) => {
+    dispatch(mediaplanSetEditOptionsForm(e.target.name, e.target.value))
+}, [dispatch])
+
+
+  const saveOptionsHandler = useCallback( () => {
+    if (formOptions.ads_start_delay < 0) {
+      message("Ошибка: задержка воспроизведения основного контента указана неверно")
+      return
+    }
+
+    if (formOptions.banners_start_delay < 0) {
+      message("Ошибка: задержка воспроизведения баннеров указана неверно")
+      return
+    }
+
+    if (formOptions.banners_animation_duration_msec < 0) {
+      message("Ошибка: длительность анимации баннеров указана неверно")
+      return
+    }
+
+    dispatch(mediaplanEditOptions(formOptions, id))
+
+    message("Основные параметры медиаплана сохранены")
+  }, [dispatch, formOptions, props, message, id])
 
   const contentList = useSelector(state => {
     const contentRaw = state.mediaplanReducer.contentList
@@ -43,8 +86,6 @@ export const MediaplanEditor = (props) =>
 
   const bannerList = useSelector(state => {
     const bannerRaw = state.mediaplanReducer.bannerList
-
-    console.log(bannerRaw);
 
     const bannerTransformed = bannerRaw.map(item => 
       <li 
@@ -78,12 +119,29 @@ export const MediaplanEditor = (props) =>
   })
 
   const initializeHandler = useCallback( () => {
+    //Get all possible components for mediaplan
     dispatch(mediaplanGetContentList())
     dispatch(mediaplanGetTickerList())
     dispatch(mediaplanGetBannerList())
+
+    //Get mediaplan using data from url
+    const path = window.location.href.split('/')
+    const id = path[path.length - 1]
+    
+    dispatch(mediaplanSetCurrent(id))
+    dispatch(mediaplanLoadMediaplan(id))
   }, [dispatch])
 
-  useEffect(() => {initializeHandler()}, [initializeHandler])
+  useEffect(() => { initializeHandler() }, [initializeHandler])
+
+  //Setup options form
+  useEffect(() => {
+    dispatch(mediaplanSetEditOptionsForm("id", currentMediaplan.id))
+    dispatch(mediaplanSetEditOptionsForm("ads_start_delay", currentMediaplan.ads_start_delay))
+    dispatch(mediaplanSetEditOptionsForm("banners_start_delay", currentMediaplan.banners_start_delay))
+    dispatch(mediaplanSetEditOptionsForm("banners_repeat", currentMediaplan.banners_repeat))
+    dispatch(mediaplanSetEditOptionsForm("banners_animation_duration_msec", currentMediaplan.banners_animation_duration_msec))
+  }, [dispatch, currentMediaplan])
 
   return (
     <div>
@@ -95,7 +153,7 @@ export const MediaplanEditor = (props) =>
               <span 
                 className="btn" 
                 style={{width: "100%", height: "100%"}}
-                onClick={() => {setShowContent(true); setShowBanners(false); setShowTickers(false)}}
+                onClick={() => {setShowTabContent(true); setShowTabBanners(false); setShowTabTickers(false)}}
               >
                 Контент
               </span>
@@ -104,7 +162,7 @@ export const MediaplanEditor = (props) =>
               <span 
                 className="btn" 
                 style={{width: "100%", height: "100%"}}
-                onClick={() => {setShowContent(false); setShowBanners(true); setShowTickers(false)}}
+                onClick={() => {setShowTabContent(false); setShowTabBanners(true); setShowTabTickers(false)}}
               >
                 Баннеры
               </span>
@@ -113,7 +171,7 @@ export const MediaplanEditor = (props) =>
               <span 
                 className="btn" 
                 style={{width: "100%", height: "100%"}}
-                onClick={() => {setShowContent(false); setShowBanners(false); setShowTickers(true)}}
+                onClick={() => {setShowTabContent(false); setShowTabBanners(false); setShowTabTickers(true)}}
               >
                 Бег. строки
               </span>
@@ -121,47 +179,47 @@ export const MediaplanEditor = (props) =>
           </div>
 
           <ul className="row elementsList" style={{height: "348px", border: "1px solid black" ,marginBottom: "0px", marginTop: "0px", overflowY: "scroll"}}>
-            {showContent && contentList}
-            {showBanners && bannerList}
-            {showTickers && tickerList}
+            {showTabContent && contentList}
+            {showTabBanners && bannerList}
+            {showTabTickers && tickerList}
           </ul>
 
         </div>
 
 
         <div className="col offset-s1 s4 settings" style={{height: "400px", border: "1px solid black", overflowY: "scroll"}}>
-          <p>Название медиаплана: <span>name</span></p>
+          <p>Название медиаплана: <span>{currentMediaplan.name || "без названия"}</span></p>
 
           <div className="row">
             <div className="input-field col s6">
-              <input value={formOptions.ads_start_delay} id="ads_start_delay" name="ads_start_delay" type="number"/>
+              <input value={formOptions.ads_start_delay} id="ads_start_delay" name="ads_start_delay" type="number" onChange={changeOptionsHandler}/>
               <span className="helper-text">Задержка воспроизведения доп контента</span>
             </div>
           </div>
 
           <div className="row">
             <div className="input-field col s6">
-              <input value={formOptions.banners_start_delay} id="banners_start_delay" name="banners_start_delay" type="number"/>
+              <input value={formOptions.banners_start_delay} id="banners_start_delay" name="banners_start_delay" type="number" onChange={changeOptionsHandler}/>
               <span className="helper-text">Задержка воспроизведения баннеров</span>
             </div>
           </div>
 
           <div className="row">
             <div className="input-field col s6">
-              <input value={formOptions.banners_animation_duration_msec} id="banners_animation_duration_msec" name="banners_animation_duration_msec" type="number"/>
+              <input value={formOptions.banners_animation_duration_msec} id="banners_animation_duration_msec" name="banners_animation_duration_msec" type="number" onChange={changeOptionsHandler}/>
               <span className="helper-text">Длительность воспроизведения анимации баннеров</span>
             </div>
           </div>
 
           <div className="row">
-            <select defaultValue={formOptions.banners_repeat} className="col s6 browser-default" name="banners_repeat">
+            <select defaultValue={formOptions.banners_repeat} className="col s6 browser-default" name="banners_repeat" onChange={changeOptionsHandler}>
               <option value="-1" disabled>Осуществлять повтор баннеров?</option>
               <option value="false">Не повторять баннеры</option>
               <option value="true">Повторять баннеры</option>
             </select>
           </div>
 
-          <button className="btn">Сохранить</button>
+          <button className="btn" onClick={saveOptionsHandler}>Сохранить</button>
         </div>
       </div>
 

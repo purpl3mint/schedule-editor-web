@@ -15,7 +15,7 @@ export const Sidebar = () => {
                 <NavLink to="/banners" className="collection-item">Баннеры</NavLink>
                 <NavLink to="/tickers" className="collection-item">Бегущие строки</NavLink>
                 <NavLink to="/mediaplans" className="collection-item">Медиапланы</NavLink>
-                <NavLink to="/testeditor" className="collection-item">Редактор</NavLink>
+                <NavLink to="/testeditor/3" className="collection-item">Редактор</NavLink>
             </div>
         )
         setComponent(newComponent)

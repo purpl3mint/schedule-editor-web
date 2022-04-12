@@ -38,7 +38,9 @@ export const useRoutes = (isAuthenticated) => {
                 </Route>
                 <Route path="tickers" element={<TickersPage />} />
                 <Route path="users" element={<UsersPage />} />
-                <Route path="testEditor" element={<MediaplanEditor />} />
+                <Route path="testEditor">
+                  <Route path=":id" element={<MediaplanEditor />} />
+                </Route >
               </Route>
             </Routes>
             }
