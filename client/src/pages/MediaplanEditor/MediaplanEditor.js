@@ -23,15 +23,13 @@ export const MediaplanEditor = (props) =>
   const formOptions = useSelector(state => state.mediaplanReducer.editOptionsForm);
   const formTicker = useSelector(state => state.mediaplanReducer.editTickerForm);
   const currentMediaplan = useSelector(state => state.mediaplanReducer.currentMediaplan);
-  //const chosenTicker = useSelector(state => state.mediaplanReducer.editTickerForm);
 
   //Tab togglers for components lists
   const [showTabContent, setShowTabContent] = useState(true);
   const [showTabBanners, setShowTabBanners] = useState(false);
   const [showTabTickers, setShowTabTickers] = useState(false);
 
-  //Container for current ticker
-
+  //Container and handlers for current ticker
   const chooseTickerHandler = useCallback( (e) => {
     dispatch(mediaplanSetEditTickerForm("tickerId", e.target.value))
   }, [dispatch])
@@ -65,8 +63,8 @@ export const MediaplanEditor = (props) =>
           id={result.id}
           style={{width: "100%", height: "100%", backgroundColor: "rgba(0, 0, 255, 0.3)"}}
         >
-          {result.name}<br />
-          <button className="btn" style={{marginTop: "10px"}} onClick={clearTickerHandler}><i className="material-icons">delete</i></button>
+          <p>{result.name}</p>
+          <button className="btn" style={{marginTop: "0px"}} onClick={clearTickerHandler}><i className="material-icons">delete</i></button>
         </div>
       )
     } else {
@@ -76,14 +74,114 @@ export const MediaplanEditor = (props) =>
     }
   })
 
+  //Container and handlers for banners
+  const banners = useSelector( state => {
+    const widthBlock = 30;
+    const bannersRaw = state.mediaplanReducer.currentMediaplan.MediaplanBanner
+
+    const bannersTransformed = bannersRaw.map((item, index) => {
+      const offset = widthBlock * index
+      return (
+        <div 
+          className="col items itemBanners" 
+          key={item.id}
+          value={item.id}
+          style={{
+            position: "absolute", 
+            left: `${offset}%`, 
+            width: `${widthBlock}%`, 
+            height: "100%", 
+            backgroundColor: "rgba(0, 255, 0, 0.3)", 
+            borderRight: "1px solid black"
+          }}
+        >
+          <p>{item.name}</p>
+          <p>Длительность: {`${Math.floor(item.duration / 3600)}:${Math.floor(item.duration / 60)}:${Math.floor(item.duration % 60)}`}</p>
+          <button 
+            className="btn"
+            style={{
+              position: "absolute",
+              top: "40px",
+              right: "10px"
+            }}
+          >
+            <i className="material-icons">delete</i>
+          </button>
+          <button 
+            className="btn"
+            style={{
+              position: "absolute",
+              top: "40px",
+              right: "70px"
+            }}
+          >
+            <i className="material-icons">edit</i>
+          </button>
+        </div>
+      )
+    })
+
+    return bannersTransformed
+  })
+
+  //Container and handlers for content
+  const contents = useSelector( state => {
+    const widthBlock = 30;
+    const commonContent = [state.mediaplanReducer.currentMediaplan.common_content];
+    const ads = state.mediaplanReducer.currentMediaplan.MediaplanContent;
+    const contentRaw = commonContent.concat(ads)
+
+
+    const contentTransformed = contentRaw.map((item, index) => {
+      const offset = widthBlock * index
+      return (
+        <div 
+          className="col items itemContent" 
+          key={item.id}
+          value={item.id}
+          style={{
+            position: "absolute", 
+            left: `${offset}%`,
+            width: `${widthBlock}%`, 
+            height: "100%", 
+            backgroundColor: "rgba(255, 0, 0, 0.3)", 
+            borderRight: "1px solid black"
+          }}
+        >
+          <p>{item.name}</p>
+          <p>Длительность: {`${Math.floor(item.duration / 3600)}:${Math.floor(item.duration / 60)}:${Math.floor(item.duration % 60)}`}</p>
+          <button 
+            className="btn"
+            style={{
+              position: "absolute",
+              top: "40px",
+              right: "10px"
+            }}
+          >
+            <i className="material-icons">delete</i>
+          </button>
+          <button 
+            className="btn"
+            style={{
+              position: "absolute",
+              top: "40px",
+              right: "70px"
+            }}
+          >
+            <i className="material-icons">edit</i>
+          </button>
+        </div>
+      )
+    })
+
+    return contentTransformed
+  })
+
   //Plugs for onClick
   const changeHandler = useCallback( (e) => {
 
   }, [])
 
-  const setTickerHandler = useCallback( (e) => {
-
-  }, [dispatch])
   //End of plugs
 
   const changeOptionsHandler = useCallback( (e) => {
@@ -306,8 +404,27 @@ export const MediaplanEditor = (props) =>
 
         <div className="col s11 timeline" style={{height: "320px", border: "1px solid black", overflowX: "scroll"}}>
 
-          <div className="row" style={{position: "relative", width: "175%", height: "100px", border: "1px solid black", marginBottom: "0px"}}>
-            <div className="col items itemContent" style={{position: "absolute", width: "20%", height: "100%", backgroundColor: "rgba(255, 0, 0, 0.3)", borderRight: "1px solid black"}}>
+          <div className="row" style={{position: "relative", height: "100px", border: "1px solid black", marginBottom: "0px"}}>
+            {contents}
+          </div>
+
+          <div className="row" style={{position: "relative", height: "100px", border: "1px solid black", marginBottom: "0px"}}>
+            {banners}
+          </div>
+
+          <div className="row " style={{position: "fixed", width: "100%", height: "100px", border: "1px solid black", marginBottom: "0px"}}>
+            {chosenTicker}
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+/*
+, width: "175%"
+
+<div className="col items itemContent" style={{position: "absolute", width: "20%", height: "100%", backgroundColor: "rgba(255, 0, 0, 0.3)", borderRight: "1px solid black"}}>
               Content 1
             </div>
             <div className="col items itemContent" style={{position: "absolute", left: "20%", width: "20%", height: "100%", backgroundColor: "rgba(255, 0, 0, 0.3)", borderRight: "1px solid black"}}>
@@ -321,47 +438,5 @@ export const MediaplanEditor = (props) =>
             </div>
             <div className="col items itemContent" style={{position: "absolute", left: "80%", width: "20%", height: "100%", backgroundColor: "rgba(255, 0, 0, 0.3)", borderRight: "1px solid black"}}>
               Content 5
-            </div>
-          </div>
-
-          <div className="row" style={{position: "relative", width: "175%", height: "100px", border: "1px solid black", marginBottom: "0px"}}>
-            <div className="col items itemBanners" style={{position: "absolute", width: "15%", height: "100%", backgroundColor: "rgba(0, 255, 0, 0.3)", borderRight: "1px solid black"}}>
-              Banner 1
-            </div>
-            <div className="col items itemBanners" style={{position: "absolute", left: "15%", width: "10%", height: "100%", backgroundColor: "rgba(0, 255, 0, 0.3)", borderRight: "1px solid black"}}>
-              Banner 2
-            </div>
-            <div className="col items itemBanners" style={{position: "absolute", left: "25%", width: "35%", height: "100%", backgroundColor: "rgba(0, 255, 0, 0.3)", borderRight: "1px solid black"}}>
-              Banner 3
-            </div>
-          </div>
-
-          <div className="row " style={{position: "fixed", width: "100%", height: "100px", border: "1px solid black", marginBottom: "0px"}}>
-            {chosenTicker}
-          </div>
-        </div>
-      </div>
-    </div>
-  )
-}
-
-/*
-<li className="col s12 element" style={{border: "1px solid black"}}>
-              <span className="elementName">Название1</span><br/>
-              <span className="elementInfo">youtube</span>
-            </li>
-            <li className="col s12 element" style={{border: "1px solid black"}}>
-              <span className="elementName">Название2</span><br/>
-              <span className="elementInfo">youtube</span>
-            </li>
-            <li className="col s12 element" style={{border: "1px solid black"}}>
-              <span className="elementName">Название3</span><br/>
-              <span className="elementInfo">youtube</span>
-            </li>
-*/
-
-/*
-            <div className="col items itemTicker" style={{width: "100%", height: "100%", backgroundColor: "rgba(0, 0, 255, 0.3)"}}>
-              Ticker Name
             </div>
 */
