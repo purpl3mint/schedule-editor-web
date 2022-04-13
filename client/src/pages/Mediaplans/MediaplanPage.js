@@ -33,15 +33,22 @@ export const MediaplanPage = () => {
 
   const idMediaplan = useSelector(state => state.mediaplanReducer.currentMediaplan.id)
 
-  const deleteBannerHandler = useCallback( (idBanner) => {
-    dispatch(mediaplanDeleteBanner(idBanner, idMediaplan))
+  const deleteBannerHandler = useCallback( (idBanner, e) => {
+    if (e.target.parentNode.localName === "button")
+      dispatch(mediaplanDeleteBanner(idBanner, idMediaplan, e.target.parentNode.value))
+    else
+      dispatch(mediaplanDeleteBanner(idBanner, idMediaplan, e.target.value))
   }, [dispatch, idMediaplan])
 
-  const deleteAdsHandler = useCallback( (idAds) => {
-    dispatch(mediaplanDeleteAds(idAds, idMediaplan))
+  const deleteAdsHandler = useCallback( (idAds, e) => {
+    if (e.target.parentNode.localName === "button")
+      dispatch(mediaplanDeleteAds(idAds, idMediaplan, e.target.parentNode.value))
+    else
+      dispatch(mediaplanDeleteAds(idAds, idMediaplan, e.target.value))
   }, [dispatch, idMediaplan])
 
   const currentMediaplan = useSelector(state => state.mediaplanReducer.currentMediaplan)
+
   const loading = useSelector(state => state.mediaplanReducer.preloader)
   const banners = useSelector(state => {
     if (!state.mediaplanReducer.currentMediaplan.MediaplanBanner || 
@@ -49,17 +56,30 @@ export const MediaplanPage = () => {
       return <span>Баннеры отсутствуют</span>
     const rawBanners = state.mediaplanReducer.currentMediaplan.MediaplanBanner
 
-    const transformedBanners = rawBanners.map(banner => 
-    <li className="collection-item row" key={banner.id}>
-      <div className="col s11">
-        <span>{banner.name}</span><br/>
-        <span>{banner.online ? "Онлайн" : "Оффлайн"}</span><br/>
-        <span>Длительность: {banner.duration}</span>
-      </div>
-      <button className="btn col s1" onClick={(e) => deleteBannerHandler(banner.banner_in_mediaplan.id, e)}>
-        <i className="material-icons" style={{marginRight: "10px"}}>delete</i>
-      </button> 
-    </li>)
+    const arrayBannersRaw = [] 
+    rawBanners.map(item => {
+      for (let i = 0; i < item.banner_in_mediaplan.position.length; i++)
+      {
+        arrayBannersRaw[item.banner_in_mediaplan.position[i]] = item
+      }
+    })
+
+    const transformedBanners = arrayBannersRaw.map((banner, index) => {
+      if (!banner)
+        return false
+      return ( 
+      <li className="collection-item row" key={index}>
+        <div className="col s11">
+          <span>{banner.name}</span><br/>
+          <span>{banner.online ? "Онлайн" : "Оффлайн"}</span><br/>
+          <span>Длительность: {banner.duration}</span><br />
+          <span>Позиция: {index}</span>
+        </div>
+        <button className="btn col s1" value={index} onClick={(e) => deleteBannerHandler(banner.banner_in_mediaplan.id, e)}>
+          <i className="material-icons" value={index} style={{marginRight: "10px"}}>delete</i>
+        </button>
+      </li>
+    )})
 
     return transformedBanners
   })
@@ -70,18 +90,32 @@ export const MediaplanPage = () => {
       return <span>Дополнительный контент отсутствует</span>
 
     const rawAds = state.mediaplanReducer.currentMediaplan.MediaplanContent
-    const transformedAds = rawAds.map(ad => 
-      <li className="collection-item row" key={ad.id}>
+    
+    const arrayAdsRaw = [] 
+    rawAds.map(item => {
+      for (let i = 0; i < item.ads.position.length; i++)
+      {
+        arrayAdsRaw[item.ads.position[i]] = item
+      }
+    })
+
+    const transformedAds = arrayAdsRaw.map((ad, index) => {
+      if (!ad)
+        return false
+      return ( 
+      <li className="collection-item row" key={index}>
         <div className="col s11">
           <span>{ad.name}</span><br/>
           <span>{ad.online ? "Онлайн" : "Оффлайн"}</span><br/>
-          <span>Длительность: {ad.duration}</span>
+          <span>Длительность: {ad.duration}</span><br />
+          <span>Позиция: {index}</span>
         </div>
-        <button className="btn col s1" onClick={(e) => deleteAdsHandler(ad.ads.id, e)}>
+        <button className="btn col s1" value={index} onClick={(e) => deleteAdsHandler(ad.ads.id, e)}>
           <i className="material-icons" style={{marginRight: "10px"}}>delete</i>
         </button>
-      </li>)
-  
+      </li>
+    )})
+
     return transformedAds
   })
 

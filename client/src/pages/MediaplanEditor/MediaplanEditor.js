@@ -81,6 +81,10 @@ export const MediaplanEditor = (props) =>
 
     const bannersTransformed = bannersRaw.map((item, index) => {
       const offset = widthBlock * index
+      const sec = Math.floor(item.duration % 60)
+      const min = Math.floor(item.duration / 60)
+      const hour = Math.floor(item.duration / 3600)
+
       return (
         <div 
           className="col items itemBanners" 
@@ -96,7 +100,7 @@ export const MediaplanEditor = (props) =>
           }}
         >
           <p>{item.name}</p>
-          <p>Длительность: {`${Math.floor(item.duration / 3600)}:${Math.floor(item.duration / 60)}:${Math.floor(item.duration % 60)}`}</p>
+          <p>Длительность: {`${hour/10}${hour%10}:${min/10}${min%10}:${sec/10}${sec%10}`}</p>
           <button 
             className="btn"
             style={{
@@ -134,6 +138,10 @@ export const MediaplanEditor = (props) =>
 
     const contentTransformed = contentRaw.map((item, index) => {
       const offset = widthBlock * index
+      const sec = Math.floor(item.duration % 60)
+      const min = Math.floor(item.duration / 60)
+      const hour = Math.floor(item.duration / 3600)
+
       return (
         <div 
           className="col items itemContent" 
@@ -149,7 +157,7 @@ export const MediaplanEditor = (props) =>
           }}
         >
           <p>{item.name}</p>
-          <p>Длительность: {`${Math.floor(item.duration / 3600)}:${Math.floor(item.duration / 60)}:${Math.floor(item.duration % 60)}`}</p>
+          <p>Длительность: {`${hour/10}${hour%10}:${min/10}${min%10}:${sec/10}${sec%10}`}</p>
           <button 
             className="btn"
             style={{

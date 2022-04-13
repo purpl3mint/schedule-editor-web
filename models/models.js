@@ -57,14 +57,14 @@ const Mediaplan = sequelize.define('mediaplan', {
 
 const Ads = sequelize.define('ads', {
   id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-  position: {type: DataTypes.INTEGER, require: true},
+  position: {type: DataTypes.ARRAY(DataTypes.INTEGER)},
   contentId: {type: DataTypes.INTEGER, require: true, unique: false},
   mediaplanId: {type: DataTypes.INTEGER, require: true, unique: false},
 })
 
 const BannerInMediaplan = sequelize.define('banner_in_mediaplan', {
   id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-  position: {type: DataTypes.INTEGER, require: true},
+  position: {type: DataTypes.ARRAY(DataTypes.INTEGER)},
   bannerId: {type: DataTypes.INTEGER, require: true},
   mediaplanId: {type: DataTypes.INTEGER, require: true},
 })

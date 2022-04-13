@@ -7,7 +7,7 @@ router.put('/', mediaplanController.setParameters)
 router.delete('/:id', mediaplanController.delete)
 
 router.post('/banner', mediaplanController.addBanner)
-router.delete('/banner/:id', mediaplanController.deleteBanner)
+router.delete('/banner/:id/:position', mediaplanController.deleteBanner)
 router.delete('/bannerall/:id', mediaplanController.deleteAllBanners)
 router.put('/bannerorder', mediaplanController.editOrderBanners)
 
@@ -16,7 +16,7 @@ router.delete('/ticker/:id', mediaplanController.unsetTicker)
 
 router.post('/content', mediaplanController.setAds)
 router.put('/contentorder', mediaplanController.editOrderAds)
-router.delete('/content/:id', mediaplanController.deleteAds)
+router.delete('/content/:id/:position', mediaplanController.deleteAds)
 router.delete('/contentall/:id', mediaplanController.deleteAds)
 
 router.get('/', mediaplanController.getAll)

@@ -377,13 +377,13 @@ export function mediaplanGetBannerList () {
   }
 }
 
-export function mediaplanDeleteBanner (idBanner, idMediaplan) {
+export function mediaplanDeleteBanner (idBanner, idMediaplan, position) {
   return async(dispatch) => {
     dispatch(mediaplanSetPreloader(true))
 
     const method = 'DELETE'
     const headers = {'Content-Type': 'application/json'}
-    const responce = await fetch("/api/mediaplan/banner/" + idBanner, {method, headers})
+    const responce = await fetch("/api/mediaplan/banner/" + idBanner + "/" + position, {method, headers})
 
     if (responce.ok) {
       dispatch(mediaplanLoadMediaplan(idMediaplan))
@@ -454,13 +454,13 @@ export function mediaplanGetAdsList () {
   }
 }
 
-export function mediaplanDeleteAds (idAds, idMediaplan) {
+export function mediaplanDeleteAds (idAds, idMediaplan, position) {
   return async(dispatch) => {
     dispatch(mediaplanSetPreloader(true))
 
     const method = 'DELETE'
     const headers = {'Content-Type': 'application/json'}
-    const responce = await fetch("/api/mediaplan/content/" + idAds, {method, headers})
+    const responce = await fetch("/api/mediaplan/content/" + idAds + "/" + position, {method, headers})
 
     if (responce.ok) {
       dispatch(mediaplanLoadMediaplan(idMediaplan))
