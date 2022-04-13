@@ -29,6 +29,12 @@ import {
   MEDIAPLAN_CLEAR_EDIT_ADS_FORM,
   MEDIAPLAN_SET_ADS_LIST,
   MEDIAPLAN_CLEAR_ADS_LIST,
+
+  MEDIAPLAN_PUT_TIMELINE_CONTENT,
+  MEDIAPLAN_REMOVE_TIMELINE_CONTENT,
+
+  MEDIAPLAN_PUT_TIMELINE_BANNER,
+  MEDIAPLAN_REMOVE_TIMELINE_BANNER,
 } from "../actions/mediaplanActions"
 
 const initialState = {
@@ -87,7 +93,9 @@ const initialState = {
     MediaplanBanner: [],
     ticker: {},
     MediaplanContent: []
-  }
+  },
+  contentTimelineList: [],
+  bannerTimelineList: []
 }
 
 function mediaplanReducer (state = initialState, action) {
@@ -164,6 +172,29 @@ function mediaplanReducer (state = initialState, action) {
       return { ...state, adsList: action.data}
     case MEDIAPLAN_CLEAR_ADS_LIST:
       return { ...state, adsList: initialState.adsList}
+
+
+    case MEDIAPLAN_PUT_TIMELINE_CONTENT: {
+      const newContentTimelineList = state.contentTimelineList
+      newContentTimelineList.push(action.data)
+      return { ...state, contentTimelineList: newContentTimelineList}
+    }
+    case MEDIAPLAN_REMOVE_TIMELINE_CONTENT: {
+      const newContentTimelineList = state.contentTimelineList
+      newContentTimelineList.splice(action.data, 1)
+      return { ...state, contentTimelineList: newContentTimelineList}
+    }
+
+    case MEDIAPLAN_PUT_TIMELINE_BANNER: {
+      const newBannerTimelineList = state.bannerTimelineList
+      newBannerTimelineList.push(action.data)
+      return { ...state, bannerTimelineList: newBannerTimelineList}
+    }
+    case MEDIAPLAN_REMOVE_TIMELINE_BANNER: {
+      const newBannerTimelineList = state.bannerTimelineList
+      newBannerTimelineList.splice(action.data, 1)
+      return { ...state, bannerTimelineList: newBannerTimelineList}
+    }
 
     default: 
       return state

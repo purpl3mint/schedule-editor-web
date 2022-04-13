@@ -79,8 +79,16 @@ export const MediaplanEditor = (props) =>
     const widthBlock = 30;
     const bannersRaw = state.mediaplanReducer.currentMediaplan.MediaplanBanner
 
-    const bannersTransformed = bannersRaw.map((item, index) => {
-      const offset = widthBlock * index
+    const arrayBannersRaw = [] 
+    bannersRaw.map(item => {
+      for (let i = 0; i < item.banner_in_mediaplan.position.length; i++)
+      {
+        arrayBannersRaw[item.banner_in_mediaplan.position[i]] = item
+      }
+    })
+
+    const bannersTransformed = arrayBannersRaw.map((item, index) => {
+      const offset = widthBlock * (index - 1)
       const sec = Math.floor(item.duration % 60)
       const min = Math.floor(item.duration / 60)
       const hour = Math.floor(item.duration / 3600)
@@ -131,12 +139,20 @@ export const MediaplanEditor = (props) =>
   //Container and handlers for content
   const contents = useSelector( state => {
     const widthBlock = 30;
-    const commonContent = [state.mediaplanReducer.currentMediaplan.common_content];
-    const ads = state.mediaplanReducer.currentMediaplan.MediaplanContent;
-    const contentRaw = commonContent.concat(ads)
+    const commonContent = state.mediaplanReducer.currentMediaplan.common_content;
+    const adsRaw = state.mediaplanReducer.currentMediaplan.MediaplanContent;
+    //const contentRaw = commonContent.concat(ads)
 
+    const arrayAdsRaw = [] 
+    adsRaw.map(item => {
+      for (let i = 0; i < item.ads.position.length; i++)
+      {
+        arrayAdsRaw[item.ads.position[i]] = item
+      }
+    })
+    arrayAdsRaw[0] = commonContent
 
-    const contentTransformed = contentRaw.map((item, index) => {
+    const contentTransformed = arrayAdsRaw.map((item, index) => {
       const offset = widthBlock * index
       const sec = Math.floor(item.duration % 60)
       const min = Math.floor(item.duration / 60)
@@ -412,15 +428,15 @@ export const MediaplanEditor = (props) =>
 
         <div className="col s11 timeline" style={{height: "320px", border: "1px solid black", overflowX: "scroll"}}>
 
-          <div className="row" style={{position: "relative", height: "100px", border: "1px solid black", marginBottom: "0px"}}>
+          <div className="row" style={{position: "relative", height: "100px", marginBottom: "0px"}}>
             {contents}
           </div>
 
-          <div className="row" style={{position: "relative", height: "100px", border: "1px solid black", marginBottom: "0px"}}>
+          <div className="row" style={{position: "relative", height: "100px", marginBottom: "0px"}}>
             {banners}
           </div>
 
-          <div className="row " style={{position: "fixed", width: "100%", height: "100px", border: "1px solid black", marginBottom: "0px"}}>
+          <div className="row " style={{position: "fixed", width: "100%", height: "100px", marginBottom: "0px"}}>
             {chosenTicker}
           </div>
         </div>
@@ -430,6 +446,8 @@ export const MediaplanEditor = (props) =>
 }
 
 /*
+
+
 , width: "175%"
 
 <div className="col items itemContent" style={{position: "absolute", width: "20%", height: "100%", backgroundColor: "rgba(255, 0, 0, 0.3)", borderRight: "1px solid black"}}>
