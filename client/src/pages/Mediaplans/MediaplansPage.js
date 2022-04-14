@@ -13,6 +13,8 @@ export const MediaplansPage = () => {
   const mediaplans = useSelector(state => {
     const mediaplansRaw = state.mediaplanReducer.mediaplans
 
+    console.log("Mediaplans", mediaplansRaw);
+
     const mediaplans = mediaplansRaw.map(m => 
       <MediaplanCard 
         id={m.id} 

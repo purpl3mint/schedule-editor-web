@@ -564,7 +564,7 @@ export function mediaplanSetNewContentList (contentsList, mediaplanId) {
     const method = 'POST'
     const body = JSON.stringify({mediaplanId, contentsList})
     const headers = {'Content-Type': 'application/json'}
-    const responce = await fetch("/api/mediaplan/setbanners", {method, body, headers})
+    const responce = await fetch("/api/mediaplan/setcontents", {method, body, headers})
 
     if (responce.ok) {
       dispatch(mediaplanLoadMediaplan(mediaplanId))

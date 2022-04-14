@@ -151,7 +151,7 @@ class MediaplanController {
 
     const resultOfDestroying = await BannerInMediaplan.destroy({where: {mediaplanId}})
 
-    if (true) {
+    if (bannersList) {
       for(let i = 0; i < bannersList.length; i++) {
 
         const candidate = await BannerInMediaplan.findOne({where: {

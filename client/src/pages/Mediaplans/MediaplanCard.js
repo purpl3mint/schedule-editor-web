@@ -43,7 +43,15 @@ export const MediaplanCard = (props) => {
 
     //Add 'banners' object
     if (MediaplanBanner.length > 0) {
-      mediaplanObj['banners'] = MediaplanBanner.map(item => {
+      const mediaplanBannerTransformed = []
+
+      for (let i = 0; i < MediaplanBanner.length; i++) {
+        for (let j = 0; j < MediaplanBanner[i].banner_in_mediaplan.position.length; j++) {
+          mediaplanBannerTransformed[MediaplanBanner[i].banner_in_mediaplan.position[j]] = MediaplanBanner[i]
+        }
+      }
+
+      mediaplanObj['banners'] = mediaplanBannerTransformed.filter(item => item !== undefined).map(item => {
         let result = {
           name: item.name,
           url: item.url,
@@ -76,7 +84,15 @@ export const MediaplanCard = (props) => {
 
     //Add 'ads' object
     if (MediaplanContent.length > 0) {
-      mediaplanObj['ads'] = MediaplanContent.map(item => {
+      const mediaplanContentTransformed = []
+
+      for (let i = 0; i < MediaplanContent.length; i++) {
+        for (let j = 0; j < MediaplanContent[i].ads.position.length; j++) {
+          mediaplanContentTransformed[MediaplanContent[i].ads.position[j]] = MediaplanContent[i]
+        }
+      }
+
+      mediaplanObj['ads'] = mediaplanContentTransformed.filter(item => item !== undefined).map(item => {
         let result = {
           name: item.name,
           url: item.url,
