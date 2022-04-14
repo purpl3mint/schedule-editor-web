@@ -161,16 +161,6 @@ export const MediaplanEditor = (props) =>
           >
             <i className="material-icons" value={index}>delete</i>
           </button>
-          <button 
-            className="btn"
-            style={{
-              position: "absolute",
-              top: "40px",
-              right: "70px"
-            }}
-          >
-            <i className="material-icons">edit</i>
-          </button>
         </div>
       )
     })
@@ -247,16 +237,6 @@ export const MediaplanEditor = (props) =>
             onClick={removeContentHandler}
           >
             <i className="material-icons">delete</i>
-          </button>
-          <button 
-            className="btn"
-            style={{
-              position: "absolute",
-              top: "40px",
-              right: "70px"
-            }}
-          >
-            <i className="material-icons">edit</i>
           </button>
         </div>
       )
