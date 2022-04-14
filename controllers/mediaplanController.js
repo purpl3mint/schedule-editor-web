@@ -146,6 +146,49 @@ class MediaplanController {
     }
   }
 
+  async setListBanner(req, res, next) {
+    const {mediaplanId, bannersList} = req.body
+
+    const resultOfDestroying = await BannerInMediaplan.destroy({where: {mediaplanId}})
+
+    if (true) {
+      for(let i = 0; i < bannersList.length; i++) {
+
+        const candidate = await BannerInMediaplan.findOne({where: {
+          mediaplanId,
+          bannerId: bannersList[i]
+        }})
+        
+        if (candidate) {
+          const newPositions = candidate.position.concat(i)
+          candidate.position = newPositions
+
+          const savingResult = await candidate.save().catch(err => console.error(err))
+
+          if (!savingResult) {
+            return next(ApiError.badRequest("Не удалось добавить список баннеров в медиаплан"))
+          }
+        } else {
+          const newPositionArray = []
+          newPositionArray.push(i)
+          const addedBanner = await BannerInMediaplan.create({
+            position: newPositionArray,
+            bannerId: bannersList[i],
+            mediaplanId
+          }).catch(err => console.error(err))
+    
+          if (!addedBanner)
+            return next(ApiError.badRequest('Не удалось добавить список баннеров в медиаплан'))
+        }
+        
+      }
+
+      return res.json({message: "Список баннеров успешно добавлен"})
+    } else {
+      return next(ApiError.badRequest("Не удалось соранить новый список баннеров"))
+    }
+  }
+
   async editOrderBanners(req, res, next) {
     const {id, position} = req.body
     const ad = await BannerInMediaplan.findByPk(id)
@@ -524,6 +567,58 @@ class MediaplanController {
     } else {
       return next(ApiError.badRequest('Весь дополнительный контент не удалось удалить'))
     }
+  }
+
+  async setContentAndAdsByList(req, res, next) {
+    const {mediaplanId, contentsList} = req.body
+
+    console.log(mediaplanId)
+    console.log(contentsList)
+
+    if (contentsList.length === 0)
+      return next(ApiError.badRequest('Список контента пуст'))
+
+    const resultOfDestroying = await Ads.destroy({where: {mediaplanId}}).catch(err => console.log(err))
+
+    const mediaplan = await Mediaplan.findByPk(mediaplanId).catch(err => console.log(err))
+    
+    if (!mediaplan)
+      return next(ApiError.badRequest('Не удалось найти медиаплан'))
+
+    mediaplan.commonContentId = contentsList[0]
+
+    const resultOfSavingCommonContent = await mediaplan.save().catch(err => console.log(err))
+
+    for (let i = 1; i < contentsList.length; i++) {
+      const candidate = await Ads.findOne({where: {
+        mediaplanId,
+        contentId: contentsList[i]
+      }}).catch(err => console.log(err))
+
+      if (candidate) {
+        const newPositions = candidate.position.concat(i)
+        candidate.position = newPositions
+
+        const savingResult = await candidate.save().catch(err => console.error(err))
+
+        if (!savingResult) {
+          return next(ApiError.badRequest("Не удалось добавить список контента в медиаплан"))
+        }
+      } else {
+        const newPositionArray = []
+        newPositionArray.push(i)
+        const addedBanner = await Ads.create({
+          position: newPositionArray,
+          contentId: contentsList[i],
+          mediaplanId
+        }).catch(err => console.error(err))
+  
+        if (!addedBanner)
+          return next(ApiError.badRequest('Не удалось добавить список контента в медиаплан'))
+      }
+    }
+
+    return res.json({message: "Список контента успешно добавлен в медиаплан"})
   }
 
   async getAll(req, res, next) {

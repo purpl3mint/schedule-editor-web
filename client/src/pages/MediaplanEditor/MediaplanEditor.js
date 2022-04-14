@@ -15,7 +15,9 @@ import {
   mediaplanPutTimelineBanner,
   mediaplanPutTimelineContent,
   mediaplanResetTimelineBanner,
-  mediaplanResetTimelineContent
+  mediaplanResetTimelineContent,
+  mediaplanSetNewBannersList,
+  mediaplanSetNewContentList
 } from "../../store/actionCreators/mediaplanActionCreator";
 
 export const MediaplanEditor = (props) =>
@@ -33,17 +35,24 @@ export const MediaplanEditor = (props) =>
 
   //Tab togglers for components lists
   const [showTabContent, setShowTabContent] = useState(true);
-  const [showTabBanners, setShowTabBanners] = useState(false);
   const [showTabTickers, setShowTabTickers] = useState(false);
+  const [showTabBanners, setShowTabBanners] = useState(false);
+
+  //Flags for changing timeline
+  const [contentChanged, setContentChanged] = useState(false);
+  const [bannersChanged, setBannersChanged] = useState(false);
+  const [tickerChanged, setTickerChanged] = useState(false);
 
   //Container and handlers for current ticker
   const chooseTickerHandler = useCallback( (e) => {
+    setTickerChanged(true)
     dispatch(mediaplanSetEditTickerForm("tickerId", e.target.value))
-  }, [dispatch])
+  }, [dispatch, setTickerChanged])
 
   const clearTickerHandler = useCallback( () => {
+    setTickerChanged(true)
     dispatch(mediaplanSetEditTickerForm("tickerId", 0))
-  }, [dispatch])
+  }, [dispatch, setTickerChanged])
 
   const saveTickerHandler = useCallback( () => {
     console.log(formTicker);
@@ -83,10 +92,13 @@ export const MediaplanEditor = (props) =>
 
   //Container and handlers for banners
   const chooseBannerHandler = useCallback((e) => {
+    setBannersChanged(true)
     dispatch(mediaplanPutTimelineBanner(e.target.value, bannerTimelineList.length))
-  }, [dispatch, bannerTimelineList])
+  }, [dispatch, bannerTimelineList, setBannersChanged])
 
   const removeBannerHandler = useCallback((e) => {
+    setBannersChanged(true)
+
     let position
     if (e.target.localName === "button")
       position = e.target.value
@@ -98,7 +110,11 @@ export const MediaplanEditor = (props) =>
       const newBannerTimelineList = bannerTimelineList.filter((bannerId, index) => index !== (position - 0))
       dispatch(mediaplanResetTimelineBanner(newBannerTimelineList))
     }
-  }, [dispatch, bannerTimelineList])
+  }, [dispatch, bannerTimelineList, setBannersChanged])
+
+  const saveBannersHandler = useCallback((e) => {
+    dispatch(mediaplanSetNewBannersList(bannerTimelineList, id))
+  }, [dispatch, bannerTimelineList, id])
 
   const banners = useSelector( state => {
     const widthBlock = 30;
@@ -163,10 +179,13 @@ export const MediaplanEditor = (props) =>
   })
   //Container and handlers for content
   const chooseContentHandler = useCallback((e) => {
+    setContentChanged(true)
     dispatch(mediaplanPutTimelineContent(e.target.value, contentTimelineList.length))
-  }, [dispatch, contentTimelineList])
+  }, [dispatch, contentTimelineList, setContentChanged])
 
   const removeContentHandler = useCallback((e) => {
+    setContentChanged(true)
+
     let position
     if (e.target.localName === "button")
       position = e.target.value
@@ -178,7 +197,11 @@ export const MediaplanEditor = (props) =>
       const newContentTimelineList = contentTimelineList.filter((contentId, index) => index !== (position - 0))
       dispatch(mediaplanResetTimelineContent(newContentTimelineList))
     }
-  }, [dispatch, contentTimelineList])
+  }, [dispatch, contentTimelineList, setContentChanged])
+
+  const saveContentHandler = useCallback((e) => {
+    dispatch(mediaplanSetNewContentList(contentTimelineList, id))
+  }, [dispatch, contentTimelineList, id])
 
   const contents = useSelector( state => {
     const widthBlock = 30;
@@ -245,7 +268,6 @@ export const MediaplanEditor = (props) =>
   const changeOptionsHandler = useCallback( (e) => {
     dispatch(mediaplanSetEditOptionsForm(e.target.name, e.target.value))
   }, [dispatch])
-
 
   const saveOptionsHandler = useCallback( () => {
     if (formOptions.ads_start_delay < 0) {
@@ -320,6 +342,23 @@ export const MediaplanEditor = (props) =>
     return tickerTransformed
   })
 
+  //Save timeline changes
+  const saveTimeline = useCallback((e) => {
+    if (tickerChanged) {
+      saveTickerHandler()
+      setTickerChanged(false)
+    }
+    if (bannersChanged) {
+      saveBannersHandler()
+      setBannersChanged(false)
+    }
+    if (contentChanged) {
+      saveContentHandler()
+      setContentChanged(false)
+    }
+  }, [tickerChanged, setTickerChanged, saveTickerHandler,
+      bannersChanged, setBannersChanged, saveBannersHandler,
+      contentChanged, setContentChanged, saveContentHandler])
 
   const initializeHandler = useCallback( () => {
     //Get all possible components for mediaplan
@@ -363,7 +402,7 @@ export const MediaplanEditor = (props) =>
     {
       const currentBanner = currentMediaplan.MediaplanBanner[i].banner_in_mediaplan;
       for (let j = 0; j < currentBanner.position.length; j++)
-        bannerArray[currentBanner.position[j] - 1] = currentBanner.bannerId
+        bannerArray[currentBanner.position[j]] = currentBanner.bannerId
     }
     dispatch(mediaplanResetTimelineBanner(bannerArray))
   }, [dispatch, currentMediaplan])
@@ -423,7 +462,12 @@ export const MediaplanEditor = (props) =>
             {showTabTickers && tickerList}
           </ul>
 
-          <button className="btn" style={{width: "100%"}} onClick={saveTickerHandler}>Сохранить изменения таймлайна</button>
+          <button 
+            className={contentChanged || bannersChanged || tickerChanged ? "btn" : "btn disabled"} 
+            style={{width: "100%"}} 
+            onClick={saveTimeline}
+
+          >Сохранить изменения таймлайна</button>
 
         </div>
 
@@ -504,25 +548,3 @@ export const MediaplanEditor = (props) =>
     </div>
   )
 }
-
-/*
-
-
-, width: "175%"
-
-<div className="col items itemContent" style={{position: "absolute", width: "20%", height: "100%", backgroundColor: "rgba(255, 0, 0, 0.3)", borderRight: "1px solid black"}}>
-              Content 1
-            </div>
-            <div className="col items itemContent" style={{position: "absolute", left: "20%", width: "20%", height: "100%", backgroundColor: "rgba(255, 0, 0, 0.3)", borderRight: "1px solid black"}}>
-              Content 2
-            </div>
-            <div className="col items itemContent" style={{position: "absolute", left: "40%", width: "20%", height: "100%", backgroundColor: "rgba(255, 0, 0, 0.3)", borderRight: "1px solid black"}}>
-              Content 3
-            </div>
-            <div className="col items itemContent" style={{position: "absolute", left: "60%", width: "20%", height: "100%", backgroundColor: "rgba(255, 0, 0, 0.3)", borderRight: "1px solid black"}}>
-              Content 4
-            </div>
-            <div className="col items itemContent" style={{position: "absolute", left: "80%", width: "20%", height: "100%", backgroundColor: "rgba(255, 0, 0, 0.3)", borderRight: "1px solid black"}}>
-              Content 5
-            </div>
-*/
