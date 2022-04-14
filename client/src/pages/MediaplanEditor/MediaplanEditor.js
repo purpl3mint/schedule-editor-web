@@ -344,22 +344,15 @@ export const MediaplanEditor = (props) =>
 
   //Save timeline changes
   const saveTimeline = useCallback((e) => {
-    console.log("Ticker", tickerChanged);
-    console.log("Banner", bannersChanged);
-    console.log("Content", contentChanged);
-
     if (tickerChanged) {
-      console.log("Changing ticker...");
       saveTickerHandler()
       setTickerChanged(false)
     }
     if (bannersChanged) {
-      console.log("Changing banners...");
       saveBannersHandler()
       setBannersChanged(false)
     }
     if (contentChanged) {
-      console.log("Changing content...");
       saveContentHandler()
       setContentChanged(false)
     }
