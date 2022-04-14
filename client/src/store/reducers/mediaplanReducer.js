@@ -32,9 +32,11 @@ import {
 
   MEDIAPLAN_PUT_TIMELINE_CONTENT,
   MEDIAPLAN_REMOVE_TIMELINE_CONTENT,
+  MEDIAPLAN_RESET_TIMELINE_CONTENT,
 
   MEDIAPLAN_PUT_TIMELINE_BANNER,
   MEDIAPLAN_REMOVE_TIMELINE_BANNER,
+  MEDIAPLAN_RESET_TIMELINE_BANNER,
 } from "../actions/mediaplanActions"
 
 const initialState = {
@@ -176,7 +178,7 @@ function mediaplanReducer (state = initialState, action) {
 
     case MEDIAPLAN_PUT_TIMELINE_CONTENT: {
       const newContentTimelineList = state.contentTimelineList
-      newContentTimelineList.push(action.data)
+      newContentTimelineList[action.data.position] = action.data.id
       return { ...state, contentTimelineList: newContentTimelineList}
     }
     case MEDIAPLAN_REMOVE_TIMELINE_CONTENT: {
@@ -184,16 +186,22 @@ function mediaplanReducer (state = initialState, action) {
       newContentTimelineList.splice(action.data, 1)
       return { ...state, contentTimelineList: newContentTimelineList}
     }
+    case MEDIAPLAN_RESET_TIMELINE_CONTENT: {
+      return { ...state, contentTimelineList: action.data}
+    }
 
     case MEDIAPLAN_PUT_TIMELINE_BANNER: {
       const newBannerTimelineList = state.bannerTimelineList
-      newBannerTimelineList.push(action.data)
+      newBannerTimelineList[action.data.position] = action.data.id
       return { ...state, bannerTimelineList: newBannerTimelineList}
     }
     case MEDIAPLAN_REMOVE_TIMELINE_BANNER: {
       const newBannerTimelineList = state.bannerTimelineList
       newBannerTimelineList.splice(action.data, 1)
       return { ...state, bannerTimelineList: newBannerTimelineList}
+    }
+    case MEDIAPLAN_RESET_TIMELINE_BANNER: {
+      return { ...state, bannerTimelineList: action.data}
     }
 
     default: 

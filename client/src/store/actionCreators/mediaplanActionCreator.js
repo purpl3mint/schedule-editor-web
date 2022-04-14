@@ -29,6 +29,14 @@ import {
   MEDIAPLAN_CLEAR_EDIT_ADS_FORM,
   MEDIAPLAN_SET_ADS_LIST,
   MEDIAPLAN_CLEAR_ADS_LIST,
+  
+  MEDIAPLAN_PUT_TIMELINE_CONTENT,
+  MEDIAPLAN_REMOVE_TIMELINE_CONTENT,
+  MEDIAPLAN_RESET_TIMELINE_CONTENT,
+
+  MEDIAPLAN_PUT_TIMELINE_BANNER,
+  MEDIAPLAN_REMOVE_TIMELINE_BANNER,
+  MEDIAPLAN_RESET_TIMELINE_BANNER,
 } from "../actions/mediaplanActions"
 
 export function mediaplanSetSucceed(data){
@@ -467,5 +475,49 @@ export function mediaplanDeleteAds (idAds, idMediaplan, position) {
     }
 
     dispatch(mediaplanSetPreloader(false))
+  }
+}
+
+/*Editing banners timeline*/
+export function mediaplanPutTimelineBanner (id, position) {
+  return {
+    type: MEDIAPLAN_PUT_TIMELINE_BANNER,
+    data: {id, position}
+  }
+}
+
+export function mediaplanRemoveTimelineBanner (position) {
+  return {
+    type: MEDIAPLAN_REMOVE_TIMELINE_BANNER,
+    data: position
+  }
+}
+
+export function mediaplanResetTimelineBanner (listOfBanners) {
+  return {
+    type: MEDIAPLAN_RESET_TIMELINE_BANNER,
+    data: listOfBanners
+  }
+}
+
+/*Editing content timeline*/
+export function mediaplanPutTimelineContent (id, position) {
+  return {
+    type: MEDIAPLAN_PUT_TIMELINE_CONTENT,
+    data: {id, position}
+  }
+}
+
+export function mediaplanRemoveTimelineContent (position) {
+  return {
+    type: MEDIAPLAN_REMOVE_TIMELINE_CONTENT,
+    data: position
+  }
+}
+
+export function mediaplanResetTimelineContent (listOfContents) {
+  return {
+    type: MEDIAPLAN_RESET_TIMELINE_CONTENT,
+    data: listOfContents
   }
 }
