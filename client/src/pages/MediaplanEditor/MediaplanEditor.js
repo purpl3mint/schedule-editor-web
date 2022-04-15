@@ -1,3 +1,4 @@
+import './MediaplanEditor.css'
 import React, {useCallback, useEffect, useState} from "react"
 import { useDispatch, useSelector } from 'react-redux';
 import { useMessage } from '../../hooks/message.hook';
@@ -44,45 +45,45 @@ export const MediaplanEditor = (props) =>
   const chooseTickerHandler = useCallback( (e) => {
     setTickerChanged(true)
     dispatch(mediaplanSetEditTickerForm("tickerId", e.target.value))
+    message("Бегущая строка добавлена в список (не сохранено)")
   }, [dispatch, setTickerChanged])
 
   const clearTickerHandler = useCallback( () => {
     setTickerChanged(true)
     dispatch(mediaplanSetEditTickerForm("tickerId", 0))
+    message("Бегущая строка удалена из списка (не сохранено)")
   }, [dispatch, setTickerChanged])
 
   const saveTickerHandler = useCallback( () => {
-    console.log(formTicker);
-
     if (formTicker.tickerId !== 0){
       dispatch(mediaplanEditTicker(formTicker, id))
-      message("Бегущая строка успешно сохранена")
     } else {
       dispatch(mediaplanDeleteTicker(id))
-      message("Бегущая строка успешно удалена")
     }
+    message("Бегущая строка успешно сохранена")
   }, [dispatch, formTicker, id, message])
 
   const chosenTicker = useSelector( state => {
     const tickerId = state.mediaplanReducer.editTickerForm.tickerId
     const tickerList = state.mediaplanReducer.tickerList
 
-    const result = tickerList.find(item => item.id === tickerId)
+    const tickerFound = tickerList.find(item => item.id === tickerId)
 
-    if (result) {
+    if (tickerFound) {
       return (
         <div 
           className="col items itemTicker" 
-          id={result.id}
-          style={{width: "100%", height: "100%", backgroundColor: "rgba(0, 0, 255, 0.3)"}}
+          id={tickerFound.id}
         >
-          <p>{result.name}</p>
-          <button className="btn" style={{marginTop: "0px"}} onClick={clearTickerHandler}><i className="material-icons">delete</i></button>
+          <p>{tickerFound.name}</p>
+          <button className="btn itemTickerClearBtn" onClick={clearTickerHandler}>
+            <i className="material-icons">delete</i>
+          </button>
         </div>
       )
     } else {
       return (
-        <div className="col items itemTicker"></div>
+        <div className="col items itemTickerEmpty"></div>
       )
     }
   })
@@ -91,6 +92,7 @@ export const MediaplanEditor = (props) =>
   const chooseBannerHandler = useCallback((e) => {
     setBannersChanged(true)
     dispatch(mediaplanPutTimelineBanner(e.target.value, bannerTimelineList.length))
+    message("Баннер добавлен в список (не сохранено)")
   }, [dispatch, bannerTimelineList, setBannersChanged])
 
   const removeBannerHandler = useCallback((e) => {
@@ -106,11 +108,14 @@ export const MediaplanEditor = (props) =>
     {
       const newBannerTimelineList = bannerTimelineList.filter((bannerId, index) => index !== (position - 0))
       dispatch(mediaplanResetTimelineBanner(newBannerTimelineList))
+
+      message("Баннер удален из списка (не сохранено)")
     }
   }, [dispatch, bannerTimelineList, setBannersChanged])
 
   const saveBannersHandler = useCallback((e) => {
     dispatch(mediaplanSetNewBannersList(bannerTimelineList, id))
+    message("Баннеры успешно сохранены")
   }, [dispatch, bannerTimelineList, id])
 
   const banners = useSelector( state => {
@@ -118,17 +123,21 @@ export const MediaplanEditor = (props) =>
     const bannerTimelineList = state.mediaplanReducer.bannerTimelineList
     const bannerList = state.mediaplanReducer.bannerList
 
-    const arrayBannersRaw = [] 
-    bannerTimelineList.map((bannerId, index) => {
+    const arrayBannersRaw = []
+    bannerTimelineList.forEach((bannerId, index) => {
       if (bannerId !== undefined)
         arrayBannersRaw[index] = bannerList.find(banner => banner.id === bannerId)
-      return bannerId
     })
     
     const bannersTransformed = arrayBannersRaw.map((item, index) => {
-      const offset = widthBlock * (index)
-      const sec = Math.floor(item.duration % 60)
-      const min = Math.floor(item.duration / 60)
+      const offsetWidth = widthBlock * (index)
+
+      const secNumber = Math.floor(item.duration % 60)
+      const sec = `${secNumber / 10}${secNumber % 10}`
+
+      const minNumber = Math.floor(item.duration / 60)
+      const min = `${minNumber / 10}${minNumber % 10}`
+
       const hour = Math.floor(item.duration / 3600)
 
       return (
@@ -137,24 +146,15 @@ export const MediaplanEditor = (props) =>
           key={"bannerTimeline" + index}
           value={item.id}
           style={{
-            position: "absolute", 
-            left: `${offset}%`, 
-            width: `${widthBlock}%`, 
-            height: "100%", 
-            backgroundColor: "rgba(0, 255, 0, 0.3)", 
-            borderRight: "1px solid black"
+            left: `${offsetWidth}%`, 
+            width: `${widthBlock}%`
           }}
         >
           <p>{item.name}</p>
-          <p>Длительность: {`${hour/10}${hour%10}:${min/10}${min%10}:${sec/10}${sec%10}`}</p>
+          <p>Длительность: {`${hour}:${min}:${sec}`}</p>
           <button 
             value={index}
-            className="btn"
-            style={{
-              position: "absolute",
-              top: "40px",
-              right: "10px"
-            }}
+            className="btn itemBannersClearBtn"
             onClick={removeBannerHandler}
           >
             <i className="material-icons" value={index}>delete</i>
@@ -171,6 +171,7 @@ export const MediaplanEditor = (props) =>
   const chooseContentHandler = useCallback((e) => {
     setContentChanged(true)
     dispatch(mediaplanPutTimelineContent(e.target.value, contentTimelineList.length))
+    message("Контент добавлен в список (не сохранено)")
   }, [dispatch, contentTimelineList, setContentChanged])
 
   const removeContentHandler = useCallback((e) => {
@@ -186,11 +187,13 @@ export const MediaplanEditor = (props) =>
     {
       const newContentTimelineList = contentTimelineList.filter((contentId, index) => index !== (position - 0))
       dispatch(mediaplanResetTimelineContent(newContentTimelineList))
+      message("Контент удален из списка (не сохранено)")
     }
   }, [dispatch, contentTimelineList, setContentChanged])
 
   const saveContentHandler = useCallback((e) => {
     dispatch(mediaplanSetNewContentList(contentTimelineList, id))
+    message("Контент успешно сохранен")
   }, [dispatch, contentTimelineList, id])
 
   const contents = useSelector( state => {
@@ -199,16 +202,20 @@ export const MediaplanEditor = (props) =>
     const contentList = state.mediaplanReducer.contentList
 
     const arrayAdsRaw = [] 
-    contentTimelineList.map((contentId, index) => {
+    contentTimelineList.forEach((contentId, index) => {
       if (contentId !== undefined)
         arrayAdsRaw[index] = contentList.find(content => content.id === contentId)
-      return contentId
     })
     
     const contentTransformed = arrayAdsRaw.map((item, index) => {
-      const offset = widthBlock * index
-      const sec = Math.floor(item.duration % 60)
-      const min = Math.floor(item.duration / 60)
+      const offsetWidth = widthBlock * index
+      
+      const secNumber = Math.floor(item.duration % 60)
+      const sec = `${secNumber / 10}${secNumber % 10}`
+
+      const minNumber = Math.floor(item.duration / 60)
+      const min = `${minNumber / 10}${minNumber % 10}`
+
       const hour = Math.floor(item.duration / 3600)
 
       return (
@@ -217,24 +224,15 @@ export const MediaplanEditor = (props) =>
           key={"contentTimeline" + index}
           value={item.id}
           style={{
-            position: "absolute", 
-            left: `${offset}%`,
-            width: `${widthBlock}%`, 
-            height: "100%", 
-            backgroundColor: "rgba(255, 0, 0, 0.3)", 
-            borderRight: "1px solid black"
+            left: `${offsetWidth}%`,
+            width: `${widthBlock}%`
           }}
         >
           <p>{item.name}</p>
-          <p>Длительность: {`${hour/10}${hour%10}:${min/10}${min%10}:${sec/10}${sec%10}`}</p>
+          <p>Длительность: {`${hour}:${min}:${sec}`}</p>
           <button 
-            className="btn"
+            className="btn itemContentClearBtn"
             value={index}
-            style={{
-              position: "absolute",
-              top: "40px",
-              right: "10px"
-            }}
             onClick={removeContentHandler}
           >
             <i className="material-icons">delete</i>
@@ -318,10 +316,10 @@ export const MediaplanEditor = (props) =>
   useEffect(() => { setupBanners() }, [setupBanners])
   useEffect(() => { setupContents() }, [setupContents])
 
-  
+
   return (
     <div>
-      <div className="row" style={{marginTop: "30px"}}>
+      <div className="row mediaplanEditorContainer">
 
         <MediaplanEditorElements 
           chooseContentHandler={chooseContentHandler}

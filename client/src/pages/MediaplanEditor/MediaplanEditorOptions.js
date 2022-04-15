@@ -1,4 +1,5 @@
-import React, {useCallback, useEffect} from "react"
+import './MediaplanEditor.css'
+import React, {useCallback, useEffect} from "react";
 import { useDispatch, useSelector } from 'react-redux';
 import { useMessage } from '../../hooks/message.hook';
 import { 
@@ -26,23 +27,7 @@ export const MediaplanEditorOptions = (props) => {
   }, [dispatch])
 
   const saveOptionsHandler = useCallback( () => {
-    if (formOptions.ads_start_delay < 0) {
-      message("Ошибка: задержка воспроизведения основного контента указана неверно")
-      return
-    }
-
-    if (formOptions.banners_start_delay < 0) {
-      message("Ошибка: задержка воспроизведения баннеров указана неверно")
-      return
-    }
-
-    if (formOptions.banners_animation_duration_msec < 0) {
-      message("Ошибка: длительность анимации баннеров указана неверно")
-      return
-    }
-
     dispatch(mediaplanEditOptions(formOptions, mediaplanId))
-
     message("Основные параметры медиаплана сохранены")
   }, [dispatch, formOptions, message, mediaplanId])
 
@@ -57,32 +42,58 @@ export const MediaplanEditorOptions = (props) => {
   useEffect(() => { initializeHandler() }, [initializeHandler])
 
   return (
-    <div className="col offset-s1 s4 options" style={{height: "400px", border: "1px solid black", overflowY: "scroll"}}>
+    <div className="col offset-s1 s4 options">
       <p>Название медиаплана: <span>{name || "без названия"}</span></p>
 
       <div className="row">
         <div className="input-field col s6">
-          <input value={formOptions.ads_start_delay} id="ads_start_delay" name="ads_start_delay" type="number" onChange={changeOptionsHandler}/>
+          <input 
+            value={formOptions.ads_start_delay} 
+            id="ads_start_delay" 
+            name="ads_start_delay" 
+            type="number" 
+            min="0"
+            onChange={changeOptionsHandler}
+          />
           <span className="helper-text">Задержка воспроизведения доп контента</span>
         </div>
       </div>
 
       <div className="row">
         <div className="input-field col s6">
-          <input value={formOptions.banners_start_delay} id="banners_start_delay" name="banners_start_delay" type="number" onChange={changeOptionsHandler}/>
+          <input 
+            value={formOptions.banners_start_delay} 
+            id="banners_start_delay" 
+            name="banners_start_delay" 
+            type="number" 
+            min="0"
+            onChange={changeOptionsHandler}
+          />
           <span className="helper-text">Задержка воспроизведения баннеров</span>
         </div>
       </div>
 
       <div className="row">
         <div className="input-field col s6">
-          <input value={formOptions.banners_animation_duration_msec} id="banners_animation_duration_msec" name="banners_animation_duration_msec" type="number" onChange={changeOptionsHandler}/>
+          <input 
+            value={formOptions.banners_animation_duration_msec} 
+            id="banners_animation_duration_msec" 
+            name="banners_animation_duration_msec" 
+            type="number" 
+            min="0"
+            onChange={changeOptionsHandler}
+          />
           <span className="helper-text">Длительность воспроизведения анимации баннеров</span>
         </div>
       </div>
 
       <div className="row">
-        <select defaultValue={formOptions.banners_repeat} className="col s6 browser-default" name="banners_repeat" onChange={changeOptionsHandler}>
+        <select 
+          defaultValue={formOptions.banners_repeat} 
+          className="col s6 browser-default" 
+          name="banners_repeat" 
+          onChange={changeOptionsHandler}
+        >
           <option value="-1" disabled>Осуществлять повтор баннеров?</option>
           <option value="false">Не повторять баннеры</option>
           <option value="true">Повторять баннеры</option>

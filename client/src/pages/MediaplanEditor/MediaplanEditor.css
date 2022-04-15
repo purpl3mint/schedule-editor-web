@@ -1,0 +1,148 @@
+.mediaplanEditorContainer {
+  margin-top: 30px;
+}
+
+.itemTicker {
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 255, 0.3);
+}
+
+.itemTickerClearBtn {
+  margin-top: 0px;
+}
+
+.itemBanners {
+  position: absolute;
+  height: 100%;
+  background-color: rgba(0, 255, 0, 0.3);
+  border-right: 1px solid black;
+}
+
+.itemBannersClearBtn {
+  position: absolute;
+  top: 40px;
+  right: 10px;
+}
+
+.itemContent {
+  position: absolute;
+  height: 100%;
+  background-color: rgba(255, 0, 0, 0.3);
+  border-right: 1px solid black;
+}
+
+.itemContentClearBtn {
+  position: absolute;
+  top: 40px;
+  right: 10px;
+}
+
+.options {
+  height: 400px;
+  border: 1px solid black; 
+  overflow-y: scroll;
+}
+
+.elements {
+  height: 400px;
+}
+
+.elementsTitle {
+  height: 48px;
+  padding-top: 5px;
+  margin-bottom: 0px;
+}
+
+.elementsTitleItemToggle {
+  width: 100%;
+  height: 100%;
+}
+
+.elementsList {
+  height: 300px;
+  border: 1px solid black;
+  margin-bottom: 10px;
+  margin-top: 0px;
+  overflow-y: scroll;
+}
+
+.elementsListSaveChanges {
+  width: 100%;
+}
+
+.element {
+  border: 1px solid black;
+  height: 50px;
+}
+
+.elementContent {
+  background-color: rgba(255, 0, 0, 0.3);
+}
+
+.elementBanner {
+  background-color: rgba(0, 255, 0, 0.3);
+}
+
+.elementTicker {
+  background-color: rgba(0, 0, 255, 0.3);
+}
+
+.timelineContainer {
+  margin-bottom: 0;
+}
+
+.timelineTags {
+  height: 300px;
+  border: 1px solid black;
+}
+
+.timelineTagContainer {
+  height: 100px;
+  border: 1px solid black;
+  margin-bottom: 0px;
+}
+
+.timelineTag {
+  width: 100%;
+  height: 100%;
+}
+
+.timelineTagContent {
+  background-color: rgba(255, 0, 0, 0.5);
+}
+
+.timelineTagBanner {
+  background-color: rgba(0, 255, 0, 0.5);
+}
+
+.timelineTagTicker {
+  background-color: rgba(0, 0, 255, 0.5);
+}
+
+.timelineTagText {
+  display: flex;
+  margin-top: 35px;
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+.timeline {
+  height: 320px;
+  border: 1px solid black;
+  overflow-x: scroll;
+}
+
+.timelineContents,
+.timelineBanners {
+  position: relative;
+  height: 100px;
+  margin-bottom: 0px;
+}
+
+.timelineTicker {
+  position: fixed;
+  width: 100%;
+  height: 100px;
+  margin-bottom: 0px;
+}
