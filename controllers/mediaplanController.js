@@ -189,6 +189,7 @@ class MediaplanController {
     }
   }
 
+  //!!!
   async editOrderBanners(req, res, next) {
     const {id, position} = req.body
     const ad = await BannerInMediaplan.findByPk(id)
@@ -221,107 +222,66 @@ class MediaplanController {
   async deleteBanner(req, res, next) {
     const {id, position} = req.params
 
+    const shiftBanners = async() => {
+      const bannerInMediaplan = await BannerInMediaplan.findAll({where: {mediaplanId: candidate.mediaplanId}})
+
+      for(let i = 0; i < bannerInMediaplan.length; i++)
+      {
+        const indexOfPosition = bannerInMediaplan[i].position.indexOf(position - 0)
+          
+        if (indexOfPosition !== -1)
+        {
+          bannerInMediaplan[i].position.splice(indexOfPosition, 1)
+        }
+          
+        const transformedPositions = bannerInMediaplan[i].position.map(pos => {
+          if (pos > position - 0)
+            return pos - 1
+          else if (pos < position - 0)
+            return pos
+        })
+
+        bannerInMediaplan[i].position = transformedPositions
+      }
+
+      for(let i = 0; i < bannerInMediaplan.length; i++)
+      {
+        const result = await bannerInMediaplan[i].save()
+
+        if (!result)
+        {
+          return next(ApiError.badRequest("Не удалось удалить баннер"))
+        }
+      }
+    }
+
     const candidate = await BannerInMediaplan.findByPk(id)
 
-    if (candidate.position.length === 1 && candidate.position[0] === position - 0)
-    {
-      const result = await BannerInMediaplan.destroy({where: {id}})
+    if (candidate.position.length === 1 && candidate.position[0] !== position - 0) {
+      return next(ApiError.badRequest("Такого баннера не найдено"))
+    } else if (candidate.position.length === 1 && candidate.position[0] === position - 0) {
+      const candidateDestroyed = await BannerInMediaplan.destroy({where: {id}})
 
-      if (result) {
-        const bannerInMediaplan = await BannerInMediaplan.findAll({where: {mediaplanId: candidate.mediaplanId}})
-
-        for(let i = 0; i < bannerInMediaplan.length; i++)
-        {
-          const indexOfPosition = bannerInMediaplan[i].position.indexOf(position - 0)
-          
-          if (indexOfPosition !== -1)
-          {
-            bannerInMediaplan[i].position.splice(indexOfPosition, 1)
-          }
-          
-          const transformedPositions = bannerInMediaplan[i].position.map(pos => {
-            if (pos > position - 0)
-              return pos - 1
-            else if (pos < position - 0)
-              return pos
-          })
-
-          bannerInMediaplan[i].position = transformedPositions
-        }
-
-        for(let i = 0; i < bannerInMediaplan.length; i++)
-        {
-          const result = await bannerInMediaplan[i].save()
-
-          if (!result)
-          {
-            return next(ApiError.badRequest("Не удалось удалить контент"))
-          }
-        }
-
-        return res.json({message: "Контент успешно удален"})
+      if (candidateDestroyed) {
+        shiftBanners()
+        return res.json({message: "Баннер успешно удален"})
       } else {
-        return next(ApiError.badRequest('Контент не удалось удалить'))
+        return next(ApiError.badRequest('Баннер не удалось удалить'))
       }
-    } else if (candidate.position.length === 1 && candidate.position[0] !== position - 0)
-    {
-      return next(ApiError.badRequest("Такого дополнительного контента не найдено"))
-    } else 
-    {
+    } else {
       const newPosition = candidate.position.filter(item => item !== position - 0)
 
       candidate.position = newPosition
-      const savingCandidate = await candidate.save()
-      
-      if (savingCandidate)
-      {
-        const bannerInMediaplan = await BannerInMediaplan.findAll({where: {mediaplanId: candidate.mediaplanId}})
+      const candidateSaved = await candidate.save()
 
-        for(let i = 0; i < bannerInMediaplan.length; i++)
-        {
-          const indexOfPosition = bannerInMediaplan[i].position.indexOf(position - 0)
-          
-          if (indexOfPosition !== -1)
-          {
-            bannerInMediaplan[i].position.splice(indexOfPosition, 1)
-          }
-          
-          const transformedPositions = bannerInMediaplan[i].position.map(pos => {
-            if (pos > position - 0)
-              return pos - 1
-            else if (pos < position - 0)
-              return pos
-          })
-
-          bannerInMediaplan[i].position = transformedPositions
-        }
-
-        for(let i = 0; i < bannerInMediaplan.length; i++)
-        {
-          const result = await bannerInMediaplan[i].save()
-
-          if (!result)
-          {
-            return next(ApiError.badRequest("Не удалось удалить контент"))
-          }
-        }
-
-        return res.json({message: "Контент успешно удален"})
+      if (candidateSaved) {
+        shiftBanners()
+        return res.json({message: "Баннер успешно удален"})
       } else {
-        return next(ApiError.badRequest("Не удалось удалить контент"))
+        return next(ApiError.badRequest('Баннер не удалось удалить'))
       }
     }
-    /*
-    const {id} = req.params
 
-    const result = await BannerInMediaplan.destroy({where: {id}})
-
-    if (result) {
-      return res.json({message: 'Баннер был удален'})
-    } else {
-      return next(ApiError.badRequest('Баннер не удалось удалить'))
-    }
-    */
   }
 
   async deleteAllBanners(req, res, next) {
@@ -429,6 +389,7 @@ class MediaplanController {
     }
   }
 
+  //!!!
   async editOrderAds(req, res, next) {
     const {id, position} = req.body
     const ad = await Ads.findByPk(id)
@@ -463,94 +424,65 @@ class MediaplanController {
 
     const candidate = await Ads.findByPk(id)
 
-    if (candidate.position.length === 1 && candidate.position[0] === position - 0)
-    {
-      const result = await Ads.destroy({where: {id}})
+    const shiftAds = async () => {
+      const adsInMediaplan = await Ads.findAll({where: {mediaplanId: candidate.mediaplanId}})
 
-      if (result) {
-        const adsInMediaplan = await Ads.findAll({where: {mediaplanId: candidate.mediaplanId}})
-
-        for(let i = 0; i < adsInMediaplan.length; i++)
-        {
-          const indexOfPosition = adsInMediaplan[i].position.indexOf(position - 0)
+      for(let i = 0; i < adsInMediaplan.length; i++)
+      {
+        const indexOfPosition = adsInMediaplan[i].position.indexOf(position - 0)
           
-          if (indexOfPosition !== -1)
-          {
-            adsInMediaplan[i].position.splice(indexOfPosition, 1)
-          }
-          
-          const transformedPositions = adsInMediaplan[i].position.map(pos => {
-            if (pos > position - 0)
-              return pos - 1
-            else if (pos < position - 0)
-              return pos
-          })
-
-          adsInMediaplan[i].position = transformedPositions
-        }
-
-        for(let i = 0; i < adsInMediaplan.length; i++)
+        if (indexOfPosition !== -1)
         {
-          const result = await adsInMediaplan[i].save()
-
-          if (!result)
-          {
-            return next(ApiError.badRequest("Не удалось удалить контент"))
-          }
+          adsInMediaplan[i].position.splice(indexOfPosition, 1)
         }
+          
+        const transformedPositions = adsInMediaplan[i].position.map(pos => {
+          if (pos > position - 0)
+            return pos - 1
+          else if (pos < position - 0)
+            return pos
+        })
 
+        adsInMediaplan[i].position = transformedPositions
+      }
+
+      for(let i = 0; i < adsInMediaplan.length; i++)
+      {
+        const result = await adsInMediaplan[i].save()
+
+        if (!result)
+        {
+          return next(ApiError.badRequest("Не удалось удалить контент"))
+        }
+      }
+    }
+
+
+    if (candidate.position.length === 1 && candidate.position[0] !== position - 0) {
+      return next(ApiError.badRequest("Такого дополнительного контента не найдено"))
+    } else if (candidate.position.length === 1 && candidate.position[0] === position - 0) {
+      const candidateDestroyed = await Ads.destroy({where: {id}})
+
+      if (candidateDestroyed) {
+        shiftAds()
         return res.json({message: "Контент успешно удален"})
       } else {
         return next(ApiError.badRequest('Контент не удалось удалить'))
       }
-    } else if (candidate.position.length === 1 && candidate.position[0] !== position - 0)
-    {
-      return next(ApiError.badRequest("Такого дополнительного контента не найдено"))
-    } else 
-    {
+      
+    } else {
       const newPosition = candidate.position.filter(item => item !== position - 0)
 
       candidate.position = newPosition
-      const savingCandidate = await candidate.save()
-      
-      if (savingCandidate)
-      {
-        const adsInMediaplan = await Ads.findAll({where: {mediaplanId: candidate.mediaplanId}})
+      const candidateSaved = await candidate.save()
 
-        for(let i = 0; i < adsInMediaplan.length; i++)
-        {
-          const indexOfPosition = adsInMediaplan[i].position.indexOf(position - 0)
-          
-          if (indexOfPosition !== -1)
-          {
-            adsInMediaplan[i].position.splice(indexOfPosition, 1)
-          }
-          
-          const transformedPositions = adsInMediaplan[i].position.map(pos => {
-            if (pos > position - 0)
-              return pos - 1
-            else if (pos < position - 0)
-              return pos
-          })
-
-          adsInMediaplan[i].position = transformedPositions
-        }
-
-        for(let i = 0; i < adsInMediaplan.length; i++)
-        {
-          const result = await adsInMediaplan[i].save()
-
-          if (!result)
-          {
-            return next(ApiError.badRequest("Не удалось удалить контент"))
-          }
-        }
-
+      if (candidateSaved) {
         return res.json({message: "Контент успешно удален"})
       } else {
-        return next(ApiError.badRequest("Не удалось удалить контент"))
+        return next(ApiError.badRequest('Контент не удалось удалить'))
       }
     }
+
   }
 
   async deleteAllAds(req, res, next) {
@@ -572,29 +504,28 @@ class MediaplanController {
   async setContentAndAdsByList(req, res, next) {
     const {mediaplanId, contentsList} = req.body
 
-    console.log(mediaplanId)
-    console.log(contentsList)
-
     if (contentsList.length === 0)
       return next(ApiError.badRequest('Список контента пуст'))
 
+    //Clear previous list of ads
     const resultOfDestroying = await Ads.destroy({where: {mediaplanId}}).catch(err => console.log(err))
 
+    //Setting common content for mediaplan
     const mediaplan = await Mediaplan.findByPk(mediaplanId).catch(err => console.log(err))
-    
     if (!mediaplan)
       return next(ApiError.badRequest('Не удалось найти медиаплан'))
-
     mediaplan.commonContentId = contentsList[0]
-
     const resultOfSavingCommonContent = await mediaplan.save().catch(err => console.log(err))
 
+
+    //Add all ads from list
     for (let i = 1; i < contentsList.length; i++) {
       const candidate = await Ads.findOne({where: {
         mediaplanId,
         contentId: contentsList[i]
       }}).catch(err => console.log(err))
 
+      //Ads already added in mediaplan
       if (candidate) {
         const newPositions = candidate.position.concat(i)
         candidate.position = newPositions
@@ -604,7 +535,9 @@ class MediaplanController {
         if (!savingResult) {
           return next(ApiError.badRequest("Не удалось добавить список контента в медиаплан"))
         }
-      } else {
+      } 
+      //Ads in mediaplan not found
+      else {
         const newPositionArray = []
         newPositionArray.push(i)
         const addedBanner = await Ads.create({
