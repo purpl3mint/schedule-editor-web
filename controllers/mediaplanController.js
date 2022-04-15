@@ -191,32 +191,7 @@ class MediaplanController {
 
   //!!!
   async editOrderBanners(req, res, next) {
-    const {id, position} = req.body
-    const ad = await BannerInMediaplan.findByPk(id)
-    const candidate = await BannerInMediaplan.findOne({where: {position}})
-    let result
-
-
-    if (!candidate){
-      ad.position = position
-      result = await ad.save()
-      if (!result)
-        return next(ApiError.badRequest('Не удалось сменить порядок воспроизведения. Баннер не сохранен'))
-      return res.json({message: 'Порядок воспроизведения баннеров успешно изменен'})
-    }
-
-
-    candidate.position = ad.position
-    ad.position = position
-
-    result = await candidate.save()
-    if (!result)
-      return next(ApiError.badRequest('Не удалось сменить порядок воспроизведения. Кандидат не сохранен'))
-    
-    result = await ad.save()
-    if (!result)
-      return next(ApiError.badRequest('Не удалось сменить порядок воспроизведения. Баннер не сохранен'))
-    return res.json({message: 'Порядок воспроизведения баннеров успешно изменен'})
+    return res.json({message: "Эта функция отключена"})
   }
 
   async deleteBanner(req, res, next) {
@@ -391,32 +366,7 @@ class MediaplanController {
 
   //!!!
   async editOrderAds(req, res, next) {
-    const {id, position} = req.body
-    const ad = await Ads.findByPk(id)
-    const candidate = await Ads.findOne({where: {position}})
-    let result
-
-
-    if (!candidate){
-      ad.position = position
-      result = await ad.save()
-      if (!result)
-        return next(ApiError.badRequest('Не удалось сменить порядок воспроизведения. Контент не сохранен'))
-      return res.json({message: 'Порядок воспроизведения контента успешно изменен'})
-    }
-
-
-    candidate.position = ad.position
-    ad.position = position
-
-    result = await candidate.save()
-    if (!result)
-      return next(ApiError.badRequest('Не удалось сменить порядок воспроизведения. Кандидат не сохранен'))
-    
-    result = await ad.save()
-    if (!result)
-      return next(ApiError.badRequest('Не удалось сменить порядок воспроизведения. Контент не сохранен'))
-    return res.json({message: 'Порядок воспроизведения контента успешно изменен'})
+    return res.json({message: "Данная функция отключена"})
   }
 
   async deleteAds(req, res, next) {
@@ -507,7 +457,7 @@ class MediaplanController {
     if (contentsList.length === 0)
       return next(ApiError.badRequest('Список контента пуст'))
 
-    //Clear previous list of ads
+    //Clear old list of ads
     const resultOfDestroying = await Ads.destroy({where: {mediaplanId}}).catch(err => console.log(err))
 
     //Setting common content for mediaplan
