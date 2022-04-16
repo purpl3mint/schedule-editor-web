@@ -74,6 +74,7 @@ export const MediaplanEditor = (props) =>
         <div 
           className="col items itemTicker" 
           id={tickerFound.id}
+          style={{backgroundColor: "rgba(0, 0, 255, 0.3)"}}
         >
           <p>{tickerFound.name}</p>
           <button className="btn itemTickerClearBtn" onClick={clearTickerHandler}>

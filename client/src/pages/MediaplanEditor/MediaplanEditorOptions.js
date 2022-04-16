@@ -42,7 +42,7 @@ export const MediaplanEditorOptions = (props) => {
   useEffect(() => { initializeHandler() }, [initializeHandler])
 
   return (
-    <div className="col offset-s1 s4 options">
+    <div className="col offset-s1 s4 options">      
       <p>Название медиаплана: <span>{name || "без названия"}</span></p>
 
       <div className="row">

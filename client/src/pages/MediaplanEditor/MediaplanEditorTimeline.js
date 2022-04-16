@@ -8,6 +8,10 @@ export const MediaplanEditorTimeline = (props) => {
     chosenTicker
   } = props
 
+  console.log("Banners: ", banners);
+
+  console.log("Chosen ticker:", chosenTicker);
+  
   return (
     <div className="row timelineContainer">
       <div className="col s1 timelineTags">
