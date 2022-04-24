@@ -1,21 +1,20 @@
 .modal {
+  padding-left: 15px;
+  padding-right: 15px;
+  display: block;
   position: fixed;
   left: 0;
-  top: 0;
   right: 0;
+  top: 0;
   bottom: 0;
-  display: flex;
-  min-width: 800px;
-  align-items: center;
-  justify-content: center;
+  max-height: 70%;
   z-index: 1;
+  overflow-y: auto;
 }
 
-.modal-content_ticker {
-  padding-top: 430px;
-  padding-left: 10px;
+.modal-content_content {
   padding-right: 10px;
-  width: 780px;
+  padding-left: 10px;
   background-color: #fff;
 }
 
