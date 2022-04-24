@@ -18,7 +18,6 @@ export const UserCard = (props) => {
           style={{marginBottom: "25px", border: "1px solid grey"}}
         >
           {username}<br/>
-          Тип: {type}
         </div>
       </div>
 
