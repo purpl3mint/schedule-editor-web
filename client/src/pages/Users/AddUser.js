@@ -1,5 +1,5 @@
 import './AddUser.css'
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux"
 import { userSetAddForm, userAdd } from "../../store/actionCreators/userActionCreator"
 import { useMessage } from '../../hooks/message.hook';
@@ -32,6 +32,12 @@ export const AddUser = (props) => {
     props.onClose()
   }, [props])
 
+  const initializeHandler = useCallback( () => {
+    dispatch(userSetAddForm("type", "admin"))
+  }, [dispatch])
+
+  useEffect( () => initializeHandler(), [initializeHandler])
+
   if (!props.show) {
     return null
   }
@@ -58,14 +64,6 @@ export const AddUser = (props) => {
             </div>
           </div>
 
-          <div className="row">
-            <select defaultValue="-1" className="col s6 browser-default" name="type" value={form.type} onChange={changeHandler}>
-              <option value="-1" disabled>Выберите тип пользователя*</option>
-              <option value="user">Обычный пользователь</option>
-              <option value="admin">Администратор</option>
-            </select>
-          </div>
-
           <button className="btn blue-grey darken-1" onClick={createHandler}>Создать</button>
           <button className="btn blue-grey darken-1 btn-close" onClick={closeHandler}>Закрыть</button>
 
@@ -77,3 +75,13 @@ export const AddUser = (props) => {
   )
   
 }
+
+/*
+          <div className="row">
+            <select defaultValue="-1" className="col s6 browser-default" name="type" value={form.type} onChange={changeHandler}>
+              <option value="-1" disabled>Выберите тип пользователя*</option>
+              <option value="user">Обычный пользователь</option>
+              <option value="admin">Администратор</option>
+            </select>
+          </div>
+*/
