@@ -51,7 +51,8 @@ export const MediaplanCard = (props) => {
         }
       }
 
-      mediaplanObj['banners'] = mediaplanBannerTransformed.filter(item => item !== undefined).map(item => {
+      mediaplanObj['banners'] = {}
+      mediaplanObj['banners']['items'] = mediaplanBannerTransformed.filter(item => item !== undefined).map(item => {
         let result = {
           name: item.name,
           url: item.url,
@@ -92,7 +93,8 @@ export const MediaplanCard = (props) => {
         }
       }
 
-      mediaplanObj['ads'] = mediaplanContentTransformed.filter(item => item !== undefined).map(item => {
+      mediaplanObj['ads'] = {}
+      mediaplanObj['ads']['items'] = mediaplanContentTransformed.filter(item => item !== undefined).map(item => {
         let result = {
           name: item.name,
           url: item.url,

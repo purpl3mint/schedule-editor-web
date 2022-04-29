@@ -1,0 +1,69 @@
+[
+  {
+    "name": "main",
+    "content": {
+      "url": "http://eltex.local/1gt/HD.mp4",
+      "online": true,
+      "aspect_ratio": "normal"
+    },
+    "ads": {
+      "start_delay": 10,
+      "items": [
+        {
+          "duration": 10,
+          "url": "https://ya.ru",
+          "online": true,
+          "aspect_ratio": "crop"
+        },
+        {
+          "duration": 10,
+          "online": true,
+          "url": "http://eltex.local/1gt/1.jpg",
+          "aspect_ratio": "stretch"
+        },
+        {
+          "url": "http://eltex.local/hls/ms-build/chunklist.m3u8",
+          "online": true,
+          "duration": 10
+        }
+      ]
+    },
+    "banners": {
+      "start_delay": 5,
+      "items": [
+        {
+          "url": "http://acs.hv.loc/1gt/1.jpg",
+          "duration": 5,
+          "online": true,
+          "background": "#ffffff",
+          "layout_params": {
+            "layout_width": "30",
+            "layout_height": "80",
+            "layout_gravity": "right"
+          }
+        },
+        {
+          "duration": 5
+        },
+        {
+          "url": "https://google.ru",
+          "duration": 5,
+          "online": true,
+          "background": "#ffffff",
+          "layout_params": {
+            "layout_width": "40",
+            "layout_height": "80",
+            "layout_gravity": "left"
+          }
+        }
+      ]
+    },
+    "ticker": {
+      "url": "http://eltex.local/1gt/playlist.json.txt",
+      "size": 150,
+      "speed": 800,
+      "font_color": "#99FFFFFF",
+      "background_color": "#50FF6064"
+    }
+  }
+]
