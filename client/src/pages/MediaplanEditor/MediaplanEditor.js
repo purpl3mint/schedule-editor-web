@@ -320,6 +320,7 @@ export const MediaplanEditor = (props) =>
 
   return (
     <div>
+      <h2>Редактирование медиаплана</h2>
       <div className="row mediaplanEditorContainer">
 
         <MediaplanEditorElements 
