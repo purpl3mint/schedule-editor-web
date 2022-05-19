@@ -8,8 +8,6 @@ export const AddBanner = (props) => {
   const dispatch = useDispatch()
   const form = useSelector(state => state.bannerReducer.addForm)
   const message = useMessage()
-  const regexpUrl = /^(http|https):\/\/[a-zA-Z-0-9\.]+((\/[a-zA-Z0-9\-\=\+\.\(\)\?\_\,\:\;]+)+(\.(gif|png|bmp|jpg|m3u8)))?$/
-  const regexpColor = /^#(([0-9a-fA-F]{6})|([0-9a-fA-F]{8}))$/
 
 
   const changeHandler = useCallback( (e) => {
@@ -17,6 +15,9 @@ export const AddBanner = (props) => {
   }, [dispatch])
 
   const createHandler = useCallback( () => {
+      const regexpUrl = /^(http|https):\/\/[a-zA-Z-0-9.]+((\/[a-zA-Z0-9\-=+.()?_,:;]+)+(.(gif|png|bmp|jpg|m3u8|mp4)))?$/
+      const regexpColor = /^#(([0-9a-fA-F]{6})|([0-9a-fA-F]{8}))$/
+      
       if (!form.name){
           message("Ошибка: не задано название баннера")
           return
@@ -48,7 +49,7 @@ export const AddBanner = (props) => {
 
       dispatch(bannerAdd(form))
       props.onCreate()
-  }, [dispatch, form, props, message, regexpUrl, regexpColor])
+  }, [dispatch, form, props, message])
 
   const closeHandler = useCallback( () => {
     props.onClose()

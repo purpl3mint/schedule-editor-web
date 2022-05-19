@@ -8,14 +8,15 @@ export const AddTicker = (props) => {
   const dispatch = useDispatch()
   const form = useSelector(state => state.tickerReducer.addForm)
   const message = useMessage()
-  const regexpUrl = /^(http|https):\/\/[a-zA-Z-0-9\.]+((\/[a-zA-Z0-9\-\=\+\.\(\)\?\_\,\:\;]+)+(\.(txt|txt)))$/
-  const regexpColor = /^#(([0-9a-fA-F]{6})|([0-9a-fA-F]{8}))$/
 
   const changeHandler = useCallback( (e) => {
       dispatch(tickerSetAddForm(e.target.name, e.target.value))
-  }, [dispatch, form])
+  }, [dispatch])
 
   const createHandler = useCallback( () => {
+      const regexpUrl = /^(http|https):\/\/[a-zA-Z-0-9.]+((\/[a-zA-Z0-9\-=+.()?_,:;]+)+(\.(txt|txt)))$/
+      const regexpColor = /^#(([0-9a-fA-F]{6})|([0-9a-fA-F]{8}))$/
+
       if (!form.name){
           message("Ошибка: не задано название бегущей строки")
           return
@@ -59,7 +60,7 @@ export const AddTicker = (props) => {
 
       dispatch(tickerAdd(form))
       props.onCreate()
-  }, [dispatch, form, props, message, regexpUrl, regexpColor])
+  }, [dispatch, form, props, message])
 
   const closeHandler = useCallback( () => {
     props.onClose()

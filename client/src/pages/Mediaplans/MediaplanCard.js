@@ -1,7 +1,7 @@
 import React, { useCallback } from "react"
 import { useDispatch } from "react-redux"
 import { NavLink } from 'react-router-dom'
-import { mediaplanDelete, mediaplanLoadMediaplan, mediaplanSetCurrent } from "../../store/actionCreators/mediaplanActionCreator"
+import { mediaplanDelete } from "../../store/actionCreators/mediaplanActionCreator"
 import { exportToJson } from "./../../utils/saveMediaplan"
 
 export const MediaplanCard = (props) => {

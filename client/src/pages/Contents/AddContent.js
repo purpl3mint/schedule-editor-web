@@ -5,7 +5,6 @@ import { contentSetAddForm, contentAdd } from "../../store/actionCreators/conten
 import { useMessage } from '../../hooks/message.hook';
 
 export const AddContent = (props) => {
-  const regexpUrl = /^(http|https):\/\/[a-zA-Z-0-9\-\_\.]+((\/[a-zA-Z0-9\-\=\+\.\(\)\?\_\,\:\;]+)+(\.(mp4|gif|png|bmp|jpg|m3u8)))?$/
 
   const dispatch = useDispatch()
   const form = useSelector(state => state.contentReducer.addForm)
@@ -16,6 +15,8 @@ export const AddContent = (props) => {
   }, [dispatch])
 
   const createHandler = useCallback( () => {
+      const regexpUrl = /^(http|https):\/\/[a-zA-Z-0-9\-_.]+((\/[a-zA-Z0-9\-=+.()?_,:;]+)+(.(mp4|gif|png|bmp|jpg|m3u8)))?$/
+
       if (!form.name){
           message("Ошибка: не задано имя контента")
           return
@@ -33,12 +34,12 @@ export const AddContent = (props) => {
       }
 
       if (form.duration < 0){
-        message("Ошибка: длиьтельность не может быть меньше 0")
+        message("Ошибка: длительность не может быть меньше 0")
         return
       }
 
       props.onCreate()
-  }, [dispatch, form, props, message, regexpUrl])
+  }, [dispatch, form, props, message])
 
   const closeHandler = useCallback( () => {
     props.onClose()

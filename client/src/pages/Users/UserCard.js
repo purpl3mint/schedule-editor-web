@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux"
 import { userDelete } from "../../store/actionCreators/userActionCreator"
 
 export const UserCard = (props) => {
-  const {username, id, type} = props
+  const {username, id} = props
   const dispatch = useDispatch()
 
   const deleteHandler = useCallback(() => {

@@ -46,13 +46,13 @@ export const MediaplanEditor = (props) =>
     setTickerChanged(true)
     dispatch(mediaplanSetEditTickerForm("tickerId", e.target.value))
     message("Бегущая строка добавлена в список (не сохранено)")
-  }, [dispatch, setTickerChanged])
+  }, [dispatch, setTickerChanged, message])
 
   const clearTickerHandler = useCallback( () => {
     setTickerChanged(true)
     dispatch(mediaplanSetEditTickerForm("tickerId", 0))
     message("Бегущая строка удалена из списка (не сохранено)")
-  }, [dispatch, setTickerChanged])
+  }, [dispatch, setTickerChanged, message])
 
   const saveTickerHandler = useCallback( () => {
     if (formTicker.tickerId !== 0){
@@ -94,7 +94,7 @@ export const MediaplanEditor = (props) =>
     setBannersChanged(true)
     dispatch(mediaplanPutTimelineBanner(e.target.value, bannerTimelineList.length))
     message("Баннер добавлен в список (не сохранено)")
-  }, [dispatch, bannerTimelineList, setBannersChanged])
+  }, [dispatch, bannerTimelineList, setBannersChanged, message])
 
   const removeBannerHandler = useCallback((e) => {
     setBannersChanged(true)
@@ -112,12 +112,12 @@ export const MediaplanEditor = (props) =>
 
       message("Баннер удален из списка (не сохранено)")
     }
-  }, [dispatch, bannerTimelineList, setBannersChanged])
+  }, [dispatch, bannerTimelineList, setBannersChanged, message])
 
   const saveBannersHandler = useCallback((e) => {
     dispatch(mediaplanSetNewBannersList(bannerTimelineList, id))
     message("Баннеры успешно сохранены")
-  }, [dispatch, bannerTimelineList, id])
+  }, [dispatch, bannerTimelineList, id, message])
 
   const banners = useSelector( state => {
     const widthBlock = 30;
@@ -173,7 +173,7 @@ export const MediaplanEditor = (props) =>
     setContentChanged(true)
     dispatch(mediaplanPutTimelineContent(e.target.value, contentTimelineList.length))
     message("Контент добавлен в список (не сохранено)")
-  }, [dispatch, contentTimelineList, setContentChanged])
+  }, [dispatch, contentTimelineList, setContentChanged, message])
 
   const removeContentHandler = useCallback((e) => {
     setContentChanged(true)
@@ -190,12 +190,12 @@ export const MediaplanEditor = (props) =>
       dispatch(mediaplanResetTimelineContent(newContentTimelineList))
       message("Контент удален из списка (не сохранено)")
     }
-  }, [dispatch, contentTimelineList, setContentChanged])
+  }, [dispatch, contentTimelineList, setContentChanged, message])
 
   const saveContentHandler = useCallback((e) => {
     dispatch(mediaplanSetNewContentList(contentTimelineList, id))
     message("Контент успешно сохранен")
-  }, [dispatch, contentTimelineList, id])
+  }, [dispatch, contentTimelineList, id, message])
 
   const contents = useSelector( state => {
     const widthBlock = 30;

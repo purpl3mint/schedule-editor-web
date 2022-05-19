@@ -62,6 +62,8 @@ export const MediaplanPage = () => {
       {
         arrayBannersRaw[item.banner_in_mediaplan.position[i]] = item
       }
+
+      return
     })
 
     const transformedBanners = arrayBannersRaw.map((banner, index) => {
@@ -97,6 +99,8 @@ export const MediaplanPage = () => {
       {
         arrayAdsRaw[item.ads.position[i]] = item
       }
+
+      return
     })
 
     const transformedAds = arrayAdsRaw.map((ad, index) => {

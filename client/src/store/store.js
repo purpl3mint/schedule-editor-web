@@ -6,6 +6,7 @@ import contentReducer from './reducers/contentReducer'
 import bannerReducer from './reducers/bannerReducer'
 import tickerReducer from './reducers/tickerReducer'
 import mediaplanReducer from './reducers/mediaplanReducer'
+import cabinetReducer from './reducers/cabinetReducer'
 
 const rootReducer = combineReducers({
   authReducer,
@@ -14,6 +15,7 @@ const rootReducer = combineReducers({
   bannerReducer,
   tickerReducer,
   mediaplanReducer,
+  cabinetReducer
 })
 
 const store = createStore(rootReducer, compose(

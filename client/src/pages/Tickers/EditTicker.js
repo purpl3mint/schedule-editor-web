@@ -8,13 +8,14 @@ export const EditTicker = (props) => {
   const dispatch = useDispatch()
   const message = useMessage()
   const form = useSelector(state => state.tickerReducer.editForm)
-  const regexpColor = /^#(([0-9a-fA-F]{6})|([0-9a-fA-F]{8}))$/
 
   const changeHandler = useCallback( (e) => {
       dispatch(tickerSetEditForm(e.target.name, e.target.value))
   }, [dispatch])
 
   const createHandler = useCallback( () => {
+      const regexpColor = /^#(([0-9a-fA-F]{6})|([0-9a-fA-F]{8}))$/
+
       if (!form.size){
           message("Ошибка: не задан размер шрифта")
           return
@@ -42,7 +43,7 @@ export const EditTicker = (props) => {
 
       dispatch(tickerEdit(form))
       props.onCreate()
-  }, [dispatch, form, props, message, regexpColor])
+  }, [dispatch, form, props, message])
 
   const closeHandler = useCallback( () => {
     props.onClose()
