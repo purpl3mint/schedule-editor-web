@@ -27,7 +27,7 @@ export const UsersPage = () => {
   useEffect(() => { initializeHandler() }, [initializeHandler])
 
   return (
-    <div className="row">
+    <div className="col s9">
       <h1>Пользователи</h1>
 
       {loading && <Preloader />}

@@ -41,7 +41,7 @@ export const TickersPage = () => {
   useEffect(() => { initializeHandler() }, [initializeHandler])
 
   return (
-    <div>
+    <div className="col s9">
       <h1>Бегущие строки</h1>
 
       {loading && <Preloader />}

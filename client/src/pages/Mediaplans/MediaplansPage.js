@@ -41,7 +41,7 @@ export const MediaplansPage = () => {
   useEffect(() => { initializeHandler() }, [initializeHandler])
 
   return (
-    <div>
+    <div className="col s9">
       <h1>Медиапланы</h1>
 
       {loading && <Preloader />}

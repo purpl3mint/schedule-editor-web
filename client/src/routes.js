@@ -15,7 +15,7 @@ export const useRoutes = (isAuthenticated) => {
   return (
     <div className="row">
         
-        <div className="col s12 m12 l12 xl12">
+        <div className="col s12 m12 l12 xl12" style={{paddingLeft: "0px"}}>
             {isAuthenticated && <Sidebar /> }
 
             {!isAuthenticated && 

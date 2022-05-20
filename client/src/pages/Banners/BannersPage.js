@@ -44,7 +44,7 @@ export const BannersPage = () => {
   useEffect(() => { initializeHandler() }, [initializeHandler])
 
   return (
-    <div>
+    <div className="col s9">
       <h1>Баннеры</h1>
 
       {loading && <Preloader />}

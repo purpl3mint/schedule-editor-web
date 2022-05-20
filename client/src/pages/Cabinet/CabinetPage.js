@@ -29,7 +29,7 @@ export const CabinetPage = () => {
 
 
     return (
-        <div className="row">
+        <div className="col s9">
             <h1>Личный кабинет</h1>
             <div className="col s12">
                 <span className="cabinet-page__username">Имя пользователя: {username}</span><br />
