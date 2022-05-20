@@ -57,7 +57,7 @@ export const EditTicker = (props) => {
     <div className='modal'>
       <div className="row modal-content_content modal-edit_content">
 
-        <h1>Редактирование бегущей строки: {props.nameEditing}</h1>
+        <h1>Редактирование бегущей строки: {(form && form.name) || "название неизвестно"}</h1>
         
         <div className="col s12">
 

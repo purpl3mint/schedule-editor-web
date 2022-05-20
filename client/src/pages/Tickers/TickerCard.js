@@ -12,13 +12,14 @@ export const TickerCard = (props) => {
 
   const editHandler = useCallback(() => {
     dispatch(tickerSetEditForm("id", id))
+    dispatch(tickerSetEditForm("name", name))
     dispatch(tickerSetEditForm("size", size))
     dispatch(tickerSetEditForm("speed", speed))
     dispatch(tickerSetEditForm("font_color", font_color))
     dispatch(tickerSetEditForm("background_color", background_color))
     setNameEditing(url)
     setShowModalEdit(true)
-  }, [dispatch, id, size, speed, font_color, background_color, setShowModalEdit, setNameEditing, url])
+  }, [dispatch, id, size, speed, font_color, background_color, setShowModalEdit, setNameEditing, url, name])
 
   return (
     <div className="row">

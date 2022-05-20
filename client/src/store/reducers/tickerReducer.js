@@ -23,6 +23,7 @@ const initialState = {
   },
   editForm: {
     id: 0,
+    name: "",
     size: 24,
     speed: 80,
     font_color: "#ffffff",
