@@ -15,7 +15,7 @@ export const AddBanner = (props) => {
   }, [dispatch])
 
   const createHandler = useCallback( () => {
-      const regexpUrl = /^(http|https):\/\/[a-zA-Z-0-9.]+((\/[a-zA-Z0-9\-=+.()?_,:;]+)+(.(gif|png|bmp|jpg|m3u8|mp4)))?$/
+      const regexpUrl = /^((http|https):\/\/)?[a-zA-Z-0-9\-_.]+[:[0-9]+]?((\/[a-zA-Z0-9\-=+.()?_,:;]+)+(.(gif|png|bmp|jpg|m3u8|mp4)))?$/
       const regexpColor = /^#(([0-9a-fA-F]{6})|([0-9a-fA-F]{8}))$/
       
       if (!form.name){
