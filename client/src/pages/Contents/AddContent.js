@@ -15,7 +15,7 @@ export const AddContent = (props) => {
   }, [dispatch])
 
   const createHandler = useCallback( () => {
-      const regexpUrl = /^((http|https):\/\/)?[a-zA-Z-0-9\-_.:]+((\/[a-zA-Z0-9\-=+.()?_,:;]+)+(.(mp4|gif|png|bmp|jpg|m3u8)))?$/
+      const regexpUrl = /^((http|https):\/\/)?[a-zA-Z-0-9\-_.:]+((\/[a-zA-Z0-9\-=+.()?_,:;]+)+(.(mp4|gif|png|bmp|jpg|m3u8))?)?$/
 
       if (!form.name){
           message("Ошибка: не задано имя контента")
