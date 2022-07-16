@@ -75,3 +75,7 @@ typings/
 
 # FuseBox cache
 .fusebox/
+
+# server configs
+config/default.json
+config/production.json

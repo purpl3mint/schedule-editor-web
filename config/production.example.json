@@ -1,0 +1,14 @@
+{
+    "port": 80,
+    "DB_NAME": "database_name_in_postgres",
+    "DB_USER": "postgres_user_name",
+    "DB_PASSWORD": "postgres_user_password",
+    "DB_HOST": "hostname_for_database",
+    "DB_PORT": 5432,
+    "SECRET_KEY": "random_string",
+    "DB_DIALECT_OPTIONS": {
+      "ssl": {
+        "rejectUnauthorized": false
+      }
+    }
+  }
